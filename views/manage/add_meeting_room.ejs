@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>添加会议室</title>
+
+    <!-- Bootstrap -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel='stylesheet' href='/stylesheets/bootstrapValidator.min.css' /> -->
+    <style type="text/css">
+      
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span4">
+        </div>
+        <div class="span4">
+          <div class="page-header">
+            <img src="/images/szucsselogo.png" class="img-responsive" alt="Responsive image"/>
+          </div>
+        </div>
+        <div class="span4">
+        </div>
+      </div>
+      <div class="row-fluid">
+        <div class="span4">
+        </div>
+        <div class="span4">
+          <form class="form-inline">
+            <fieldset>
+              <h3>
+                会议室预定系统 <small>新增会议室</small>
+              </h3>
+              <br /> 请输入会议室编号或名称:
+              <input type="text" class="form-control input-lg" id="room_name" placeholder="请输入会议室编号或名称" /> 
+              <span class="help-block"><label class="checkbox"></label></span>
+              <button class="btn btn-success btn-block" type="button">确认</button>
+            </fieldset>
+          </form> 
+        </div>
+        <div class="span4">
+        </div>
+      </div>
+      <div class="row-fluid">
+        <div class="span12"></div>
+      </div>
+      <div class="row-fluid">
+        <div class="span4">
+        </div>
+        <div class="span4">
+          <address><span>COPYRIGHT©2017 SZU ALL RIGHTS RESERVED.</span><br /> <span>版权所有©深圳大学 计算机与软件学院</span></address>
+        </div>
+        <div class="span4">
+        </div>
+      </div>
+    </div>
+        
+    <!-- <script type="text/javascript" src='/javascripts/jquery-1.10.2.min.js'></script> -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src='/javascripts/bootstrap.min.js' ></script>
+    <!-- <script type="text/javascript" src='/javascripts/bootstrapValidator.min.js' ></script> -->
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('.btn').on("click",function(){
+          var room_name = $('#room_name').val()
+          if(!room_name){
+            alert('会议室编号或名称不能为空！')
+            return false
+          }
+          if(typeof room_name == 'undefined'){
+            alert('会议室编号或名称不能为空！')
+            return false
+          }
+          $.ajax({
+            url: '/manage/add_meeting_room', 
+            async: true,
+            dataType: 'json',
+            type: 'POST',
+            data: {
+              room_name:room_name
+            },
+
+            success: function(data , textStatus){
+              console.log("success");
+            },
+           
+            error: function(jqXHR , textStatus , errorThrown){
+              console.log("error");
+            },
+           
+          });
+        });
+      });
+  </script>
+  </body>
+</html>
+

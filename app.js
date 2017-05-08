@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const fs = require('fs')
+//const mongoose = require('./db/mongoose')
 
 const moment = require('moment')
 const log4js = require('log4js')
@@ -15,6 +16,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var manage = require('./routes/manage/manage')
 var reserve = require('./routes/reserve/meeting')
+//var test_route = require('./routes/test/test_route')
 
 var app = express();
 
@@ -41,6 +43,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/manage',manage)
 app.use('/reserve',reserve)
+//app.use('/test',test_route)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
