@@ -1,0 +1,17 @@
+{  
+    "appenders": [
+        {  
+            "category": "console", 
+            "type": "console"  
+        }, 
+        {  
+            "type": "dateFile",  
+            "filename": "./log/log_info",  
+            "pattern": ".yyyy_MM_dd.log",  
+            "alwaysIncludePattern": true,  
+            "category": "log_info",  
+            "level" : "INFO"  
+        }
+    ],  
+    "replaceConsole": true  
+}  
