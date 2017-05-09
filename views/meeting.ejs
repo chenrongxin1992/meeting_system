@@ -1,31 +1,282 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>meeting</title>
+    <title>index</title>
     <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/bootstrapValidator.min.css' />
     <script type="text/javascript" src='/javascripts/jquery-1.10.2.min.js'></script>
     <script type="text/javascript" src='/javascripts/bootstrap.min.js' ></script>
     <script type="text/javascript" src='/javascripts/bootstrapValidator.min.js' ></script>
   </head>
-  <body>
-    <div class="container">
-		<div class="row">
-			<div class="span6">
-				<img src="/images/szucsselogo.png" class="img-responsive" alt="Responsive image"/>
+  <body onload="initDate()">
+        <div class="container">
+	      <div class="row">
+	        <div class="col-md-5">
+	          <img src="/images/szucsselogo.png" class="img-responsive" alt="Responsive image"/>
+	          
+	        </div>
+	        <div class="col-md-5"><h3>会议室申请</h3></div>
+	      </div>
+	      <div class="row">
+	        <div class="col-md-4 pull-right">管理申请</div>
+	      </div>
+	      
+          
+          <div class="row">
+			<div class="col-md-4">
+				会议室一周申请表
 			</div>
-			<div class="span6">
-				<h2 class="bg-info">会议室预定</h2>
+			<div class="col-md-4">
+				上周 | 本周 | 下周
 			</div>
-		</div>
-		<div class="row">
-			<div class="span6">table</div>
-		</div>
-		<div class="row">
-			<div class="span6">
-				footer
+			<div class="col-md-4">
+				当前时间
 			</div>
-		</div>
-    </div>
+          </div>
+			
+		  <div class="row">
+			<div class="table-responsive">
+				<table class="table" id="mytable" border="1px">
+					<tr> 
+						<td rowspan="2" width="auto">会议室</td>
+						<td colspan="4"></td>  
+						<td colspan="4"></td>  
+						<td colspan="4"></td>  
+						<td colspan="4"></td>  
+						<td colspan="4"></td>  
+						<td colspan="4"></td>  
+						<td colspan="4"></td> 
+					</tr>
+					<tr>
+						<td>上午</td>
+						<td>中午</td>
+						<td>下午</td>
+						<td>晚上</td>
+
+						<td>上午</td>
+						<td>中午</td>
+						<td>下午</td>
+						<td>晚上</td>
+
+						<td>上午</td>
+						<td>中午</td>
+						<td>下午</td>
+						<td>晚上</td>
+
+						<td>上午</td>
+						<td>中午</td>
+						<td>下午</td>
+						<td>晚上</td>
+
+						<td>上午</td>
+						<td>中午</td>
+						<td>下午</td>
+						<td>晚上</td>
+
+						<td>上午</td>
+						<td>中午</td>
+						<td>下午</td>
+						<td>晚上</td>
+
+						<td>上午</td>
+						<td>中午</td>
+						<td>下午</td>
+						<td>晚上</td>
+					</tr>
+					<tr>
+						<td>999</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						<td>1</td>
+						
+
+					</tr>
+				</table>
+			</div>
+		  </div>
+
+	      <div class="row">
+	        <hr>
+	      </div>
+
+	      <div class="row">
+	        <div class="col-md-4 col-md-offset-4">
+	          <address><p class="pull-right">©深圳大学 计算机与软件学院</p><p>©2017 </p></address>
+	        </div>
+	      </div>
+	</div>
+
+	<script>  
+		var currDT; 
+		var aryDay = new Array("日","一","二","三","四","五","六");//显示星期  
+		var lastDay;//页面显示的最后一天
+		var firstDay;//页面显示的第一天
+
+		//初始化日期加载
+		function initDate() {
+			currDT = new Date();
+			//showdate.innerHTML = currDT.toLocaleDateString(); //显示日期  
+			var dw = currDT.getDay();//从Date对象返回一周中的某一天(0~6)
+			var tdDT;//日期  
+
+			//在表格中显示一周的日期  
+			var objTB = document.getElementById("mytable");//取得表格对象
+			console.log(objTB)
+			for(var i=0;i<7;i++) {
+				tdDT = getDays()[i];
+				if(tdDT.toLocaleDateString() == currDT.toLocaleDateString()) {  
+					objTB.rows[0].cells[i].style.color = "red";//currDT突出显示  
+				}  
+				dw = tdDT.getDay();//星期几
+				objTB.rows[0].cells[i+1].innerHTML = tdDT.getMonth()+1 + "月" + tdDT.getDate() + "日 星期" + aryDay[dw];//显示 
+			} 
+			//重新赋值
+			lastDay = getDays()[6];//本周的最后一天
+			firstDay = getDays()[0];//本周的第一天
+		}
+
+		//取得当前日期一周内的某一天
+		function getWeek(i) {
+			var now = new Date();
+			var n = now.getDay();
+			var start = new Date();
+			start.setDate(now.getDate() - n + i);//取得一周内的第一天、第二天、第三天...
+			return start;
+		}
+
+		//取得当前日期一周内的七天
+		function getDays() {
+			var days = new Array();
+			for(var i=1;i<=7;i++) {
+				days[i-1] = getWeek(i);
+			}
+			return days;
+		}
+
+		//取得下一周的日期数(共七天)
+		function getNextWeekDatas(ndt) {
+			var days = new Array();
+			for(var i=1;i<=7;i++) {
+				var dt = new Date(ndt);
+				days[i-1] = getNextWeek(dt,i);
+			}
+			return days;
+		}
+
+		//指定日期的下一周(后七天)
+		function getNextWeek(dt,i) {
+			var today = dt;
+			today.setDate(today.getDate()+i);
+			return today;
+		}
+
+
+		//取得上一周的日期数(共七天)
+		function getPreviousWeekDatas(ndt) {
+			var days = new Array();
+			for(var i=-7;i<=-1;i++) {
+				var dt = new Date(ndt);
+				days[7+i] = getPreviousWeek(dt,i);
+			}
+			return days;
+		}
+
+		//指定日期的上一周(前七天)
+		function getPreviousWeek(dt,i) {
+			var today = dt;
+			today.setDate(today.getDate()+i);
+			return today;
+		}
+
+		//下一周
+		function nextWeek() {
+			setCurrDTAfter();//重设时间
+			//showdate.innerHTML = currDT.toLocaleDateString(); //显示日期  
+
+			//在表格中显示一周的日期  
+			var objTB = document.getElementById("mytable");//取得表格对象
+			var dw = currDT.getDay();//从Date对象返回一周中的某一天(0~6)
+			var tdDT;//日期
+			
+			for(var i=0;i<7;i++) {
+				tdDT = getNextWeekDatas(lastDay)[i];
+				if(tdDT.toLocaleDateString()==currDT.toLocaleDateString()) {  
+					objTB.rows[0].cells[i].style.color = "red";//currDT突出显示  
+				}  
+				dw = tdDT.getDay();//星期几
+				objTB.rows[0].cells[i].innerHTML = tdDT.getMonth()+1 + "月" + tdDT.getDate() + "日 星期" + aryDay[dw]; //显示 
+			} 
+			//重新赋值
+			firstDay = getNextWeekDatas(lastDay)[0];//注意赋值顺序1
+			lastDay = getNextWeekDatas(lastDay)[6];//注意赋值顺序2
+		}
+
+		//上一周
+		function previousWeek() {
+			settCurrDTBefore();
+			//showdate.innerHTML = currDT.toLocaleDateString(); //显示日期  
+
+			//在表格中显示一周的日期  
+			var objTB = document.getElementById("mytable");//取得表格对象
+			var dw = currDT.getDay();//从Date对象返回一周中的某一天(0~6)
+			var tdDT;//日期
+
+			for(var i=0;i<7;i++) {
+				tdDT = getPreviousWeekDatas(firstDay)[i];
+				
+				if(tdDT.toLocaleDateString()==currDT.toLocaleDateString()) {  
+					objTB.rows[0].cells[i].style.color = "red";//currDT突出显示  
+				}  
+				dw = tdDT.getDay();//星期几
+				objTB.rows[0].cells[i].innerHTML = tdDT.getMonth()+1 + "月" + tdDT.getDate() + "日 星期" + aryDay[dw];//显示
+			} 
+			//重新赋值
+			lastDay =  getPreviousWeekDatas(firstDay)[6];//注意赋值顺序1
+			firstDay = getPreviousWeekDatas(firstDay)[0];//注意赋值顺序2
+		}
+
+		//当前日期后第七天
+		function setCurrDTAfter() {
+			currDT.setDate(currDT.getDate()+7);
+		}
+
+		//当前日期前第七天
+		function settCurrDTBefore() {
+			currDT.setDate(currDT.getDate()-7);
+		}
+	</script>
+
+
   </body>
 </html>

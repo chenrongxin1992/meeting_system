@@ -7,7 +7,7 @@ var mongoose = require('./db'),
 var meeting_roomSchema = new Schema({          
     room_name : { type: String },                    //会议室name
     created_at : {
-    	type:Date
+    	type:Date,
     	default:Date.now()
     },
     in_used : {

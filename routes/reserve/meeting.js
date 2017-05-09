@@ -9,4 +9,7 @@ router.get('/meeting',function(req,res){
 // 	console.log('----- add_meeting_room -----')
 
 // })
+router.get('/reserve',function(req,res){
+	res.render('reserve/reserve')
+})
 module.exports = router
