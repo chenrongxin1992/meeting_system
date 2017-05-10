@@ -1,9 +1,12 @@
 var express = require('express')
 var router = express.Router()
 var logger = require('../../log/logConfig').logger
+const logic = require('../../logic/logic')
 
 router.get('/meeting',function(req,res){
-	res.render('meeting')
+	logic.apply_record(function(result){
+		res.render('meeting',{result:result})
+	})
 })
 // router.post('/add_meeting_room',function(req,res){
 // 	console.log('----- add_meeting_room -----')

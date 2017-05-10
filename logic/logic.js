@@ -1,6 +1,7 @@
 const meeting_room = require('../db/meeting_room')
 const apply = require('../db/apply')
 const async = require('async')
+const moment = require('moment')
 
 exports.add_meeting_room = function(room_name,callback){
 	async.waterfall([
@@ -54,6 +55,97 @@ exports.add_meeting_room = function(room_name,callback){
 		callback(result)
 	})
 	
+}
+//返回一周会议室申请记录
+exports.apply_record = function(callback){
+	async.waterfall([
+		function(cb){//获取所有会议室记录
+			meeting_room.find({},'room_name',function(err,docs){
+				if(err){
+					console.log('----- search err -----')
+					cb(err)
+				}
+				if(!docs || docs.length == 0){
+					console.log('----- docs is null -----')
+					cb(1)
+				}
+				console.log(docs)
+				cb(null,docs)
+			})
+		},
+		function(docs,cb){
+			var list = new Array(),
+				resultList = new Array()
+			async.eachLimit(docs,1,function(item,cb){
+				console.log('----- check each docs -----')
+				console.log(item)
+				list.push(item.room_name)
+				var dateArr = new Array()
+					dateArr.push(moment().format('M月DD日'))
+					dateArr.push(moment().add(1,'days').format('M月DD日'))
+					dateArr.push(moment().add(2,'days').format('M月DD日'))
+					dateArr.push(moment().add(3,'days').format('M月DD日'))
+					dateArr.push(moment().add(4,'days').format('M月DD日'))
+					dateArr.push(moment().add(5,'days').format('M月DD日'))
+					dateArr.push(moment().add(6,'days').format('M月DD日'))
+
+				console.log('dateArr:',dateArr)
+
+				async.eachLimit(dateArr,1,function(val,cbb){
+					console.log('----- check dateArr val -----')
+					console.log(val)
+					var timeArr = new Array()
+						timeArr.push('上午')
+						timeArr.push('中午')
+						timeArr.push('下午')
+						timeArr.push('晚上')
+					console.log('timeArr:',timeArr)
+					async.eachLimit(timeArr,1,function(v,cbbb){
+						console.log('----- check timeArr val -----')
+						console.log(v)
+						apply.find({'meeting_date':val,'meeting_time':v,'room_name':item.room_name,'is_approved':1},function(err,doc){
+							if(err){
+								console.log('----- search err -----')
+							}
+							else if(!doc || doc.length ==0){
+								console.log('----- doc is null -----')
+								list.push('0')
+								cbbb()
+							}
+							else {
+								list.push('1')
+								cbbb()
+							}
+						})
+					},function(err){
+							if(err){
+								console.log('----- each timeArr err -----')
+							}
+							console.log('list:',list)
+							console.log('list length',list.length)
+							cbb()		
+					})
+				},function(err){
+					if(err){
+						console.log('----- each dateArr err -----')
+					}
+					resultList.push(list)
+					console.log('resultList:',resultList)
+					console.log('resultList length',resultList.length)
+					cb()
+				})
+			},function(err){
+				if(err){
+					console.log('----- each docs err -----')
+				}
+				console.log('----- final result -----')
+				console.log('resultList: ',resultList[0])
+				callback(resultList)
+			})
+		}
+	],function(err,result){
+
+	})
 }
 
 //测试添加申请记录
