@@ -158,7 +158,23 @@ exports.apply_record = function(callback){
 
 	})
 }
-
+//获取点击查看申请详情
+exports.get_meeting_detail = function(room_name,meeting_date,meeting_time,callback){
+	console.log('check args: ',room_name,meeting_date,meeting_time)
+	apply.find({'room_name':room_name,'meeting_date':meeting_date,'meeting_time':meeting_time},function(err,docs){
+		if(err){
+			console.log('----- find err -----')
+			callback(err)
+		}
+		if(!docs || docs.length == 0){
+			console.log('----- docs is null -----')
+			callback()
+		}
+		console.log('----- check docs -----')
+		console.log(docs)
+		callback(null,docs)
+	})
+}
 //测试添加申请记录
 exports.test_apply = function(room_name,meeting_name,meeting_num,meeting_content,meeting_date,meeting_time,apply_name,apply_phone,callback){
 	async.waterfall([

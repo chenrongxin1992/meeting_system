@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>index</title>
+    <title>会议室申请</title>
     <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/bootstrapValidator.min.css' />
     <script type="text/javascript" src='/javascripts/jquery-1.10.2.min.js'></script>
@@ -15,14 +15,20 @@
 	    .red{ background-color: red; }
 	    .blue{ background-color: rgb(226,235,254); }
 	    .white{ background-color: white; }
-    
+	    .none{ background-color: white; }
+    	.cl{ 
+    		background-color: rgb(226,235,254)
+    		height: 80px;
+    		line-height: 80px;
+    		text-align: center
+    	}
     </style>
   </head>
   <body>
         <div class="container">
 	      <div class="row">
 	        <div class="col-md-5">
-	          <img src="/images/szucsselogo.png" class="img-responsive" alt="Responsive image"/>
+	         <!--  <img src="/images/szucsselogo.png" class="img-responsive" alt="Responsive image"/> -->
 	          
 	        </div>
 	        <div class="col-md-5"><h3>会议室申请</h3></div>
@@ -48,7 +54,7 @@
 			<div class="table-responsive">
 				<table class="table" id="monitor" border="1px">
 					<tr id="date"> 
-						<td class="blue" rowspan="2" width="100px">会议室</td>
+						<td class="none" rowspan="2" width="100px">会议室</td>
 						<td colspan="4"></td>  
 						<td colspan="4"></td>  
 						<td colspan="4"></td>  
@@ -69,58 +75,20 @@
 						<tr>
 							<% for(let k=0;k<result[i].length;k++) { %>
 									<% if(result[i][k] == 2) { %>
-										<td class="red"><%= result[i][k] %></td>
+										<td class="red" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' ><%= result[i][k] %></td>
 									<% } %>
 									<% if(result[i][k] == 0) { %>
-										<td class="white"><%= result[i][k] %></td>
+										<td class="white" title= '<%=result[i][0]%>,<%=i%>,<%=k%>'><%= result[i][k] %></td>
 									<% } %>
 									<% if(result[i][k] == 1) { %>
-										<td class="blue"><%= result[i][k] %></td>
+										<td class="blue" title= '<%=result[i][0]%>,<%=i%>,<%=k%>'><%= result[i][k] %></td>
 									<% } %>
 									<% if(result[i][k] != 0 && result[i][k] != 1 && result[i][k] != 2) { %>
-										<td class="blue"><%= result[i][k] %></td>
+										<td class="none" title= '<%=result[i][0]%>,<%=i%>,<%=k%>'><%= result[i][k] %></td>
 									<% } %>
 							<% } %>
 						</tr>
 					<% } %>
-					<!-- <tr>
-						<td>999</td>
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-					
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-					
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-					
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-					
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-					
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-					
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-						<td>1</td>
-						
-					</tr> -->
 				</table>
 			</div>
 		  </div>
@@ -131,10 +99,53 @@
 
 	      <div class="row">
 	        <div class="col-md-4 col-md-offset-4">
-	          <address><p class="pull-right">©深圳大学 计算机与软件学院</p><p>©2017 </p></address>
+	          <!-- <address><p class="pull-right">©深圳大学 计算机与软件学院</p><p>©2017 </p></address> -->
 	        </div>
 	      </div>
-	      <%console.log%>
+	</div>
+
+	<!-- 模态框 -->
+	<!-- Large modal -->
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bs-example-modal-lg">Large modal</button>
+
+	<div class="modal fade modal-msg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="bs-example-modal-lg">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="gridSystemModalLabel">会议室预定信息</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<div class="getclassname"></div><!-- 查看获取的值是否正确 -->
+	        <div class="row">
+	          <div class="col-md-3">申请状态</div>
+	          <div class="col-md-9">申请信息</div>
+	        </div>
+	        <div class="row">
+	          <div class="col-md-3 cl" >已审批</div>
+	          <div class="col-md-9">
+				<div class="row">
+					<div class="col-md-4">会议名称</div><div class="col-md-8">12121212</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">申请人</div><div class="col-md-8">aaa</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">联系方式</div><div class="col-md-8">110110</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">会议时间</div><div class="col-md-8">2017</div>
+				</div>
+	          </div>
+	        </div>
+	      </div>
+
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
 	</div>
 
 	<script>  
@@ -181,6 +192,120 @@
         
       }; 
       setDate(new Date());
+
+      //弹出模态框
+      $('.table').on('click','td',function(){
+      	var title = $(this).attr('title');
+      	console.log('点击的方框信息：会议室名称,横坐标，纵坐标',title)
+      	let msg = title.split(',')
+      	console.log('msg: ',msg)
+      	let room_name = msg[0],
+      		i = msg[1],
+      		k = msg[2]
+
+      	//根据i,k求出日期和时间段
+      	let arr = dateAndTime(k)
+      	console.log('arr: ',arr)
+      	let meeting_date = arr[0]
+      	let meeting_time = arr[1]
+      	console.log('meeting_date && meeting_time : ',meeting_date,meeting_time)
+
+      	//ajax请求数据
+      	$.ajax({
+            url: '/reserve/get_meeting_detail', 
+            async: true,
+            dataType: 'json',
+            type: 'POST',
+            data: {
+              room_name:room_name,
+              meeting_date:meeting_date,
+              meeting_time:meeting_time
+            },
+
+            success: function(result){
+              console.log(result)
+              
+            },
+            error: function(jqXHR , textStatus , errorThrown){
+              console.log("error");
+              console.error()
+            },
+           
+          });
+
+
+      	//if(classname == 'white') return;//
+      	//$('.modal-msg').modal('show');//显示莫态框
+      	//$('.modal-msg').find('.getclassname').text(title);
+      })
+    }
+    var format_month_day = function(date,n){ 
+    	console.log('----- check n -----')
+    	console.log(n)      
+        var month = (date.getMonth()+1)+'月';
+        var day = (date.getDate()+n)+'日';
+        return month+day;
+     };
+    var dateAndTime = function(arg){
+    	let tem1 = parseInt(arg/4)  //取整,(0-6)
+
+    	if(tem1 == 0){//1 2 3
+    		tem1 = 0
+    	}
+    	if(tem1 == 1 && (arg%4) == 0){//4
+    		tem1 = 0
+    	}
+    	if(tem1 == 1 && (arg%4) != 0){//5,6,7
+    		tem1 = 1
+    	}
+    	if(tem1 == 2 && (arg%4) == 0){//8
+    		tem1 = 1
+    	}
+    	if(tem1 == 2 && (arg%4) != 0){//9 10 11
+    		tem1 = 2
+    	}
+    	if(tem1 ==3 && (arg%4) == 0){//12
+    		tem1 = 2
+    	}
+    	if(tem1 == 3 && (arg%4) != 0){//13 14 15
+    		tem1 = 3
+    	}
+    	if(tem1 ==4 && (arg%4) == 0){//16
+    		tem1 = 3
+    	}
+    	if(tem1 == 4 && (arg%4) != 0){//17 18 19
+    		tem1 = 4
+    	}
+    	if(tem1 ==5 && (arg%4) == 0){//20
+    		tem1 = 4
+    	}
+    	if(tem1 == 5 && (arg%4) != 0){//21 22 23
+    		tem1 = 5
+    	}
+    	if(tem1 ==6 && (arg%4) == 0){//24
+    		tem1 = 5
+    	}
+    	if(tem1 == 6 && (arg%4) != 0){//25 26 27
+    		tem1 = 6
+    	}
+    	if(tem1 ==7 && (arg%4) == 0){//28
+    		tem1 = 6
+    	}
+
+    	let date = new Date()
+    	let tem2 = format_month_day(date,tem1)
+    	console.log('----- check date -----',tem2)
+    	let tem3 = arg%4
+    	switch(tem3){
+    		case 1 : tem3 = '上午'
+    		break;
+    		case 2 : tem3 = '中午'
+    		break;
+    		case 3 : tem3 = '下午'
+    		break;
+    		case 0 : tem3 = '晚上'
+    	}
+    	return new Array(tem2,tem3)
     }
 	</script>
   </body>
