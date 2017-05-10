@@ -68,13 +68,16 @@
 					<% for(let i=0;i<result.length;i++){ %>
 						<tr>
 							<% for(let k=0;k<result[i].length;k++) { %>
-									<% if(result[i][k] == 1) { %>
+									<% if(result[i][k] == 2) { %>
 										<td class="red"><%= result[i][k] %></td>
 									<% } %>
 									<% if(result[i][k] == 0) { %>
 										<td class="white"><%= result[i][k] %></td>
 									<% } %>
-									<% if(result[i][k] != 0 && result[i][k] != 1) { %>
+									<% if(result[i][k] == 1) { %>
+										<td class="blue"><%= result[i][k] %></td>
+									<% } %>
+									<% if(result[i][k] != 0 && result[i][k] != 1 && result[i][k] != 2) { %>
 										<td class="blue"><%= result[i][k] %></td>
 									<% } %>
 							<% } %>

@@ -104,17 +104,25 @@ exports.apply_record = function(callback){
 					async.eachLimit(timeArr,1,function(v,cbbb){
 						console.log('----- check timeArr val -----')
 						console.log(v)
-						apply.find({'meeting_date':val,'meeting_time':v,'room_name':item.room_name,'is_approved':1},function(err,doc){
+						apply.find({'meeting_date':val,'meeting_time':v,'room_name':item.room_name},function(err,doc){
 							if(err){
 								console.log('----- search err -----')
 							}
-							else if(!doc || doc.length ==0){
+							if(!doc || doc.length ==0){
 								console.log('----- doc is null -----')
 								list.push('0')
 								cbbb()
 							}
-							else {
-								list.push('1')
+							if(doc && doc.length != 0) {
+								var temp = '1'
+								for(let k=0;k<doc.length;k++){
+									console.log(doc)
+									if(doc[k].is_approved == 1){//有批准记录
+										console.log('----- has is_approved -----')
+										temp = '2'
+									}
+								}
+								list.push(temp)
 								cbbb()
 							}
 						})

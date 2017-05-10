@@ -68,7 +68,63 @@
         <!-- <div class="span3">
         </div> -->
       </div>
-    </div>
+
+      <!-- modal 弹出框 -->
+      <!-- <button class="btn btn-primary" type="button">点击我</button> -->
+      <div class="modal" id="success-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">添加会议室结果</h4>
+              </div>
+              <div class="modal-body">
+                <p>成功！</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <!-- <button type="button" class="btn btn-primary">保存</button> -->
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+      </div>
+      <div class="modal" id="existed-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">添加会议室结果</h4>
+              </div>
+              <div class="modal-body">
+                <p>该会议室已存在！</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <!-- <button type="button" class="btn btn-primary">保存</button> -->
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+      </div>
+      <div class="modal" id="notnull-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">提示</h4>
+              </div>
+              <div class="modal-body">
+                <p>会议室编号不能为空！</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <!-- <button type="button" class="btn btn-primary">保存</button> -->
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+      </div>
         
     <!-- <script type="text/javascript" src='/javascripts/jquery-1.10.2.min.js'></script> -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -76,14 +132,16 @@
     <!-- <script type="text/javascript" src='/javascripts/bootstrapValidator.min.js' ></script> -->
     <script type="text/javascript">
     $(document).ready(function(){
-        $('.btn').on("click",function(){
+        $('.btn-success').on("click",function(){
           var room_name = $('#room_name').val()
           if(!room_name){
-            alert('会议室编号或名称不能为空！')
+            //alert('会议室编号或名称不能为空！')
+            $("#notnull-modal").modal("toggle");
             return false
           }
           if(typeof room_name == 'undefined'){
-            alert('会议室编号或名称不能为空！')
+            //alert('会议室编号或名称不能为空！')
+            $("#notnull-modal").modal("toggle");
             return false
           }
           $.ajax({
@@ -98,10 +156,13 @@
             success: function(result){
               console.log(result)
               if(result.data == 1){
-                alert('该会议室已存在！')
-                window.location.reload()
+                //alert('该会议室已存在！')
+                $("#existed-modal").modal("toggle");
+                return false
+                //window.location.reload()
               }else{
-                alert('添加成功！')
+                //alert('添加成功！')
+                $("#success-modal").modal("toggle");
               }
             },
             error: function(jqXHR , textStatus , errorThrown){
