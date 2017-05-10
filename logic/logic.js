@@ -168,7 +168,7 @@ exports.get_meeting_detail = function(room_name,meeting_date,meeting_time,callba
 		}
 		if(!docs || docs.length == 0){
 			console.log('----- docs is null -----')
-			callback()
+			return callback()
 		}
 		console.log('----- check docs -----')
 		console.log(docs)

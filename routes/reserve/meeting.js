@@ -35,6 +35,9 @@ router.post('/get_meeting_detail',function(req,res){
 			console.log('----- get_meeting_detail err -----')
 			return res.json({'Msg':err.message})
 		}
+		if(result == null){
+			return res.json(null)
+		}
 		return res.json(result)
 	})
 })

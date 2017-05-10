@@ -17,10 +17,24 @@
 	    .white{ background-color: white; }
 	    .none{ background-color: white; }
     	.cl{ 
-    		background-color: rgb(226,235,254)
+    		background-color: rgb(226,235,254);
     		height: 80px;
     		line-height: 80px;
     		text-align: center
+    	}
+    	.col-md-3 {
+    		text-align : center;
+    		font-weight : bold;
+    	}
+    	.col-md-9{
+    		font-weight : bold;
+    	}
+    	.col-md-4{
+    		
+    	}
+    	.col-md-8{
+    		text-align: left;
+    		font-weight : normal;
     	}
     </style>
   </head>
@@ -106,43 +120,21 @@
 
 	<!-- 模态框 -->
 	<!-- Large modal -->
-	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bs-example-modal-lg">Large modal</button>
+	<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bs-example-modal-lg">Large modal</button> -->
 
-	<div class="modal fade modal-msg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="bs-example-modal-lg">
-	  <div class="modal-dialog modal-lg" role="document">
+	<div class="modal fade modal-msg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="data-modal">
+	  <div class="modal-dialog " role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h4 class="modal-title" id="gridSystemModalLabel">会议室预定信息</h4>
 	      </div>
 	      <div class="modal-body">
-	      	<div class="getclassname"></div><!-- 查看获取的值是否正确 -->
-	        <div class="row">
-	          <div class="col-md-3">申请状态</div>
-	          <div class="col-md-9">申请信息</div>
-	        </div>
-	        <div class="row">
-	          <div class="col-md-3 cl" >已审批</div>
-	          <div class="col-md-9">
-				<div class="row">
-					<div class="col-md-4">会议名称</div><div class="col-md-8">12121212</div>
-				</div>
-				<div class="row">
-					<div class="col-md-4">申请人</div><div class="col-md-8">aaa</div>
-				</div>
-				<div class="row">
-					<div class="col-md-4">联系方式</div><div class="col-md-8">110110</div>
-				</div>
-				<div class="row">
-					<div class="col-md-4">会议时间</div><div class="col-md-8">2017</div>
-				</div>
-	          </div>
-	        </div>
+
 	      </div>
 
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
+	        <button type="button" class="btn btn-default sure" data-dismiss="modal">确定</button>
 	      </div>
 	    </div>
 	  </div>
@@ -192,7 +184,7 @@
         
       }; 
       setDate(new Date());
-
+      
       //弹出模态框
       $('.table').on('click','td',function(){
       	var title = $(this).attr('title');
@@ -221,9 +213,109 @@
               meeting_date:meeting_date,
               meeting_time:meeting_time
             },
-
             success: function(result){
               console.log(result)
+              $('.modal-msg').modal('show')
+
+	          let first_row = $('<div></div>')
+	          	  first_row.addClass('row')
+	          let first_col = $('<div></div>')
+	          	  first_col.addClass('col-md-3')
+	          	  first_col.text('申请状态')
+	          let second_col = $('<div></div>')
+	          	  second_col.addClass('col-md-9')
+	          	  second_col.text('申请信息')
+
+	          	  first_col.appendTo(first_row)
+	          	  second_col.appendTo(first_row)
+	          	  first_row.appendTo('.modal-body')
+              for(let i=0;i<result.length;i++){
+              	let sta = '未审批'
+              	if(result[i].is_approved == 1){
+              		sta = '已批准'
+              	}
+
+
+				    var parentdiv=$('<div></div>');        				//创建一个父div 外边row
+				    	parentdiv.addClass('row');    			
+
+				    var childdiv_left_parent=$('<div></div>');         //左边列
+					    childdiv_left_parent.addClass('col-md-3 cl');   
+					    childdiv_left_parent.text(sta)
+
+				    let childdiv_right_parent = $('<div></div>');   	//右边列
+				    	childdiv_right_parent.addClass('col-md-9')
+
+				    let childdiv_right_child_row_1 = $('<div></div>');
+				    	childdiv_right_child_row_1.addClass('row')			//右边列 嵌套的第一行
+				    let childdiv_right_child_row_1_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
+				    	childdiv_right_child_row_1_col_1.addClass('col-md-4')
+				    	childdiv_right_child_row_1_col_1.text('会议名称')
+				    let childdiv_right_child_row_1_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
+				    	childdiv_right_child_row_1_col_2.addClass('col-md-8')
+				    	childdiv_right_child_row_1_col_2.text(result[i].meeting_name)
+
+				    let childdiv_right_child_row_2 = $('<div></div>');
+				    	childdiv_right_child_row_2.addClass('row')			//右边列 嵌套的第一行
+				    let childdiv_right_child_row_2_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
+				    	childdiv_right_child_row_2_col_1.addClass('col-md-4')
+				    	childdiv_right_child_row_2_col_1.text('申请人')
+				    let childdiv_right_child_row_2_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
+				    	childdiv_right_child_row_2_col_2.addClass('col-md-8')
+				    	childdiv_right_child_row_2_col_2.text(result[i].apply_name)
+				    
+				    let childdiv_right_child_row_3 = $('<div></div>');
+				    	childdiv_right_child_row_3.addClass('row')			//右边列 嵌套的第一行
+				    let childdiv_right_child_row_3_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
+				    	childdiv_right_child_row_3_col_1.addClass('col-md-4')
+				    	childdiv_right_child_row_3_col_1.text('联系方式')
+				    let childdiv_right_child_row_3_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
+				    	childdiv_right_child_row_3_col_2.addClass('col-md-8')
+				    	childdiv_right_child_row_3_col_2.text(result[i].apply_phone)
+
+				    let childdiv_right_child_row_4 = $('<div></div>');
+				    	childdiv_right_child_row_4.addClass('row')			//右边列 嵌套的第一行
+				    let childdiv_right_child_row_4_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
+				    	childdiv_right_child_row_4_col_1.addClass('col-md-4')
+				    	childdiv_right_child_row_4_col_1.text('会议时间')
+				    let childdiv_right_child_row_4_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
+				    	childdiv_right_child_row_4_col_2.addClass('col-md-8')
+				    	childdiv_right_child_row_4_col_2.text(result[i].meeting_date+result[i].meeting_time)
+
+				    childdiv_right_child_row_1_col_1.appendTo(childdiv_right_child_row_1)
+				    childdiv_right_child_row_1_col_2.appendTo(childdiv_right_child_row_1)
+
+				    childdiv_right_child_row_2_col_1.appendTo(childdiv_right_child_row_2)
+				    childdiv_right_child_row_2_col_2.appendTo(childdiv_right_child_row_2)
+
+				    childdiv_right_child_row_3_col_1.appendTo(childdiv_right_child_row_3)
+				    childdiv_right_child_row_3_col_2.appendTo(childdiv_right_child_row_3)
+
+				    childdiv_right_child_row_4_col_1.appendTo(childdiv_right_child_row_4)
+				    childdiv_right_child_row_4_col_2.appendTo(childdiv_right_child_row_4)
+
+				    childdiv_right_child_row_1.appendTo(childdiv_right_parent)
+				    childdiv_right_child_row_2.appendTo(childdiv_right_parent)
+				    childdiv_right_child_row_3.appendTo(childdiv_right_parent)
+				    childdiv_right_child_row_4.appendTo(childdiv_right_parent)
+
+				    childdiv_left_parent.appendTo(parentdiv);        //将子div添加到父div中  左边第一列添加到row中
+				    childdiv_right_parent.appendTo(parentdiv)		 //将子div添加到父div中  右边第一列添加到row中
+
+				    //添加划分线
+				    let last_row = $('<div></div>')
+	          	  		last_row.addClass('row')
+		          	  	last_row.html('<hr>')
+	          	  	last_row.appendTo('.modal-body')
+
+				    parentdiv.appendTo('.modal-body');            //将父div添加到body中
+
+              }
+            $(".modal-msg").on("hidden.bs.modal", function() {
+            	console.log('---- here ----')
+        		//$(this).removeData("bs.modal");
+        		$(".modal-body").children().remove();  
+      		});
               
             },
             error: function(jqXHR , textStatus , errorThrown){
