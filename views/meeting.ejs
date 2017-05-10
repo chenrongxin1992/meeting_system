@@ -11,6 +11,11 @@
 		td{
 			text-align: center;
 		}
+
+	    .red{ background-color: red; }
+	    .blue{ background-color: rgb(226,235,254); }
+	    .white{ background-color: white; }
+    
     </style>
   </head>
   <body>
@@ -43,7 +48,7 @@
 			<div class="table-responsive">
 				<table class="table" id="monitor" border="1px">
 					<tr id="date"> 
-						<td rowspan="2" width="100px">会议室</td>
+						<td class="blue" rowspan="2" width="100px">会议室</td>
 						<td colspan="4"></td>  
 						<td colspan="4"></td>  
 						<td colspan="4"></td>  
@@ -53,80 +58,66 @@
 						<td colspan="4"></td> 
 					</tr>
 					<tr>
-						<td>上午</td>
-						<td>中午</td>
-						<td>下午</td>
-						<td>晚上</td>
-
-						<td>上午</td>
-						<td>中午</td>
-						<td>下午</td>
-						<td>晚上</td>
-
-						<td>上午</td>
-						<td>中午</td>
-						<td>下午</td>
-						<td>晚上</td>
-
-						<td>上午</td>
-						<td>中午</td>
-						<td>下午</td>
-						<td>晚上</td>
-
-						<td>上午</td>
-						<td>中午</td>
-						<td>下午</td>
-						<td>晚上</td>
-
-						<td>上午</td>
-						<td>中午</td>
-						<td>下午</td>
-						<td>晚上</td>
-
-						<td>上午</td>
-						<td>中午</td>
-						<td>下午</td>
-						<td>晚上</td>
+						<% for (let i=0;i<7;i++){ %>
+							<td>上午</td>
+							<td>中午</td>
+							<td>下午</td>
+							<td>晚上</td>
+						<% } %>
 					</tr>
-					<tr>
+					<% for(let i=0;i<result.length;i++){ %>
+						<tr>
+							<% for(let k=0;k<result[i].length;k++) { %>
+									<% if(result[i][k] == 1) { %>
+										<td class="red"><%= result[i][k] %></td>
+									<% } %>
+									<% if(result[i][k] == 0) { %>
+										<td class="white"><%= result[i][k] %></td>
+									<% } %>
+									<% if(result[i][k] != 0 && result[i][k] != 1) { %>
+										<td class="blue"><%= result[i][k] %></td>
+									<% } %>
+							<% } %>
+						</tr>
+					<% } %>
+					<!-- <tr>
 						<td>999</td>
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
-
+					
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
-
+					
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
-
+					
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
-
+					
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
-
+					
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
-
+					
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
 						<td>1</td>
 						
-
-					</tr>
+					</tr> -->
 				</table>
 			</div>
 		  </div>
@@ -140,7 +131,7 @@
 	          <address><p class="pull-right">©深圳大学 计算机与软件学院</p><p>©2017 </p></address>
 	        </div>
 	      </div>
-	      <%=result%>
+	      <%console.log%>
 	</div>
 
 	<script>  

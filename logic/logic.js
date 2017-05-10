@@ -2,6 +2,7 @@ const meeting_room = require('../db/meeting_room')
 const apply = require('../db/apply')
 const async = require('async')
 const moment = require('moment')
+const chunk =require("lodash/chunk")
 
 exports.add_meeting_room = function(room_name,callback){
 	async.waterfall([
@@ -123,13 +124,15 @@ exports.apply_record = function(callback){
 							}
 							console.log('list:',list)
 							console.log('list length',list.length)
+							//分割结果
+							resultList = chunk(list,29)
 							cbb()		
 					})
 				},function(err){
 					if(err){
 						console.log('----- each dateArr err -----')
 					}
-					resultList.push(list)
+					//resultList.push(list)
 					console.log('resultList:',resultList)
 					console.log('resultList length',resultList.length)
 					cb()
@@ -139,7 +142,7 @@ exports.apply_record = function(callback){
 					console.log('----- each docs err -----')
 				}
 				console.log('----- final result -----')
-				console.log('resultList: ',resultList[0])
+				console.log('resultList: ',resultList)
 				callback(resultList)
 			})
 		}
