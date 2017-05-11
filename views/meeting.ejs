@@ -7,6 +7,7 @@
     <script type="text/javascript" src='/javascripts/jquery-1.10.2.min.js'></script>
     <script type="text/javascript" src='/javascripts/bootstrap.min.js' ></script>
     <script type="text/javascript" src='/javascripts/bootstrapValidator.min.js' ></script>
+    <script type="text/javascript" src='/javascripts/moment.js' ></script>
     <style type="text/css">
 		td{
 			text-align: center;
@@ -30,7 +31,7 @@
     		font-weight : bold;
     	}
     	.col-md-4{
-    		
+
     	}
     	.col-md-8{
     		text-align: left;
@@ -57,7 +58,7 @@
 				会议室一周申请表
 			</div>
 			<div class="col-md-4">
-				<a id="last-week">上周</a> | <a id="now-week">本周</a> | <a id="next-week">下周</a>
+			   <a id="now-week" href="?week=0">本周</a> | <a id="next-week" href="?week=1">下周</a> | <a id="next-next-week" href="?week=2">下下周</a>
 			</div>
 			<div class="col-md-4">
 				当前时间:<span id="showdate"></span>
@@ -113,7 +114,7 @@
 
 	      <div class="row">
 	        <div class="col-md-4 col-md-offset-4">
-	          <!-- <address><p class="pull-right">©深圳大学 计算机与软件学院</p><p>©2017 </p></address> -->
+	         <address><p class="pull-right">©深圳大学 计算机与软件学院</p><p>©2017 </p></address>
 	        </div>
 	      </div>
 	</div>
@@ -142,6 +143,14 @@
 
 	<script>  
 	window.onload = function(){     
+	  function GetQueryString(name)
+		{
+		     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		     var r = window.location.search.substr(1).match(reg);
+		     if(r!=null)return  unescape(r[2]); return null;
+		}
+		 
+
       var cells = document.getElementById('date').getElementsByTagName('td');
       var clen = cells.length;
       var currentFirstDate;
@@ -160,6 +169,22 @@
       var setDate = function(date){       
         //var week = date.getDay()-2;
         //date = addDate(date,week*-1);
+        // 调用方法
+        console.log('原始日期',date)
+		  var week=GetQueryString("week");
+		  console.log(week)
+		  if(week !=null && week.toString().length>=1)
+		  {
+			    console.log('week is ' + week);
+		  } 
+		  tempstamp = moment().format('X')
+		  console.log('临时时间戳',tempstamp)
+		timeStamp = moment().add(week,'week').format('X')
+		console.log('加参数时间戳',timeStamp)
+		//date = new Date()
+		date = new Date(timeStamp*1000)
+		//newDate = newDate.toDateString()
+		console.log('新日期',date)
         currentFirstDate = new Date(date);
 		showdate.innerHTML = currentFirstDate.getFullYear() + '年' + formatDate(currentFirstDate); //显示日期  
  
@@ -167,25 +192,32 @@
           cells[i].innerHTML = formatDate(i==1 ? date : addDate(date,1));
         }        
       };       
-      document.getElementById('last-week').onclick = function(){
+      /*document.getElementById('last-week').onclick = function(){
         setDate(addDate(currentFirstDate,-7)); 
         //console.log(currentFirstDate)  
         //currentFirstDate = new Date()
       };       
-      document.getElementById('next-week').onclick = function(){         
+      document.getElementById('next-week').onclick = function(){     
+
         setDate(addDate(currentFirstDate,7));
         //console.log(currentFirstDate) 
-        //currentFirstDate = new Date()
+        //currentFirstDate = new Date() next-next-week
+      }; 
+       document.getElementById('next-next-week').onclick = function(){     
+
+        setDate(addDate(currentFirstDate,14));
+        //console.log(currentFirstDate) 
+        //currentFirstDate = new Date() next-next-week
       };  
       document.getElementById('now-week').onclick = function(){   
       	currentFirstDate = new Date()      
         setDate(addDate(currentFirstDate,0));
         //console.log(currentFirstDate) 
         
-      }; 
+      }; */
       setDate(new Date());
-      
-      //弹出模态框
+    }
+    //弹出模态框
       $('.table').on('click','td',function(){
       	var title = $(this).attr('title');
       	console.log('点击的方框信息：会议室名称,横坐标，纵坐标',title)
@@ -330,7 +362,10 @@
       	//$('.modal-msg').modal('show');//显示莫态框
       	//$('.modal-msg').find('.getclassname').text(title);
       })
-    }
+	
+		
+		
+
     var format_month_day = function(date,n){ 
     	console.log('----- check n -----')
     	console.log(n)      
