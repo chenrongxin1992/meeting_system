@@ -44,6 +44,14 @@ router.post('/apply',function(req,res){
 		return res.json({'errCode':0,'data':result})
 	})
 })
+//register
+router.get('/register',function(req,res){
+	res.render('manage/register')
+})
+//register
+router.get('/login',function(req,res){
+	res.render('manage/login')
+})
 //for apply test
 router.post('/test_apply',function(req,res){
 	console.log('----- apply test -----')
