@@ -16,7 +16,13 @@
 	    .red{ background-color: red; }
 	    .blue{ background-color: rgb(226,235,254); }
 	    .white{ background-color: white; }
-	    .none{ background-color: white; }
+	    .none{
+	    		background-color: white; 
+	    		line-height: 94px;
+	    }
+	    .roomname{
+	    	line-height: 94px;
+	    }
     	.cl{ 
     		background-color: rgb(226,235,254);
     		height: 80px;
@@ -69,7 +75,7 @@
 			<div class="table-responsive">
 				<table class="table" id="monitor" border="1px">
 					<tr id="date"> 
-						<td class="none" rowspan="2" width="100px">会议室</td>
+						<td class="none roomname" rowspan="2" width="100px">会议室</td>
 						<td colspan="4"></td>  
 						<td colspan="4"></td>  
 						<td colspan="4"></td>  
@@ -170,6 +176,7 @@
         //var week = date.getDay()-2;
         //date = addDate(date,week*-1);
         // 调用方法
+        solidDate = date
         console.log('原始日期',date)
 		  var week=GetQueryString("week");
 		  console.log(week)
@@ -186,7 +193,7 @@
 		//newDate = newDate.toDateString()
 		console.log('新日期',date)
         currentFirstDate = new Date(date);
-		showdate.innerHTML = currentFirstDate.getFullYear() + '年' + formatDate(currentFirstDate); //显示日期  
+		showdate.innerHTML = currentFirstDate.getFullYear() + '年' + formatDate(solidDate); //显示日期  
  
         for(var i = 1;i<clen;i++){         
           cells[i].innerHTML = formatDate(i==1 ? date : addDate(date,1));

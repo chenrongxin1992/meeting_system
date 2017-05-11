@@ -58,7 +58,7 @@ exports.add_meeting_room = function(room_name,callback){
 	
 }
 //返回一周会议室申请记录
-exports.apply_record = function(callback){
+exports.apply_record = function(week,callback){
 	async.waterfall([
 		function(cb){//获取所有会议室记录
 			meeting_room.find({},'room_name',function(err,docs){
@@ -82,13 +82,13 @@ exports.apply_record = function(callback){
 				console.log(item)
 				list.push(item.room_name)
 				var dateArr = new Array()
-					dateArr.push(moment().format('M月DD日'))
-					dateArr.push(moment().add(1,'days').format('M月DD日'))
-					dateArr.push(moment().add(2,'days').format('M月DD日'))
-					dateArr.push(moment().add(3,'days').format('M月DD日'))
-					dateArr.push(moment().add(4,'days').format('M月DD日'))
-					dateArr.push(moment().add(5,'days').format('M月DD日'))
-					dateArr.push(moment().add(6,'days').format('M月DD日'))
+					dateArr.push(moment().add(week,'week').format('M月DD日'))
+					dateArr.push(moment().add(week,'week').add(1,'days').format('M月DD日'))
+					dateArr.push(moment().add(week,'week').add(2,'days').format('M月DD日'))
+					dateArr.push(moment().add(week,'week').add(3,'days').format('M月DD日'))
+					dateArr.push(moment().add(week,'week').add(4,'days').format('M月DD日'))
+					dateArr.push(moment().add(week,'week').add(5,'days').format('M月DD日'))
+					dateArr.push(moment().add(week,'week').add(6,'days').format('M月DD日'))
 
 				console.log('dateArr:',dateArr)
 
@@ -103,7 +103,7 @@ exports.apply_record = function(callback){
 					console.log('timeArr:',timeArr)
 					async.eachLimit(timeArr,1,function(v,cbbb){
 						console.log('----- check timeArr val -----')
-						console.log(v)
+						//console.log(v)
 						apply.find({'meeting_date':val,'meeting_time':v,'room_name':item.room_name},function(err,doc){
 							if(err){
 								console.log('----- search err -----')
@@ -116,7 +116,7 @@ exports.apply_record = function(callback){
 							if(doc && doc.length != 0) {
 								var temp = '1'
 								for(let k=0;k<doc.length;k++){
-									console.log(doc)
+									//console.log(doc)
 									if(doc[k].is_approved == 1){//有批准记录
 										console.log('----- has is_approved -----')
 										temp = '2'
@@ -130,7 +130,7 @@ exports.apply_record = function(callback){
 							if(err){
 								console.log('----- each timeArr err -----')
 							}
-							console.log('list:',list)
+							//console.log('list:',list)
 							console.log('list length',list.length)
 							//分割结果
 							resultList = chunk(list,29)
@@ -141,7 +141,7 @@ exports.apply_record = function(callback){
 						console.log('----- each dateArr err -----')
 					}
 					//resultList.push(list)
-					console.log('resultList:',resultList)
+					//console.log('resultList:',resultList)
 					console.log('resultList length',resultList.length)
 					cb()
 				})
@@ -150,7 +150,7 @@ exports.apply_record = function(callback){
 					console.log('----- each docs err -----')
 				}
 				console.log('----- final result -----')
-				console.log('resultList: ',resultList)
+				//console.log('resultList: ',resultList)
 				callback(resultList)
 			})
 		}

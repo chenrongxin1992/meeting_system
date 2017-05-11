@@ -4,7 +4,13 @@ var logger = require('../../log/logConfig').logger
 const logic = require('../../logic/logic')
 
 router.get('/meeting',function(req,res){
-	logic.apply_record(function(result){
+	var week = req.query.week
+	console.log('----- router get week -----',week)
+	if(typeof week == 'undefined' || week == null){
+		week = 0
+	}
+	console.log('now week is : ',week)
+	logic.apply_record(week,function(result){
 		res.render('meeting',{result:result})
 	})
 })
