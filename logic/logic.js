@@ -70,7 +70,7 @@ exports.apply_record = function(week,callback){
 					console.log('----- docs is null -----')
 					cb(1)
 				}
-				console.log(docs)
+				console.log('meeting_room: ',docs)
 				cb(null,docs)
 			})
 		},
@@ -104,6 +104,7 @@ exports.apply_record = function(week,callback){
 					async.eachLimit(timeArr,1,function(v,cbbb){
 						console.log('----- check timeArr val -----')
 						//console.log(v)
+						console.log('meeting_date && meeting_time && room_name',val,v,item.room_name)
 						apply.find({'meeting_date':val,'meeting_time':v,'room_name':item.room_name},function(err,doc){
 							if(err){
 								console.log('----- search err -----')
@@ -159,7 +160,7 @@ exports.apply_record = function(week,callback){
 	})
 }
 //获取点击查看申请详情
-exports.get_meeting_detail = function(room_name,meeting_date,meeting_time,callback){
+exports.get_meeting_detail = function(week,room_name,meeting_date,meeting_time,callback){
 	console.log('check args: ',room_name,meeting_date,meeting_time)
 	apply.find({'room_name':room_name,'meeting_date':meeting_date,'meeting_time':meeting_time},function(err,docs){
 		if(err){
@@ -173,6 +174,84 @@ exports.get_meeting_detail = function(room_name,meeting_date,meeting_time,callba
 		console.log('----- check docs -----')
 		console.log(docs)
 		callback(null,docs)
+	})
+}
+//获取会议室，返回前端select
+exports.select_room = function(callback){
+	meeting_room.find({},function(err,docs){
+		if(err){
+			console.log('----- search err -----')
+			callback(err)
+		}
+		if(!docs || docs.length == 0){
+			console.log('----- docs is null -----')
+			callback(1,null)
+		}
+		console.log(docs)
+		let room_arr = new Array()
+		for(let i=0;i<docs.length;i++){
+			room_arr.push(docs[i].room_name)
+		}
+		console.log('----- check room_arr -----')
+		console.log(room_arr)
+		callback(null,room_arr)
+	})
+}
+//添加申请记录
+exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meeting_date,meeting_time,apply_name,apply_phone,exact_meeting_time,callback){
+	async.waterfall([
+		function(cb){//检查该时间段会议室是否已被批准使用
+			apply.find({'room_name':room_name,'meeting_date':meeting_date,'meeting_time':meeting_time,'is_approved':1},function(err,doc){
+				if(err){
+					console.log('----- search err -----')
+					console.error(err)
+					return cb(err)
+				}
+				if(!doc || doc.length == 0){
+					console.log('----- 没有申请 -----')
+					cb(null)
+				}
+				if(doc && doc.length != 0){
+					console.log('----- 已有批准记录 -----')
+					console.log(doc)
+					cb(1,doc)
+				}
+			})
+		},
+		function(cb){
+			var new_apply = new apply({
+				room_name : room_name,
+				meeting_name : meeting_name,
+				meeting_num : meeting_num,
+				meeting_content : meeting_content,
+				meeting_date : meeting_date,
+				meeting_time : meeting_time,
+				apply_name : apply_name,
+				apply_phone : apply_phone,
+				exact_meeting_time : exact_meeting_time
+			})
+			console.log(new_apply)
+			new_apply.save(function(err,doc){
+				if(err){
+					console.log('----- save err -----')
+					console.error(err)
+					return cb(err)
+				}
+				console.log('---- save success -----')
+				console.log('new_apply: ',doc)
+				cb(null,doc)
+			})
+		}
+	],function(err,result){
+		if(err && result){
+			console.log('----- 已有批准记录 -----')
+			return callback(null,1)
+		}
+		if(err){
+			console.log('----- async err -----')
+			return callback(err)
+		}
+		callback(null,result)
 	})
 }
 //测试添加申请记录
@@ -207,7 +286,7 @@ exports.test_apply = function(room_name,meeting_name,meeting_num,meeting_content
 				apply_name : apply_name,
 				apply_phone : apply_phone
 			})
-			console.log(new_apply)
+			console.log('new_apply: ',new_apply)
 			new_apply.save(function(err,doc){
 				if(err){
 					console.log('----- save err -----')

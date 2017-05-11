@@ -19,14 +19,27 @@ router.get('/meeting',function(req,res){
 
 // })
 router.get('/reserve',function(req,res){
-	res.render('reserve/reserve')
+	logic.select_room(function(err,result){
+		if(err && result != null){
+			return res.json({'err':err.message})
+		}
+		if(err && result == null){
+			return res.json({'err':'no meeting_room now'})
+		}
+		res.render('reserve/reserve',{'data':result})
+	})
 })
 //请求申请记录详情
 router.post('/get_meeting_detail',function(req,res){
 	console.log('----- get_meeting_detail -----')
 	var room_name = req.body.room_name,
 		meeting_date = req.body.meeting_date,
-		meeting_time = req.body.meeting_time
+		meeting_time = req.body.meeting_time,
+		week = req.body.week
+	if(typeof week == 'undefined' || week == null){
+		week = 0
+	}
+	console.log('now week is : ',week)
 	if(!room_name){
 		return res.json({'Msg':'meeting_room can not be null'})
 	}
@@ -36,7 +49,7 @@ router.post('/get_meeting_detail',function(req,res){
 	if(!meeting_time){
 		return res.json({'Msg':'meeting_time can not be null'})
 	}
-	logic.get_meeting_detail(room_name,meeting_date,meeting_time,function(err,result){
+	logic.get_meeting_detail(week,room_name,meeting_date,meeting_time,function(err,result){
 		if(err){
 			console.log('----- get_meeting_detail err -----')
 			return res.json({'Msg':err.message})

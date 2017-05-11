@@ -49,13 +49,14 @@
         <div class="container">
 	      <div class="row">
 	        <div class="col-md-5">
-	         <!--  <img src="/images/szucsselogo.png" class="img-responsive" alt="Responsive image"/> -->
+	         <img src="/images/szucsselogo.png" class="img-responsive" alt="Responsive image"/>
 	          
 	        </div>
 	        <div class="col-md-5"><h3>会议室申请</h3></div>
 	      </div>
 	      <div class="row">
-	        <div class="col-md-4 pull-right">管理申请</div>
+	        <div class="col-md-2 pull-right">管理申请</div>
+	        <div class="col-md-2 pull-right"><a href="/reserve/reserve">申请会议室</a></div>
 	      </div>
 	      
           
@@ -148,13 +149,19 @@
 	</div>
 
 	<script>  
-	window.onload = function(){     
-	  function GetQueryString(name)
+	function GetQueryString(name)
 		{
 		     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
 		     var r = window.location.search.substr(1).match(reg);
 		     if(r!=null)return  unescape(r[2]); return null;
 		}
+	window.onload = function(){     
+	  /*function GetQueryString(name)
+		{
+		     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		     var r = window.location.search.substr(1).match(reg);
+		     if(r!=null)return  unescape(r[2]); return null;
+		}*/
 		 
 
       var cells = document.getElementById('date').getElementsByTagName('td');
@@ -173,8 +180,6 @@
         return date;
       };
       var setDate = function(date){       
-        //var week = date.getDay()-2;
-        //date = addDate(date,week*-1);
         // 调用方法
         solidDate = date
         console.log('原始日期',date)
@@ -239,6 +244,7 @@
       	console.log('arr: ',arr)
       	let meeting_date = arr[0]
       	let meeting_time = arr[1]
+      	let week = arr[2]
       	console.log('meeting_date && meeting_time : ',meeting_date,meeting_time)
 
       	//ajax请求数据
@@ -250,7 +256,8 @@
             data: {
               room_name:room_name,
               meeting_date:meeting_date,
-              meeting_time:meeting_time
+              meeting_time:meeting_time,
+              week:week
             },
             success: function(result){
               console.log(result)
@@ -268,11 +275,12 @@
 	          	  first_col.appendTo(first_row)
 	          	  second_col.appendTo(first_row)
 	          	  first_row.appendTo('.modal-body')
+	          if(!result) return 
               for(let i=0;i<result.length;i++){
-              	let sta = '未审批'
-              	if(result[i].is_approved == 1){
-              		sta = '已批准'
-              	}
+	              	let sta = '未审批'
+	              	if(result[i].is_approved == 1){
+	              		sta = '已批准'
+	              	}
 
 
 				    var parentdiv=$('<div></div>');        				//创建一个父div 外边row
@@ -426,7 +434,18 @@
     		tem1 = 6
     	}
 
-    	let date = new Date()
+    	let week=GetQueryString("week");
+		console.log(week)
+		if(week !=null && week.toString().length>=1){
+			console.log('week is ' + week);
+		} 
+		let tempstamp = moment().format('X')
+		console.log('临时时间戳',tempstamp)
+		timeStamp = moment().add(week,'week').format('X')
+		console.log('加参数时间戳',timeStamp)
+		//date = new Date(timeStamp*1000)
+
+    	let date = new Date(timeStamp * 1000)
     	let tem2 = format_month_day(date,tem1)
     	console.log('----- check date -----',tem2)
     	let tem3 = arg%4
@@ -439,7 +458,7 @@
     		break;
     		case 0 : tem3 = '晚上'
     	}
-    	return new Array(tem2,tem3)
+    	return new Array(tem2,tem3,week)
     }
 	</script>
   </body>
