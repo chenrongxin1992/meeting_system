@@ -52,6 +52,26 @@ router.get('/register',function(req,res){
 router.get('/login',function(req,res){
 	res.render('manage/login')
 })
+//add adminUser
+router.post('/addAdminUser',function(req,res){
+	let username = req.body.username,
+		password = req.body.password
+	if(!username || typeof username == 'undefined'){
+		return res.json({'errCode':-1,'errMsg':'username can not be null'})
+	}
+	if(!password || typeof password == 'undefined'){
+		return res.json({'errCode':-1,'errMsg':'password can not be null'})
+	}
+	logic.addAdminUser(username,password,function(error,result){
+		if(error && result != 1){
+			return res.json({'errCode':-1,'errMsg':error.message})
+		}
+		if(error && result == 1){
+			return res.json({'errCode':-1,'errMsg':'该用户已存在'})
+		}
+		return res.json({'errCode':0,'errMsg':'添加用户成功'})
+	})
+})
 //for apply test
 router.post('/test_apply',function(req,res){
 	console.log('----- apply test -----')

@@ -1,5 +1,6 @@
 const meeting_room = require('../db/meeting_room')
 const apply = require('../db/apply')
+const admin = require('../db/admin')
 const async = require('async')
 const moment = require('moment')
 const chunk =require("lodash/chunk")
@@ -252,6 +253,34 @@ exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meet
 			return callback(err)
 		}
 		callback(null,result)
+	})
+}
+exports.addAdminUser = function(username,password,callback){
+	admin.find({'username':username},function(err,doc){
+		if(err){
+			console.log('----- search err -----')
+			callback(err)
+		}
+		if(!doc || doc.length == 0){
+			console.log('----- username is not existed and can be add -----')
+			let newUser = new admin({
+				username : username,
+				password : password
+			})
+			console.log('new adminUser: ',newUser)
+			newUser.save(function(error,doc){
+				if(error){
+					console.log('----- save err -----')
+					callback(error)
+				}
+				console.log('----- save success -----')
+				callback(null,doc)
+			})
+		}
+		if(doc){
+			console.log('----- username is existed -----')
+			callback(1,1)
+		}
 	})
 }
 //测试添加申请记录
