@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>会议室申请审批</title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" >
+    <link rel="stylesheet" href="/stylesheets/bootstrapValidator.min.css" >
+    <style type="text/css">
+        hr{
+            margin-bottom: 20px;
+            border: 0;
+            border-top: 1px solid #d0a8a8;
+            margin-top: 0px;
+          }
+          .hh4{
+            line-height: 39px;
+          }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <img src="/images/szucsselogo.png" class="img-responsive" alt="Responsive image"/>
+              
+            </div>
+            <div class="col-md-7"><h3>会议室申请系统</h3></div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2"><h4>会议室申请记录</h4></div>
+            <div class="col-sm-1 pull-right hh4"><a href="/manage/logout">退出</a></div>
+            <div class="col-sm-2 pull-right hh4">当前用户: <%=user.username%></div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12"><hr></div>
+        </div>
+
+        <div class="row">
+            放table  
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-12"><hr></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5 col-md-offset-3">
+              <address><p class="pull-right">©深圳大学 计算机与软件学院</p><p>©2017 </p></address>
+            </div>
+          </div>
+    </div>
+
+    <script type="text/javascript" src="/javascripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        var MyValidator = function() {  
+            var handleSubmit = function() {  
+                $('.form-horizontal').validate({  
+                    errorElement : 'span',  
+                    errorClass : 'help-block',  
+                    focusInvalid : false,  
+                    rules : {  
+                        username : {  
+                            required : true  
+                        },  
+                        password : {  
+                            required : true  
+                        }
+                    },  
+                    messages : {  
+                        username : {  
+                            required : "用户名不能为空"  
+                        },  
+                        password : {  
+                            required : "密码不能为空"  
+                        }
+                    },  
+          
+                    highlight : function(element) {  
+                        $(element).closest('.form-group').addClass('has-error');  
+                    },  
+          
+                    success : function(label) {  
+                        label.closest('.form-group').removeClass('has-error');  
+                        label.remove();  
+                    },  
+          
+                    errorPlacement : function(error, element) {  
+                        element.parent('div').append(error);  
+                    },  
+          
+                    submitHandler : function(form) {  
+                        form.submit();  
+                    }  
+                });  
+          
+                $('.form-horizontal input').keypress(function(e) {  
+                    if (e.which == 13) {  
+                        if ($('.form-horizontal').validate().form()) {  
+                            $('.form-horizontal').submit();  
+                        }  
+                        return false;  
+                    }  
+                });  
+            }  
+            return {  
+                init : function() {  
+                    handleSubmit();  
+                }  
+            };  
+          
+        }();  
+        MyValidator.init();  
+    })
+    /*$(function(){ 
+        $("#register0").click(function(){ 
+            location.href = 'register';
+        });
+        $("#login0").click(function(){ 
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var data = {"uname":username,"upwd":password};
+            $.ajax({ 
+                url:'/login',
+                type:'post',
+                data: data,
+                success: function(data,status){ 
+                    if(status == 'success'){ 
+                        location.href = 'home';
+                    }
+                },
+                error: function(data,status){ 
+                    if(status == 'error'){ 
+                        location.href = 'login';
+                    }
+                }
+            });
+        });
+    });*/
+    </script>
+</body>
+</head>
+</html>

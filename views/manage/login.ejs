@@ -40,20 +40,20 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">用户名</label>
             <div class="col-sm-4">
-            <input type="username" class="form-control" placeholder="请输入用户名" name="username">
+            <input type="username" id="username" class="form-control" placeholder="请输入用户名" name="username">
             </div>
           </div>
       
           <div class="form-group">
             <label class="col-sm-2 control-label">密码</label>
             <div class="col-sm-4">
-            <input type="password" class="form-control" placeholder="请输入密码" name="password">
+            <input type="password" id="password" class="form-control" placeholder="请输入密码" name="password">
             </div>
           </div>
       
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-              <button type="button" class="btn btn-success" id="now-submit">提交</button>
+              <button type="button" class="btn btn-success" id="now-submit">登录</button>
             </div>
           </div>
       </form>
@@ -74,7 +74,7 @@
     <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery.validate.min.js"></script>
     <script type="text/javascript">
-    $(document).ready(function(){
+    /*$(document).ready(function(){
         var MyValidator = function() {  
             var handleSubmit = function() {  
                 $('.form-horizontal').validate({  
@@ -133,33 +133,68 @@
           
         }();  
         MyValidator.init();  
-    })
-    /*$(function(){ 
-        $("#register0").click(function(){ 
-            location.href = 'register';
-        });
-        $("#login0").click(function(){ 
+    })*/
+    $(function(){ 
+        $("#now-submit").click(function(){ 
             var username = $("#username").val();
             var password = $("#password").val();
-            var data = {"uname":username,"upwd":password};
+            console.log('username && password is ',username,password)
+            if(!username || username == null || typeof username == 'undefined'){
+                $('.modal-msg').modal('show')
+                $('.modal-body').text('用户名不能为空！')
+                return false
+            }
+            if(!password || password == null || typeof password == 'undefined'){
+                $('.modal-msg').modal('show')
+                $('.modal-body').text('密码不能为空！')
+                return false
+            }
+            //var data = {"username":username,"password":password};
             $.ajax({ 
-                url:'/login',
-                type:'post',
-                data: data,
-                success: function(data,status){ 
-                    if(status == 'success'){ 
-                        location.href = 'home';
+                url:'/manage/login',
+                async: true,
+                dataType: 'json',
+                type: 'POST',
+                data: {"username":username,"password":password},
+                success: function(result){ 
+                    console.log('result is',result)
+                    if(result.errCode == -1){ 
+                        $('.modal-msg').modal('show')
+                        $('.modal-body').text(result.errMsg)
+                        //location.href = '/manage/login';
+                        //location.href = '/manage/approve';
+                    }
+                    if(result.errCode == 0){
+                        alert('登录成功')
+                        window.location.href = '/manage/approve'
                     }
                 },
-                error: function(data,status){ 
-                    if(status == 'error'){ 
-                        location.href = 'login';
-                    }
+                error: function(e){ 
+                    console.log('error ',e.message)
+                    
                 }
             });
         });
-    });*/
+    });
     </script>
+    <!-- Modal -->
+    <div class="modal fade modal-msg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="data-modal">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">提示</h4>
+        </div>
+        <div class="modal-body">
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default sure" data-dismiss="modal">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </head>
 </html>

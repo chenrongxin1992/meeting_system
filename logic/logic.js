@@ -283,6 +283,48 @@ exports.addAdminUser = function(username,password,callback){
 		}
 	})
 }
+//checkLogin
+exports.checkLogin = function(username,password,callback){
+	async.waterfall([
+		function(cb){
+			admin.find({'username':username},function(err,doc){
+				if(err){
+					console.log('----- search err -----')
+					cb(err,null)
+				}
+				if(!doc || doc.length == 0){
+					console.log('----- username not existed -----')
+					cb(1,1)
+				}
+				if(doc && doc.length != 0){
+					console.log('----- check admin detail -----')
+					console.log(doc)
+					cb(null,doc[0])
+				}
+			})
+		},
+		function(doc,cb){
+			if(doc.password == password){
+				console.log('----- login confirm -----')
+				cb(null,doc)
+			}
+		}
+	],function(err,result){
+		if(err && result == 1){
+			console.log('----- admin not existed -----')
+			callback(1,1)
+		}
+		if(err && result == null){
+			console.log('----- async err -----')
+			callback(err,null)
+		}
+		if(err == null){
+			console.log('----- final check -----')
+			callback(null,result)
+		}
+		
+	})
+}
 //测试添加申请记录
 exports.test_apply = function(room_name,meeting_name,meeting_num,meeting_content,meeting_date,meeting_time,apply_name,apply_phone,callback){
 	async.waterfall([

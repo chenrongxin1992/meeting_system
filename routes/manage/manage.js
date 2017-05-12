@@ -44,13 +44,55 @@ router.post('/apply',function(req,res){
 		return res.json({'errCode':0,'data':result})
 	})
 })
-//register
-router.get('/register',function(req,res){
-	res.render('manage/register')
-})
-//register
+
+//login
 router.get('/login',function(req,res){
 	res.render('manage/login')
+})
+//checkLogin
+router.post('/login',function(req,res){
+	console.log('----- check login -----')
+	let username = req.body.username,
+		password = req.body.password
+	logic.checkLogin(username,password,function(error,result){
+		console.log('error is ',error)
+		console.log('result is ',result)
+		if(error && result == 1){
+			console.log('---- 用户不存在 -----')
+			return res.json({'errCode':-1,'errMsg':'用户不存在'})
+		}
+		if(error && result == null){
+			console.log('----- 出错 -----')
+			return res.json({'errCode':-1,'errMsg':error.message})
+		}
+		if(error == null ){
+			console.log('----- 登录成功 -----')
+			console.log(result)
+			req.session.user = result
+			console.log('----- check session content -----')
+			console.log(req.session.user)
+			return res.json({'errCode':0,'errMsg':'success'})
+		}
+		
+	})
+	//res.render('manage/login')
+})
+//approve
+router.get('/approve',function(req,res){
+	console.log('----- in approve router -----')
+	console.log('check session ',req.session.user)
+	if(!req.session.user){
+		console.log('----- user not login -----')
+		return res.redirect('/manage/login')
+	}
+	return res.render('manage/approve',{username:req.session.user.username})
+})
+//logout
+router.get('/logout',function(req,res){
+	console.log('----- in router logout -----')
+	req.session.user = null;
+    req.session.error = null;
+    res.redirect("/manage/login");
 })
 //add adminUser
 router.post('/addAdminUser',function(req,res){
