@@ -351,7 +351,7 @@ exports.applyApprove = function(limit,offset,callback){
 			offset = parseInt(offset)
 			let numSkip = (offset)*limit
 			console.log('skip num is: ',numSkip)
-			let search = apply.find({},{'room_name':1,'meeting_name':1,'exact_meeting_time':1,'meeting_content':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':0 })
+			let search = apply.find({},{'room_name':1,'meeting_name':1,'exact_meeting_time':1,'meeting_content':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1 })
 				search.sort({'apply_time':-1})
 				search.limit(limit)
 				search.skip(numSkip)
@@ -400,6 +400,38 @@ exports.applyApprove = function(limit,offset,callback){
 				console.log('----- async final result -----')
 				callback(null,result)
 			}
+	})
+}
+//applyDetail
+exports.applyDetail = function(_id,callback){
+	apply.findOne({'_id':_id},function(err,doc){
+		if(err){
+			console.log('----- search err -----')
+			console.log(e.message)
+			callback(err,null)
+		}
+		if(!doc || doc.length == 0){
+			console.log('----- no result -----')
+			callback(1,1)
+		}
+		if(doc && doc.length != 0){
+			console.log('----- check doc -----')
+			console.log(doc)
+			callback(null,doc)
+		}
+	})
+}
+//updateApprove
+exports.updateApprove = function(_id,is_approved,callback){
+	//{$set:{name:'MDragon'}}
+	apply.update({'_id':_id},{$set:{'is_approved':is_approved}},function(err){
+		if(err){
+			console.log('----- update err -----')
+			console.log(err.message)
+			callback(err,null)
+		}
+		console.log('----- update success -----')
+		callback(null)
 	})
 }
 //测试添加申请记录

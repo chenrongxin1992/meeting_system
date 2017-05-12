@@ -146,6 +146,36 @@ router.get('/applyApprove',function(req,res){
 		}
 	})
 })
+//get applyDetail
+router.post('/applyDetail',function(req,res){
+	let _id = req.body._id
+	console.log('----- in applyDetail router -----')
+	console.log('_id: ',_id)
+	logic.applyDetail(_id,function(error,result){
+		if(error && result == null){
+			return res.json({'errCode':-1,'errMsg':error.message})
+		}
+		if(error && result == 1){
+			return res.json({'errCode':-1,'errMsg':'没有该记录'})
+		}
+		if(result && result != 1){
+			return res.json({'errCode':0,'errMsg':'success','result':result})
+		}
+	})
+})
+//update approve
+router.post('/updateApprove',function(req,res){
+	let _id = req.body._id,
+		is_approved = req.body.is_approved
+	logic.updateApprove(_id,is_approved,function(error,result){
+		if(error){
+			console.log('----- router error -----')
+			console.log(error.message)
+			return res.json({'errCode':-1,'errMsg':error.message})
+		}
+		return res.json({'errCode':0,'errMsg':'success'})
+	})
+})
 //for apply test
 router.post('/test_apply',function(req,res){
 	console.log('----- apply test -----')

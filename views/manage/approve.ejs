@@ -33,6 +33,9 @@
         .table th{
             text-align: center;
         }
+        .hide_id{
+            display: none;
+        }
 
 
     </style>
@@ -106,12 +109,61 @@
           </div>
     </div>
 
+
+    <!-- 模态框 -->
+    <!-- Large modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bs-example-modal-lg">Large modal</button> -->
+
+    <div class="modal fade modal-msg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="data-modal">
+      <div class="modal-dialog " role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="gridSystemModalLabel">会议室预定信息</h4>
+          </div>
+          <div class="modal-body">
+
+          </div>
+
+          <div class="modal-footer">
+            <button id="mybutton" type="button" class="btn btn-default sure" data-dismiss="modal">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <!-- 申请结果模态框 -->
+  <div class="modal fade result-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="result-modal">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">提交结果</h4>
+        </div>
+        <div class="modal-body">
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default sure" data-dismiss="modal" id="success-btn">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
     <script type="text/javascript" src="/javascripts/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="/javascripts/bootstrap-table.min.js"></script>
     <script type="text/javascript" src="/javascripts/bootstrap-table-zh-CN.js"></script>
     <script type="text/javascript">
     $(function () {
+
+         //弹出模态框
+      $('.fixed-table-body').on('click','td',function(){
+        console.log('hhhhhh')
+        var uniqueId = $(this).attr('uniqueId');
+        console.log(uniqueId)
+      })
+
 
         //1.初始化Table
         var oTable = new TableInit();
@@ -129,6 +181,138 @@
             //初始化Table
             oTableInit.Init = function () {
                 $('#tb_departments').bootstrapTable({
+                    onClickRow:function(row,tr){
+                        console.log(row)
+                        console.log(tr)
+                        let _id = row._id
+                        console.log('check _id: ',_id)
+                        if(row.is_approved == '已批准')
+                            return
+                        $.ajax({ 
+                            url:'/manage/applyDetail',
+                            type:'post',
+                            data: {'_id':_id},
+                            success: function(result){ 
+                                console.log('result: ',result)
+                                console.log(result.result._id)
+                                if(result.errCode == -1){
+                                    console.log('err occurd!')
+                                    console.log(result.errMsg)
+                                    return 
+                                }
+                                if(result.errCode == 0){
+                                    //弹出模态框
+                                    $('.modal-msg').modal('show')
+                                    let first_row = $('<div></div>')
+                                        first_row.addClass('row')
+                                    let first_col = $('<div></div>')
+                                        first_col.addClass('col-md-12')
+                                        first_col.text('申请信息')
+                                        
+                                        first_col.appendTo(first_row)
+                                        first_row.appendTo('.modal-body')
+                                        
+                                    let second_row = $('<div></div>')
+                                        second_row.addClass('row')
+                                    let second_row_first_col = $('<div></div>')
+                                        second_row_first_col.addClass('col-md-3')
+                                        second_row_first_col.text('会议名称')
+                                    let second_row_second_col = $('<div></div>')
+                                        second_row_second_col.addClass('col-md-6')
+                                        second_row_second_col.text(result.result.meeting_name)
+                                        
+                                    let three_row = $('<div></div>')
+                                        three_row.addClass('row')
+                                    let three_row_first_col = $('<div></div>')
+                                        three_row_first_col.addClass('col-md-3')
+                                        three_row_first_col.text('会议内容')
+                                    let three_row_second_col = $('<div></div>')
+                                        three_row_second_col.addClass('col-md-6')
+                                        three_row_second_col.text(result.result.meeting_content)
+                                        
+                                    let four_row = $('<div></div>')
+                                        four_row.addClass('row')
+                                    let four_row_first_col = $('<div></div>')
+                                        four_row_first_col.addClass('col-md-3')
+                                        four_row_first_col.text('会议人数')
+                                    let four_row_second_col = $('<div></div>')
+                                        four_row_second_col.addClass('col-md-6')
+                                        four_row_second_col.text(result.result.meeting_num)
+                                        
+                                    let five_row = $('<div></div>')
+                                        five_row.addClass('row')
+                                    let five_row_first_col = $('<div></div>')
+                                        five_row_first_col.addClass('col-md-3')
+                                        five_row_first_col.text('申请人')
+                                    let five_row_second_col = $('<div></div>')
+                                        five_row_second_col.addClass('col-md-6')
+                                        five_row_second_col.text(result.result.apply_name)
+                                        
+                                    let six_row = $('<div></div>')
+                                        six_row.addClass('row')
+                                    let six_row_first_col = $('<div></div>')
+                                        six_row_first_col.addClass('col-md-3')
+                                        six_row_first_col.text('联系方式')
+                                    let six_row_second_col = $('<div></div>')
+                                        six_row_second_col.addClass('col-md-6')
+                                        six_row_second_col.text(result.result.apply_phone)
+                                        
+                                    let seven_row = $('<div></div>')
+                                        seven_row.addClass('row')
+                                    let seven_row_first_col = $('<div></div>')
+                                        seven_row_first_col.addClass('col-md-3')
+                                        seven_row_first_col.text('是否批准')
+                                    let seven_row_second_col = $('<div></div>')
+                                        seven_row_second_col.addClass('col-md-6')//form-control这个类是bootstrap自己写好的，你用惯了，知道他写的啥，就能用了？？
+                                        seven_row_second_col.html('<select id="approve" class="selectpicker form-control" data-hide-disabled="true" data-live-search="false"><option>批准</option><option>不批准</option><select>')
+
+                                 /*   let eight_row = $('<div></div>')
+                                        eight_row.addClass('row')
+                                        //eight_row.addClass('hide_id')
+                                        eight_row.attr('id', 'myid');//zheli
+                                    let eight_row_first_col = $('<div></div>')
+                                        eight_row_first_col.addClass('col-md-12')
+                                        //eight_row_first_col.addClass('hide_id')
+                                        //eight_row_first_col.attr('id', 'myid')
+                                        eight_row_first_col.text(result.result._id)//你这里都是text*/
+                                         $('.modal-msg').attr('myid',result.result._id);
+                                    
+                                    
+
+                                    second_row_first_col.appendTo(second_row)
+                                    second_row_second_col.appendTo(second_row)
+                                    second_row.appendTo('.modal-body')
+                                        
+                                    three_row_first_col.appendTo(three_row)
+                                    three_row_second_col.appendTo(three_row)
+                                    three_row.appendTo('modal-body')
+
+                                    four_row_first_col.appendTo(four_row)
+                                    four_row_second_col.appendTo(four_row)
+                                    four_row.appendTo('.modal-body')
+
+                                    five_row_first_col.appendTo(five_row)
+                                    five_row_second_col.appendTo(five_row)
+                                    five_row.appendTo('.modal-body')
+
+                                    six_row_first_col.appendTo(six_row)
+                                    six_row_second_col.appendTo(six_row)
+                                    six_row.appendTo('.modal-body')
+
+                                    seven_row_first_col.appendTo(seven_row)
+                                    seven_row_second_col.appendTo(seven_row)
+                                    seven_row.appendTo('.modal-body')
+
+                                   /* eight_row_first_col.appendTo(eight_row)
+                                    eight_row.appendTo('.modal-body')*/
+                                }
+                            },
+                            error: function(e){ 
+                                console.log('error')
+                                console.log(e.message)
+                            }
+                        });
+                    },
                     url: '/manage/applyApprove',         //请求后台的URL（*）
                     method: 'get',                      //请求方式（*）
                     toolbar: '#toolbar',                //工具按钮用哪个容器
@@ -207,31 +391,65 @@
 
         return oInit;
     };
-    /*$(function(){ 
-        $("#register0").click(function(){ 
-            location.href = 'register';
-        });
-        $("#login0").click(function(){ 
-            var username = $("#username").val();
-            var password = $("#password").val();
-            var data = {"uname":username,"upwd":password};
-            $.ajax({ 
-                url:'/login',
-                type:'post',
-                data: data,
-                success: function(data,status){ 
-                    if(status == 'success'){ 
-                        location.href = 'home';
-                    }
-                },
-                error: function(data,status){ 
-                    if(status == 'error'){ 
-                        location.href = 'login';
-                    }
-                }
+    //success-btn
+    $("#success-btn").click(function(){ 
+        window.location.reload()
+    })
+    $("#mybutton").click(function(){ 
+        /*let myid = $('#myid').text()//用id获取 我改了这里不是val,是text
+        alert(myid);
+        console.log('here _id: ',myid)*/
+        let approve_info = $('#approve option:selected').val()
+        console.log('here approve info',approve_info)
+        let myid = $('.modal-msg').attr('myid');
+        console.log('myid: ',myid)
+
+        if(approve_info == '批准'){
+            approve_info = '1'
+        }
+        else{
+            approve_info = '0'
+        }
+
+        $.ajax({
+            url: '/manage/updateApprove', 
+            async: true,
+            dataType: 'json',
+            type: 'POST',
+            data: {
+              _id:myid,
+              is_approved:approve_info
+            },
+
+            success: function(result){
+              console.log('success')
+              console.log(result)
+              if(result.errCode == 0){
+                //弹出模态框
+                $('.result-modal').modal('show')
+                $('.modal-body').text('审批成功')
+                //setTimeout(window.location.reload(),3000)
+              }
+              if(result.errCode == -1){
+                //弹出模态框
+                $('.result-modal').modal('show')
+                $('.modal-body').text(result.errMsg)
+              }
+            },
+            error: function(e){
+              console.log("error");
+              console.error(e.message)
+              $('.result-modal').modal('show')
+              $('.modal-body').text('操作失败')
+            },
+          });
+
+    })
+    $(".modal-msg").on("hidden.bs.modal", function() {
+                console.log('---- here ----')
+                //$(this).removeData("bs.modal");
+                $(".modal-body").children().remove();  
             });
-        });
-    });*/
     </script>
 </body>
 </head>
