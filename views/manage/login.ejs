@@ -158,7 +158,7 @@
                 data: {"username":username,"password":password},
                 success: function(result){ 
                     console.log('result is',result)
-                    if(result.errCode == -1){ 
+                    if(result.errCode == -1){
                         $('.modal-msg').modal('show')
                         $('.modal-body').text(result.errMsg)
                         //location.href = '/manage/login';
@@ -169,7 +169,7 @@
                         window.location.href = '/manage/approve'
                     }
                 },
-                error: function(e){ 
+                error: function(e){
                     console.log('error ',e.message)
                     
                 }

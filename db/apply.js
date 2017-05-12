@@ -15,7 +15,7 @@ var applySchema = new Schema({
     meeting_time :{type : String },                                    //会议时间 前期简单，只使用上午、中午、下午、晚上，对应(0、1、2、3)
     apply_name : {type :String},                                       //申请人
     apply_phone : {type : String},                                     //联系方式
-    is_approved : {type : Number,default : 0},                         //是否批准(0：未批，1：批准，2：不批)
+    is_approved : {type : String,default : 0},                         //是否批准(0：未批，1：批准，2：不批)
     exact_meeting_time : {type : String}
 })
 

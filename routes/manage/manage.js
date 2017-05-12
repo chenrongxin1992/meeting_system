@@ -117,14 +117,15 @@ router.post('/addAdminUser',function(req,res){
 //get apply record for approve
 router.get('/applyApprove',function(req,res){
 	//获取分页参数
-	let limit = req.query.limit,
-		offset = req.query.offset
-	/*if(!limit || limit == null || typeof limit == 'undefined'){//页面记录数
+	let limit = req.query.limit, 	//这个相当于条数
+		offset = req.query.offset 	//这个相当于pages
+	if(!limit || limit == null || typeof limit == 'undefined'){//页面记录数
 		limit = 10
 	}
 	if(!offset || offset == null || typeof offset == 'undefined'){//当前页数
-		offset = 1
-	}*/
+		offset = 0
+	}
+	offset = parseInt(offset/limit)
 	console.log('----- in router applyApprove -----')
 	console.log('check limit && offset: ',limit,offset)
 
@@ -138,9 +139,10 @@ router.get('/applyApprove',function(req,res){
 		if(error == null && result){
 			let total = result.length,
 				rows = result
-			console.log('total is ',total)
-			console.log('rows is ',rows)
-			return res.json({total:total,rows:rows})
+			console.log('total is ',result.total)
+			//console.log('rows is ',result.docs)
+			console.log('offset is ',result.offset)
+			return res.json({total:result.total,rows:result.docs,offset:result.offset})
 		}
 	})
 })

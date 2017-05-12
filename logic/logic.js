@@ -327,44 +327,80 @@ exports.checkLogin = function(username,password,callback){
 }
 //get apply for approve 'room_name,meeting_name,exact_meeting_time,meeting_content,meeting_num,apply_name,apply_phone,is_approved'
 exports.applyApprove = function(limit,offset,callback){
-	/*apply.find({},{'room_name':1,'meeting_name':1,'exact_meeting_time':1,'meeting_content':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':0 },function(err,docs){
-		if(err){
-			console.log('----- search err -----')
-			console.log(err.message)
-			callback(err,null)
-		}
-		if(!docs || docs.length == 0){
-			console.log('----- no result now -----')
-			callback(1,1)
-		}
-		if(docs && docs.length !=0){
-			console.log('check apply records: ',docs)
-			callback(null,docs)
-		}
-	})*/
-	limit = parseInt(limit)
-	offset = parseInt(offset)
-	let numSkip = (offset)*limit
-	console.log('skip num is: ',numSkip)
-	let search = apply.find({},{'room_name':1,'meeting_name':1,'exact_meeting_time':1,'meeting_content':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':0 })
-		search.sort({'apply_time':-1})
-		search.limit(limit)
-		search.skip(numSkip)
-		search.exec(function(err,docs){
-			if(err){
-				console.log('----- search err -----')
+	async.waterfall([
+		function(cb){
+			apply.find({},function(err,docs){
+				if(err){
+					console.log('----- search err -----')
 					console.log(err.message)
-					callback(err,null)
+					cb(err,null)
 				}
-			if(!docs || docs.length == 0){
-				console.log('----- no result now -----')
-				callback(1,1)
+				if(!docs || docs.length == 0){
+					console.log('----- no result now -----')
+					cb(1,1)
+				}
+				if(docs && docs.length !=0){
+					//console.log('check apply records: ',docs)
+					cb(null,docs.length)
+				}
+			})
+		},
+		function(length,cb){
+			console.log('total length: ',length)
+			limit = parseInt(limit)
+			offset = parseInt(offset)
+			let numSkip = (offset)*limit
+			console.log('skip num is: ',numSkip)
+			let search = apply.find({},{'room_name':1,'meeting_name':1,'exact_meeting_time':1,'meeting_content':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':0 })
+				search.sort({'apply_time':-1})
+				search.limit(limit)
+				search.skip(numSkip)
+				search.exec(function(err,docs){
+					if(err){
+						console.log('----- search err -----')
+						console.log(err.message)
+						cb(err,null)
+					}
+					if(!docs || docs.length == 0){
+						console.log('----- no result now -----')
+						cb(1,1)
+					}
+					if(docs && docs.length !=0){//格式化并将length加入
+						for(let i=0;i<docs.length;i++){
+							console.log('docs.is_approved: ',docs[i].is_approved)
+							if(docs[i].is_approved == 1){
+								console.log('--- check here -----')
+								docs[i].is_approved = '已批准'
+								console.log(docs[i].is_approved)
+							}
+							else{
+								console.log('----- check here hrere -----')
+								docs[i].is_approved = '未批准'
+							}
+						}
+
+						 docs = {//你这是干啥的？就是传参数给前端呀docs
+						 	total : length,
+						 	docs : docs,////这句？？这句是记录，所有的记录哦哦感觉怪怪的，你继续你等下
+						 	offset : offset
+						 }
+						 cb(null,docs)
+					}
+				})
+		}],function(err,result){
+			if(err && result == 1){
+				console.log('----- async no records -----')
+				callback(err,1)
 			}
-			if(docs && docs.length !=0){
-				console.log('check apply records: ',docs)
-				callback(null,docs)
+			if(err && result == null){
+				console.log('----- async err -----')
+				callback(err,null)
 			}
-		})
+			if(result && result.length != 0){
+				console.log('----- async final result -----')
+				callback(null,result)
+			}
+	})
 }
 //测试添加申请记录
 exports.test_apply = function(room_name,meeting_name,meeting_num,meeting_content,meeting_date,meeting_time,apply_name,apply_phone,callback){
