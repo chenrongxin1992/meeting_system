@@ -114,6 +114,36 @@ router.post('/addAdminUser',function(req,res){
 		return res.json({'errCode':0,'errMsg':'添加用户成功'})
 	})
 })
+//get apply record for approve
+router.get('/applyApprove',function(req,res){
+	//获取分页参数
+	let limit = req.query.limit,
+		offset = req.query.offset
+	/*if(!limit || limit == null || typeof limit == 'undefined'){//页面记录数
+		limit = 10
+	}
+	if(!offset || offset == null || typeof offset == 'undefined'){//当前页数
+		offset = 1
+	}*/
+	console.log('----- in router applyApprove -----')
+	console.log('check limit && offset: ',limit,offset)
+
+	logic.applyApprove(limit,offset,function(error,result){
+		if(error && result == null){//查询出错
+			return res.json({'errCode':-1,'errMsg':error.message})
+		}
+		if(error && result == 1){
+			return res.json({'errCode':-1,'errMsg':'当前没有记录'})
+		}
+		if(error == null && result){
+			let total = result.length,
+				rows = result
+			console.log('total is ',total)
+			console.log('rows is ',rows)
+			return res.json({total:total,rows:rows})
+		}
+	})
+})
 //for apply test
 router.post('/test_apply',function(req,res){
 	console.log('----- apply test -----')
