@@ -17,11 +17,11 @@
 	    .blue{ background-color: rgb(226,235,254); }
 	    .white{ background-color: white; }
 	    .none{
-	    		background-color: white; 
-	    		line-height: 94px;
+	    		background-color: white;
+	    		vertical-align: middle;
 	    }
 	    .roomname{
-	    	line-height: 94px;
+	    	
 	    }
     	.cl{ 
     		background-color: rgb(226,235,254);
@@ -34,15 +34,24 @@
     		font-weight : bold;
     	}
     	.col-md-9{
-    		font-weight : bold;
+    		font-weight : normal;
     	}
     	.col-md-4{
-
+			font-weight : normal;
     	}
     	.col-md-8{
     		text-align: left;
+    		font-weight : bold;
+    	}
+    	.col-md-7{
     		font-weight : normal;
     	}
+    	.hr_head{
+    		margin-top: :-10px;
+    		margin-bottom: 5px;
+    	}
+
+
     </style>
   </head>
   <body>
@@ -62,7 +71,7 @@
           
           <div class="row">
 			<div class="col-md-4">
-				会议室一周申请表
+				会议室一周申请情况
 			</div>
 			<div class="col-md-4">
 			   <a id="now-week" href="?week=0">本周</a> | <a id="next-week" href="?week=1">下周</a> | <a id="next-next-week" href="?week=2">下下周</a>
@@ -71,12 +80,17 @@
 				当前时间:<span id="showdate"></span>
 			</div>
           </div>
-			
+		
+		  <!-- <div class="row">
+		  	        <hr class="hr_head">
+		  	      </div> -->
+
 		  <div class="row">
 			<div class="table-responsive">
-				<table class="table" id="monitor" border="1px">
+				<table class="table" id="monitor" border="1px" style="vertical-align: center">
+				<thead>
 					<tr id="date"> 
-						<td class="none roomname" rowspan="2" width="100px">会议室</td>
+						<td class="none" rowspan="2" width="100px" height="auto" line-height="94px">会议室</td>
 						<td colspan="4"></td>  
 						<td colspan="4"></td>  
 						<td colspan="4"></td>  
@@ -93,17 +107,19 @@
 							<td>晚上</td>
 						<% } %>
 					</tr>
+				</thead>
+				<tbody>
 					<% for(let i=0;i<result.length;i++){ %>
 						<tr>
 							<% for(let k=0;k<result[i].length;k++) { %>
 									<% if(result[i][k] == 2) { %>
-										<td class="red" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' ><%= result[i][k] %></td>
+										<td class="red" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:hand; "><%= result[i][k] %></td>
 									<% } %>
 									<% if(result[i][k] == 0) { %>
-										<td class="white" title= '<%=result[i][0]%>,<%=i%>,<%=k%>'><%= result[i][k] %></td>
+										<td class="white" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:pointer; "><%= result[i][k] %></td>
 									<% } %>
 									<% if(result[i][k] == 1) { %>
-										<td class="blue" title= '<%=result[i][0]%>,<%=i%>,<%=k%>'><%= result[i][k] %></td>
+										<td class="blue" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:hand; "><%= result[i][k] %></td>
 									<% } %>
 									<% if(result[i][k] != 0 && result[i][k] != 1 && result[i][k] != 2) { %>
 										<td class="none" title= '<%=result[i][0]%>,<%=i%>,<%=k%>'><%= result[i][k] %></td>
@@ -111,6 +127,7 @@
 							<% } %>
 						</tr>
 					<% } %>
+				</tbody>
 				</table>
 			</div>
 		  </div>
@@ -135,7 +152,7 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="gridSystemModalLabel">会议室预定信息</h4>
+	        <h4 class="modal-title" id="gridSystemModalLabel"></h4>
 	      </div>
 	      <div class="modal-body">
 
@@ -156,13 +173,6 @@
 		     if(r!=null)return  unescape(r[2]); return null;
 		}
 	window.onload = function(){     
-	  /*function GetQueryString(name)
-		{
-		     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-		     var r = window.location.search.substr(1).match(reg);
-		     if(r!=null)return  unescape(r[2]); return null;
-		}*/
-		 
 
       var cells = document.getElementById('date').getElementsByTagName('td');
       var clen = cells.length;
@@ -232,6 +242,9 @@
     //弹出模态框
       $('.table').on('click','td',function(){
       	var title = $(this).attr('title');
+      	if(typeof title == 'undefined'){
+      		return 
+      	}
       	console.log('点击的方框信息：会议室名称,横坐标，纵坐标',title)
       	let msg = title.split(',')
       	console.log('msg: ',msg)
@@ -239,6 +252,10 @@
       		i = msg[1],
       		k = msg[2]
 
+      	
+      	if(i == 0 && k == 0){
+      		return 
+      	}
       	//根据i,k求出日期和时间段
       	let arr = dateAndTime(k)
       	console.log('arr: ',arr)
@@ -263,19 +280,35 @@
               console.log(result)
               $('.modal-msg').modal('show')
 
+              $('#gridSystemModalLabel').text(room_name+'预订信息')
+
+              if(!result || result.length == 0) {
+		          	//没有预订信息时提示
+		          let no_result_row = $('<div></div>')
+		          	  no_result_row.addClass('row')
+		          let no_result_col = $('<div></div>')
+		          	  no_result_col.addClass('col-md-12')
+		          	  no_result_col.text('该时间段暂无预订信息!')
+
+		          	  no_result_col.appendTo(no_result_row)
+		          	  no_result_row.appendTo('.modal-body')
+
+		          	  return 
+	          } 
+	          
 	          let first_row = $('<div></div>')
 	          	  first_row.addClass('row')
 	          let first_col = $('<div></div>')
 	          	  first_col.addClass('col-md-3')
 	          	  first_col.text('申请状态')
 	          let second_col = $('<div></div>')
-	          	  second_col.addClass('col-md-9')
+	          	  second_col.addClass('col-md-8 col-md-offset-1')
 	          	  second_col.text('申请信息')
 
 	          	  first_col.appendTo(first_row)
 	          	  second_col.appendTo(first_row)
 	          	  first_row.appendTo('.modal-body')
-	          if(!result) return 
+	          
               for(let i=0;i<result.length;i++){
 	              	let sta = '未审批'
 	              	if(result[i].is_approved == 1){
@@ -296,38 +329,38 @@
 				    let childdiv_right_child_row_1 = $('<div></div>');
 				    	childdiv_right_child_row_1.addClass('row')			//右边列 嵌套的第一行
 				    let childdiv_right_child_row_1_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
-				    	childdiv_right_child_row_1_col_1.addClass('col-md-4')
+				    	childdiv_right_child_row_1_col_1.addClass('col-md-3')
 				    	childdiv_right_child_row_1_col_1.text('会议名称')
 				    let childdiv_right_child_row_1_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
-				    	childdiv_right_child_row_1_col_2.addClass('col-md-8')
+				    	childdiv_right_child_row_1_col_2.addClass('col-md-9')
 				    	childdiv_right_child_row_1_col_2.text(result[i].meeting_name)
 
 				    let childdiv_right_child_row_2 = $('<div></div>');
 				    	childdiv_right_child_row_2.addClass('row')			//右边列 嵌套的第一行
 				    let childdiv_right_child_row_2_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
-				    	childdiv_right_child_row_2_col_1.addClass('col-md-4')
+				    	childdiv_right_child_row_2_col_1.addClass('col-md-3')
 				    	childdiv_right_child_row_2_col_1.text('申请人')
 				    let childdiv_right_child_row_2_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
-				    	childdiv_right_child_row_2_col_2.addClass('col-md-8')
+				    	childdiv_right_child_row_2_col_2.addClass('col-md-9')
 				    	childdiv_right_child_row_2_col_2.text(result[i].apply_name)
 				    
 				    let childdiv_right_child_row_3 = $('<div></div>');
 				    	childdiv_right_child_row_3.addClass('row')			//右边列 嵌套的第一行
 				    let childdiv_right_child_row_3_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
-				    	childdiv_right_child_row_3_col_1.addClass('col-md-4')
+				    	childdiv_right_child_row_3_col_1.addClass('col-md-3')
 				    	childdiv_right_child_row_3_col_1.text('联系方式')
 				    let childdiv_right_child_row_3_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
-				    	childdiv_right_child_row_3_col_2.addClass('col-md-8')
+				    	childdiv_right_child_row_3_col_2.addClass('col-md-9')
 				    	childdiv_right_child_row_3_col_2.text(result[i].apply_phone)
 
 				    let childdiv_right_child_row_4 = $('<div></div>');
 				    	childdiv_right_child_row_4.addClass('row')			//右边列 嵌套的第一行
 				    let childdiv_right_child_row_4_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
-				    	childdiv_right_child_row_4_col_1.addClass('col-md-4')
+				    	childdiv_right_child_row_4_col_1.addClass('col-md-3')
 				    	childdiv_right_child_row_4_col_1.text('会议时间')
 				    let childdiv_right_child_row_4_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
-				    	childdiv_right_child_row_4_col_2.addClass('col-md-8')
-				    	childdiv_right_child_row_4_col_2.text(result[i].meeting_date+result[i].meeting_time)
+				    	childdiv_right_child_row_4_col_2.addClass('col-md-9')
+				    	childdiv_right_child_row_4_col_2.text(result[i].meeting_date + ' ' + result[i].exact_meeting_time)
 
 				    childdiv_right_child_row_1_col_1.appendTo(childdiv_right_child_row_1)
 				    childdiv_right_child_row_1_col_2.appendTo(childdiv_right_child_row_1)
@@ -358,11 +391,7 @@
 				    parentdiv.appendTo('.modal-body');            //将父div添加到body中
 
               }
-            $(".modal-msg").on("hidden.bs.modal", function() {
-            	console.log('---- here ----')
-        		//$(this).removeData("bs.modal");
-        		$(".modal-body").children().remove();  
-      		});
+
               
             },
             error: function(jqXHR , textStatus , errorThrown){
@@ -379,7 +408,14 @@
       })
 	
 		
-		
+	$(".modal-msg").on("hidden.bs.modal", function() {
+            	console.log('---- here ----')
+        		//$(this).removeData("bs.modal");
+        		$(".modal-body").children().remove();  
+        		console.log('----- clear modal window -----')
+        		//$(".modal-body").remove()
+        		//console.log('----- clear again -----')
+     });
 
     var format_month_day = function(date,n){ 
     	console.log('----- check n -----')

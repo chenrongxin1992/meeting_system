@@ -202,7 +202,7 @@ exports.select_room = function(callback){
 exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meeting_date,meeting_time,apply_name,apply_phone,exact_meeting_time,callback){
 	async.waterfall([
 		function(cb){//检查该时间段会议室是否已被批准使用
-			apply.find({'room_name':room_name,'meeting_date':meeting_date,'meeting_time':meeting_time,'is_approved':1},function(err,doc){
+			apply.find({'room_name':room_name,'meeting_date':meeting_date,'exact_meeting_time':exact_meeting_time,'is_approved':1},function(err,doc){
 				if(err){
 					console.log('----- search err -----')
 					console.error(err)
