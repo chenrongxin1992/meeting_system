@@ -36,6 +36,30 @@
         .hide_id{
             display: none;
         }
+        td{
+            max-width: 150px;
+            cursor: pointer;
+        }
+        .apply_info{
+            text-align: center;
+            font-weight: bold;
+        }
+        .col-md-3 ,.col-md-6{
+            height: 34px;
+            line-height: 34px;
+        }
+        .col-md-3{
+            text-align: right;
+            font-weight: bold;
+        }
+        .table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+            vertical-align: middle;
+        }
+        .col-md-9{
+            height: auto;
+            line-height: auto;
+            vertical-align: middle;
+        }
 
 
     </style>
@@ -51,7 +75,7 @@
         <div class="row-fluid">
             <div class="col-md-4"><span><h4 style="padding-left: 15px">会议室申请记录</h4></span></div>
             <div class="col-md-1 head1 pull-right"><a href="/manage/logout">退出</a></div>
-            <div class="col-md-1 head1 pull-right"><span style="color: red">当前用户: <%=user.username%></span></div>
+            <div class="col-md-2 head1 pull-right">当前用户:<span style="color: red"> <%=user.username%></span></div>
         </div>
 
        <div class="row-fluid">
@@ -119,7 +143,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="gridSystemModalLabel">会议室预定信息</h4>
+            <h4 class="modal-title" id="gridSystemModalLabel"></h4>
           </div>
           <div class="modal-body">
 
@@ -154,6 +178,7 @@
     <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="/javascripts/bootstrap-table.min.js"></script>
     <script type="text/javascript" src="/javascripts/bootstrap-table-zh-CN.js"></script>
+    <script type="text/javascript" src="/javascripts/moment.js"></script>
     <script type="text/javascript">
     $(function () {
 
@@ -203,14 +228,15 @@
                                 if(result.errCode == 0){
                                     //弹出模态框
                                     $('.modal-msg').modal('show')
-                                    let first_row = $('<div></div>')
+                                    $('#gridSystemModalLabel').text(result.result.room_name + '预订信息')
+                                    /*let first_row = $('<div></div>')
                                         first_row.addClass('row')
                                     let first_col = $('<div></div>')
-                                        first_col.addClass('col-md-12')
+                                        first_col.addClass('col-md-12 apply_info')
                                         first_col.text('申请信息')
                                         
                                         first_col.appendTo(first_row)
-                                        first_row.appendTo('.modal-body')
+                                        first_row.appendTo('.modal-body')*/
                                         
                                     let second_row = $('<div></div>')
                                         second_row.addClass('row')
@@ -221,15 +247,36 @@
                                         second_row_second_col.addClass('col-md-6')
                                         second_row_second_col.text(result.result.meeting_name)
                                         
-                                    let three_row = $('<div></div>')
-                                        three_row.addClass('row')
-                                    let three_row_first_col = $('<div></div>')
-                                        three_row_first_col.addClass('col-md-3')
-                                        three_row_first_col.text('会议内容')
-                                    let three_row_second_col = $('<div></div>')
-                                        three_row_second_col.addClass('col-md-6')
-                                        three_row_second_col.text(result.result.meeting_content)
+                                    // let three_row = $('<div></div>')
+                                    //     three_row.addClass('row')
+                                    // let three_row_first_col = $('<div></div>')
+                                    //     three_row_first_col.addClass('col-md-3')
+                                    //     three_row_first_col.text('会议内容')
+                                    // let three_row_second_col = $('<div></div>')
+                                    //     three_row_second_col.addClass('col-md-6')
+                                    //     three_row_second_col.text(result.result.meeting_content)
+                                    
+                                    //显示内容
+                                    let content_row = $('<div></div>')
+                                        content_row.addClass('row')
+                                    let content_row_first_col = $('<div></div>')
+                                        content_row_first_col.addClass('col-md-3')
+                                        content_row_first_col.text('会议内容')
+                                    let content_row_second_col = $('<div></div>')
+                                        content_row_second_col.addClass('col-md-9')
+                                        content_row_second_col.text(result.result.meeting_content)
                                         
+                                    //增加一行显示预订时间
+                                    let insert_apply_time_row = $('<div></div>')
+                                        insert_apply_time_row.addClass('row')
+                                    let insert_apply_time_row_first_col = $('<div></div>')
+                                        insert_apply_time_row_first_col.addClass('col-md-3')
+                                        insert_apply_time_row_first_col.text('申请时间')
+                                    let insert_apply_time_row_second_col = $('<div></div>')
+                                        insert_apply_time_row_second_col.addClass('col-md-6')
+                                        insert_apply_time_row_second_col.text(result.result.apply_time)
+                                    
+
                                     let four_row = $('<div></div>')
                                         four_row.addClass('row')
                                     let four_row_first_col = $('<div></div>')
@@ -283,9 +330,18 @@
                                     second_row_second_col.appendTo(second_row)
                                     second_row.appendTo('.modal-body')
                                         
-                                    three_row_first_col.appendTo(three_row)
-                                    three_row_second_col.appendTo(three_row)
-                                    three_row.appendTo('modal-body')
+                                    // three_row_first_col.appendTo(three_row)
+                                    // three_row_second_col.appendTo(three_row)
+                                    // three_row.appendTo('modal-body')
+                                    
+                                    content_row_first_col.appendTo(content_row)
+                                    content_row_second_col.appendTo(content_row)
+                                    content_row.appendTo('.modal-body')
+
+                                    //insert
+                                    insert_apply_time_row_first_col.appendTo(insert_apply_time_row)
+                                    insert_apply_time_row_second_col.appendTo(insert_apply_time_row)
+                                    insert_apply_time_row.appendTo('.modal-body')
 
                                     four_row_first_col.appendTo(four_row)
                                     four_row_second_col.appendTo(four_row)
@@ -351,6 +407,9 @@
                     }, {
                         field: 'meeting_content',
                         title: '会议内容'
+                    },{
+                        field: 'apply_time',
+                        title: '申请时间'
                     },{
                         field: 'meeting_num',
                         title: '会议人数'
@@ -446,7 +505,7 @@
 
     })
     $(".modal-msg").on("hidden.bs.modal", function() {
-                console.log('---- here ----')
+                console.log('---- clear modal-body ----')
                 //$(this).removeData("bs.modal");
                 $(".modal-body").children().remove();  
             });

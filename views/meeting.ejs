@@ -50,6 +50,10 @@
     		margin-top: :-10px;
     		margin-bottom: 5px;
     	}
+    	.hr_bottom{
+    		margin-top: 5px;
+    		margin-bottom: 5px;
+    	}
 
 
     </style>
@@ -64,7 +68,7 @@
 	        <div class="col-md-5"><h3>会议室申请</h3></div>
 	      </div>
 	      <div class="row">
-	        <div class="col-md-2 pull-right">管理申请</div>
+	        <div class="col-md-2 pull-right"><a href="/manage/approve">管理申请</a></div>
 	        <div class="col-md-2 pull-right"><a href="/reserve/reserve">申请会议室</a></div>
 	      </div>
 	      
@@ -113,13 +117,13 @@
 						<tr>
 							<% for(let k=0;k<result[i].length;k++) { %>
 									<% if(result[i][k] == 2) { %>
-										<td class="red" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:hand; "><%= result[i][k] %></td>
+										<td class="red" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:pointer; "></td>
 									<% } %>
 									<% if(result[i][k] == 0) { %>
-										<td class="white" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:pointer; "><%= result[i][k] %></td>
+										<td class="white" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:pointer;"></td>
 									<% } %>
 									<% if(result[i][k] == 1) { %>
-										<td class="blue" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:hand; "><%= result[i][k] %></td>
+										<td class="blue" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:pointer; "></td>
 									<% } %>
 									<% if(result[i][k] != 0 && result[i][k] != 1 && result[i][k] != 2) { %>
 										<td class="none" title= '<%=result[i][0]%>,<%=i%>,<%=k%>'><%= result[i][k] %></td>
@@ -131,9 +135,17 @@
 				</table>
 			</div>
 		  </div>
+		  
+		  <div class="row">
+			<div class="col-md-12">
+				<span>注：1、红色代表该时间段已被占用</span>
+				<span>2、蓝色代表该时间段有人申请</span>
+				<span>3、白色代表该时间段空闲</span>
+			</div>
+		  </div>
 
-	      <div class="row">
-	        <hr>
+	      <div class="row bottom_hr">
+	        <hr class="hr_bottom">
 	      </div>
 
 	      <div class="row">

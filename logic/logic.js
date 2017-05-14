@@ -259,7 +259,7 @@ exports.addAdminUser = function(username,password,callback){
 	admin.find({'username':username},function(err,doc){
 		if(err){
 			console.log('----- search err -----')
-			callback(err)
+			callback(err,null)
 		}
 		if(!doc || doc.length == 0){
 			console.log('----- username is not existed and can be add -----')
@@ -277,7 +277,7 @@ exports.addAdminUser = function(username,password,callback){
 				callback(null,doc)
 			})
 		}
-		if(doc){
+		if(doc && doc.length != 0){
 			console.log('----- username is existed -----')
 			callback(1,1)
 		}
@@ -351,7 +351,7 @@ exports.applyApprove = function(limit,offset,callback){
 			offset = parseInt(offset)
 			let numSkip = (offset)*limit
 			console.log('skip num is: ',numSkip)
-			let search = apply.find({},{'room_name':1,'meeting_name':1,'exact_meeting_time':1,'meeting_content':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1 })
+			let search = apply.find({},{'room_name':1,'meeting_name':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1 })
 				search.sort({'apply_time':-1})
 				search.limit(limit)
 				search.skip(numSkip)
@@ -367,6 +367,9 @@ exports.applyApprove = function(limit,offset,callback){
 					}
 					if(docs && docs.length !=0){//格式化并将length加入
 						for(let i=0;i<docs.length;i++){
+							//格式化时间戳
+							//docs[i].apply_time = moment(docs[i].apply_time).format('YYYY-MM-DD HH:mm:ss')
+							//console.log('check applytime : ',docs[i].apply_time)
 							console.log('docs.is_approved: ',docs[i].is_approved)
 							if(docs[i].is_approved == 1){
 								console.log('--- check here -----')

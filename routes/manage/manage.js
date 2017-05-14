@@ -114,6 +114,30 @@ router.post('/addAdminUser',function(req,res){
 		return res.json({'errCode':0,'errMsg':'添加用户成功'})
 	})
 })
+
+//add adminUser type of get
+router.get('/addAdminUser',function(req,res){
+	let username = req.body.username,
+		password = req.body.password
+		username = 'liyali'
+		password = 'liyali'
+	if(!username || typeof username == 'undefined'){
+		return res.json({'errCode':-1,'errMsg':'username can not be null'})
+	}
+	if(!password || typeof password == 'undefined'){
+		return res.json({'errCode':-1,'errMsg':'password can not be null'})
+	}
+	logic.addAdminUser(username,password,function(error,result){
+		if(error && result == null){
+			return res.json({'errCode':-1,'errMsg':error.message})
+		}
+		if(error && result == 1){
+			return res.json({'errCode':-1,'errMsg':'该用户已存在'})
+		}
+		if(result && result.length != 0)
+			return res.json({'errCode':0,'errMsg':'添加用户成功'})
+	})
+})
 //get apply record for approve
 router.get('/applyApprove',function(req,res){
 	//获取分页参数
