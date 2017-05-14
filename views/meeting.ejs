@@ -9,15 +9,16 @@
     <script type="text/javascript" src='/javascripts/bootstrapValidator.min.js' ></script>
     <script type="text/javascript" src='/javascripts/moment.js' ></script>
     <style type="text/css">
+
 		td{
 			text-align: center;
 		}
 
-	    .red{ background-color: red; }
-	    .blue{ background-color: rgb(226,235,254); }
+	    .red{ background-color:rgb(255,0,128);}
+	    .blue{ background-color: rgb(255,128,0);}
 	    .white{ background-color: white; }
 	    .none{
-	    		background-color: white;
+	    		background-color: rgb(226,234,254);
 	    		vertical-align: middle;
 	    }
 	    .roomname{
@@ -54,6 +55,12 @@
     		margin-top: 5px;
     		margin-bottom: 5px;
     	}
+    	#date{
+    		background-color: rgb(226,234,254);
+    	}
+    	#time_line{
+    		background-color: rgb(226,234,254);
+    	}
 
 
     </style>
@@ -78,7 +85,7 @@
 				会议室一周申请情况
 			</div>
 			<div class="col-md-4">
-			   <a id="now-week" href="?week=0">本周</a> | <a id="next-week" href="?week=1">下周</a> | <a id="next-next-week" href="?week=2">下下周</a>
+			   <a id="now-week" href="?week=0">本周</a> | <a id="next-week" href="?week=1">下周</a> | <a id="next-next-week" href="?week=2">下下周</a> | <a id="next-next-next-week" href="?week=3">下下下周</a>
 			</div>
 			<div class="col-md-4">
 				当前时间:<span id="showdate"></span>
@@ -94,7 +101,7 @@
 				<table class="table" id="monitor" border="1px" style="vertical-align: center">
 				<thead>
 					<tr id="date"> 
-						<td class="none" rowspan="2" width="100px" height="auto" line-height="94px">会议室</td>
+						<td class="none" rowspan="2" width="100px" style="vertical-align: middle;">会议室</td>
 						<td colspan="4"></td>  
 						<td colspan="4"></td>  
 						<td colspan="4"></td>  
@@ -103,7 +110,7 @@
 						<td colspan="4"></td>  
 						<td colspan="4"></td> 
 					</tr>
-					<tr>
+					<tr id="time_line">
 						<% for (let i=0;i<7;i++){ %>
 							<td>上午</td>
 							<td>中午</td>
@@ -138,8 +145,8 @@
 		  
 		  <div class="row">
 			<div class="col-md-12">
-				<span>注：1、红色代表该时间段已被占用</span>
-				<span>2、蓝色代表该时间段有人申请</span>
+				<span>注：1、红色代表该时间段已被占用;</span>
+				<span>2、橙色代表该时间段有人申请;</span>
 				<span>3、白色代表该时间段空闲</span>
 			</div>
 		  </div>
