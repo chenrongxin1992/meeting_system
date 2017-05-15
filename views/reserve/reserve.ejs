@@ -115,18 +115,23 @@
                  placeholder="请输入会议时间"> -->
               <select id="meeting_time" class="selectpicker" data-hide-disabled="true" data-live-search="false">
                 <optgroup label="上午">
-                  <option>08:30-11:00</option>
+                  <option>08:30-09:30</option>
+                  <option>09:30-10:30</option>
+                  <option>10:30-11:30</option>
                 </optgroup>
                 <optgroup label="中午">
-                  <option>11:00-13:00</option>
+                  <option>12:00-13:00</option>
+                  <option>13:00-14:30</option>
                 </optgroup>
                 <optgroup label="下午">
-                  <option>14:00-15:30</option>
+                  <option>14:30-15:30</option>
                   <option>15:30-16:30</option>
                   <option>16:30-17:30</option>
                 </optgroup>
                 <optgroup label="晚上">
-                  <option>19:00-20:30</option>
+                  <option>18:00-19:00</option>
+                  <option>19:00-20:00</option>
+                  <option>20:00-21:00</option>
                 </optgroup>
               </select>
           </div>
@@ -251,11 +256,11 @@
           let temp_meeting_time = meeting_time.substring(0,2),
               exact_meeting_time = ''
           console.log('临时截取时间：',temp_meeting_time)
-          if(temp_meeting_time == '08'){
+          if(temp_meeting_time == '08' || temp_meeting_time == '09' || temp_meeting_time == '10'){
             exact_meeting_time = '上午' + meeting_time
             meeting_time = '上午'
           }
-          if(temp_meeting_time == '11'){
+          if(temp_meeting_time == '12' || temp_meeting_time == '13'){
             exact_meeting_time = '中午' + meeting_time 
             meeting_time = '中午'
           }
@@ -263,7 +268,7 @@
             exact_meeting_time = '下午' + meeting_time
             meeting_time = '下午'
           }
-          if(temp_meeting_time == '19'){
+          if(temp_meeting_time == '19' || temp_meeting_time == '18' || temp_meeting_time == '20'){
             exact_meeting_time = '晚上' + meeting_time
             meeting_time = '晚上'
           }

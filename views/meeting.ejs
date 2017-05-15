@@ -111,7 +111,7 @@
 						<td colspan="4"></td> 
 					</tr>
 					<tr id="time_line">
-						<% for (let i=0;i<7;i++){ %>
+						<% for (var a=0;a<7;a++){ %>
 							<td>上午</td>
 							<td>中午</td>
 							<td>下午</td>
@@ -120,20 +120,20 @@
 					</tr>
 				</thead>
 				<tbody>
-					<% for(let i=0;i<result.length;i++){ %>
+					<% for(var b=0;b<result.length;b++){ %>
 						<tr>
-							<% for(let k=0;k<result[i].length;k++) { %>
-									<% if(result[i][k] == 2) { %>
-										<td class="red" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:pointer; "></td>
+							<% for(var c=0;c<result[b].length;c++) { %>
+									<% if(result[b][c] == 2) { %>
+										<td class="red" title= '<%=result[b][0]%>,<%=b%>,<%=c%>' style= "cursor:pointer; "></td>
 									<% } %>
-									<% if(result[i][k] == 0) { %>
-										<td class="white" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:pointer;"></td>
+									<% if(result[b][c] == 0) { %>
+										<td class="white" title= '<%=result[b][0]%>,<%=b%>,<%=c%>' style= "cursor:pointer;"></td>
 									<% } %>
-									<% if(result[i][k] == 1) { %>
-										<td class="blue" title= '<%=result[i][0]%>,<%=i%>,<%=k%>' style= "cursor:pointer; "></td>
+									<% if(result[b][c] == 1) { %>
+										<td class="blue" title= '<%=result[b][0]%>,<%=b%>,<%=c%>' style= "cursor:pointer; "></td>
 									<% } %>
-									<% if(result[i][k] != 0 && result[i][k] != 1 && result[i][k] != 2) { %>
-										<td class="none" title= '<%=result[i][0]%>,<%=i%>,<%=k%>'><%= result[i][k] %></td>
+									<% if(result[b][c] != 0 && result[b][c] != 1 && result[b][c] != 2) { %>
+										<td class="none" title= '<%=result[b][0]%>,<%=b%>,<%=c%>'><%= result[b][c] %></td>
 									<% } %>
 							<% } %>
 						</tr>
@@ -185,6 +185,7 @@
 	</div>
 
 	<script>  
+	//'use strict';
 	function GetQueryString(name)
 		{
 		     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -265,9 +266,9 @@
       		return 
       	}
       	console.log('点击的方框信息：会议室名称,横坐标，纵坐标',title)
-      	let msg = title.split(',')
+      	var msg = title.split(',')
       	console.log('msg: ',msg)
-      	let room_name = msg[0],
+      	var room_name = msg[0],
       		i = msg[1],
       		k = msg[2]
 
@@ -277,11 +278,11 @@
       	}
 
       	//根据i,k求出日期和时间段
-      	let arr = dateAndTime(k)
+      	var arr = dateAndTime(k)
       	console.log('arr: ',arr)
-      	let meeting_date = arr[0]
-      	let meeting_time = arr[1]
-      	let week = arr[2]
+      	var meeting_date = arr[0]
+      	var meeting_time = arr[1]
+      	var week = arr[2]
       	console.log('meeting_date && meeting_time : ',meeting_date,meeting_time)
 
       	//ajax请求数据
@@ -304,9 +305,9 @@
 
               if(!result || result.length == 0) {
 		          	//没有预订信息时提示
-		          let no_result_row = $('<div></div>')
+		          var no_result_row = $('<div></div>')
 		          	  no_result_row.addClass('row')
-		          let no_result_col = $('<div></div>')
+		          var no_result_col = $('<div></div>')
 		          	  no_result_col.addClass('col-md-12')
 		          	  no_result_col.text('该时间段暂无预订信息!')
 
@@ -316,12 +317,12 @@
 		          	  return 
 	          } 
 	          
-	          let first_row = $('<div></div>')
+	          var first_row = $('<div></div>')
 	          	  first_row.addClass('row')
-	          let first_col = $('<div></div>')
+	          var first_col = $('<div></div>')
 	          	  first_col.addClass('col-md-3')
 	          	  first_col.text('申请状态')
-	          let second_col = $('<div></div>')
+	          var second_col = $('<div></div>')
 	          	  second_col.addClass('col-md-8 col-md-offset-1')
 	          	  second_col.text('申请信息')
 
@@ -329,8 +330,8 @@
 	          	  second_col.appendTo(first_row)
 	          	  first_row.appendTo('.modal-body')
 	          
-              for(let i=0;i<result.length;i++){
-	              	let sta = '未审批'
+              for(var i=0;i<result.length;i++){
+	              	var sta = '未审批'
 	              	if(result[i].is_approved == 1){
 	              		sta = '已批准'
 	              	}
@@ -343,42 +344,42 @@
 					    childdiv_left_parent.addClass('col-md-3 cl');   
 					    childdiv_left_parent.text(sta)
 
-				    let childdiv_right_parent = $('<div></div>');   	//右边列
+				    var childdiv_right_parent = $('<div></div>');   	//右边列
 				    	childdiv_right_parent.addClass('col-md-9')
 
-				    let childdiv_right_child_row_1 = $('<div></div>');
+				    var childdiv_right_child_row_1 = $('<div></div>');
 				    	childdiv_right_child_row_1.addClass('row')			//右边列 嵌套的第一行
-				    let childdiv_right_child_row_1_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
+				    var childdiv_right_child_row_1_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
 				    	childdiv_right_child_row_1_col_1.addClass('col-md-3')
 				    	childdiv_right_child_row_1_col_1.text('会议名称')
-				    let childdiv_right_child_row_1_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
+				    var childdiv_right_child_row_1_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
 				    	childdiv_right_child_row_1_col_2.addClass('col-md-9')
 				    	childdiv_right_child_row_1_col_2.text(result[i].meeting_name)
 
-				    let childdiv_right_child_row_2 = $('<div></div>');
+				    var childdiv_right_child_row_2 = $('<div></div>');
 				    	childdiv_right_child_row_2.addClass('row')			//右边列 嵌套的第一行
-				    let childdiv_right_child_row_2_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
+				    var childdiv_right_child_row_2_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
 				    	childdiv_right_child_row_2_col_1.addClass('col-md-3')
 				    	childdiv_right_child_row_2_col_1.text('申请人')
-				    let childdiv_right_child_row_2_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
+				    var childdiv_right_child_row_2_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
 				    	childdiv_right_child_row_2_col_2.addClass('col-md-9')
 				    	childdiv_right_child_row_2_col_2.text(result[i].apply_name)
 				    
-				    let childdiv_right_child_row_3 = $('<div></div>');
+				    var childdiv_right_child_row_3 = $('<div></div>');
 				    	childdiv_right_child_row_3.addClass('row')			//右边列 嵌套的第一行
-				    let childdiv_right_child_row_3_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
+				    var childdiv_right_child_row_3_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
 				    	childdiv_right_child_row_3_col_1.addClass('col-md-3')
 				    	childdiv_right_child_row_3_col_1.text('联系方式')
-				    let childdiv_right_child_row_3_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
+				    var childdiv_right_child_row_3_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
 				    	childdiv_right_child_row_3_col_2.addClass('col-md-9')
 				    	childdiv_right_child_row_3_col_2.text(result[i].apply_phone)
 
-				    let childdiv_right_child_row_4 = $('<div></div>');
+				    var childdiv_right_child_row_4 = $('<div></div>');
 				    	childdiv_right_child_row_4.addClass('row')			//右边列 嵌套的第一行
-				    let childdiv_right_child_row_4_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
+				    var childdiv_right_child_row_4_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
 				    	childdiv_right_child_row_4_col_1.addClass('col-md-3')
 				    	childdiv_right_child_row_4_col_1.text('会议时间')
-				    let childdiv_right_child_row_4_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
+				    var childdiv_right_child_row_4_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
 				    	childdiv_right_child_row_4_col_2.addClass('col-md-9')
 				    	childdiv_right_child_row_4_col_2.text(result[i].meeting_date + ' ' + result[i].exact_meeting_time)
 
@@ -403,7 +404,7 @@
 				    childdiv_right_parent.appendTo(parentdiv)		 //将子div添加到父div中  右边第一列添加到row中
 
 				    //添加划分线
-				    let last_row = $('<div></div>')
+				    var last_row = $('<div></div>')
 	          	  		last_row.addClass('row')
 		          	  	last_row.html('<hr>')
 	          	  	last_row.appendTo('.modal-body')
@@ -445,7 +446,7 @@
         return month+day;
      };
     var dateAndTime = function(arg){
-    	let tem1 = parseInt(arg/4)  //取整,(0-6)
+    	var tem1 = parseInt(arg/4)  //取整,(0-6)
 
     	if(tem1 == 0){//1 2 3
     		tem1 = 0
@@ -490,21 +491,21 @@
     		tem1 = 6
     	}
 
-    	let week=GetQueryString("week");
+    	var week=GetQueryString("week");
 		console.log(week)
 		if(week !=null && week.toString().length>=1){
 			console.log('week is ' + week);
 		} 
-		let tempstamp = moment().format('X')
+		var tempstamp = moment().format('X')
 		console.log('临时时间戳',tempstamp)
 		timeStamp = moment().add(week,'week').format('X')
 		console.log('加参数时间戳',timeStamp)
 		//date = new Date(timeStamp*1000)
 
-    	let date = new Date(timeStamp * 1000)
-    	let tem2 = format_month_day(date,tem1)
+    	var date = new Date(timeStamp * 1000)
+    	var tem2 = format_month_day(date,tem1)
     	console.log('----- check date -----',tem2)
-    	let tem3 = arg%4
+    	var tem3 = arg%4
     	switch(tem3){
     		case 1 : tem3 = '上午'
     		break;

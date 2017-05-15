@@ -1,13 +1,18 @@
+/**
+ *  @Author:    chenrongxin
+ *  @Create Date:   2017-05-15
+ *  @Description:   后台所有路由
+ */
 var express = require('express')
 var router = express.Router()
 var logger = require('../../log/logConfig').logger
 var logic = require('../../logic/logic')
 
-//http://localhost:3000/manage/add_meeting_room
+//get method : for render a page 
+//post method : for ajax add meeting room 
 router.get('/add_meeting_room',function(req,res){
 	res.render('manage/add_meeting_room')
-})
-router.post('/add_meeting_room',function(req,res){
+}).post('/add_meeting_room',function(req,res){
 	console.log('----- add_meeting_room -----')
 
 	var room_name = req.body.room_name
@@ -20,7 +25,7 @@ router.post('/add_meeting_room',function(req,res){
 		}
 	})
 })
-//apply
+//for apply a new meeting room
 router.post('/apply',function(req,res){
 	console.log('----- apply -----')
 	var room_name = req.body.room_name,
@@ -45,12 +50,11 @@ router.post('/apply',function(req,res){
 	})
 })
 
-//login
+//get method : for render a login page 
+//post method : for ajax to check login 
 router.get('/login',function(req,res){
 	res.render('manage/login')
-})
-//checkLogin
-router.post('/login',function(req,res){
+}).post('/login',function(req,res){
 	console.log('----- check login -----')
 	let username = req.body.username,
 		password = req.body.password
@@ -73,11 +77,9 @@ router.post('/login',function(req,res){
 			console.log(req.session.user)
 			return res.json({'errCode':0,'errMsg':'success'})
 		}
-		
 	})
-	//res.render('manage/login')
 })
-//approve
+//render a approve page for admin
 router.get('/approve',function(req,res){
 	console.log('----- in approve router -----')
 	console.log('check session ',req.session.user)
@@ -87,14 +89,15 @@ router.get('/approve',function(req,res){
 	}
 	return res.render('manage/approve',{username:req.session.user.username})
 })
-//logout
+//render a logout page
 router.get('/logout',function(req,res){
 	console.log('----- in router logout -----')
 	req.session.user = null;
     req.session.error = null;
     res.redirect("/manage/login");
 })
-//add adminUser
+//post method : ajax for add admin user 
+//get method : render a page to add admin user 
 router.post('/addAdminUser',function(req,res){
 	let username = req.body.username,
 		password = req.body.password
@@ -113,10 +116,7 @@ router.post('/addAdminUser',function(req,res){
 		}
 		return res.json({'errCode':0,'errMsg':'添加用户成功'})
 	})
-})
-
-//add adminUser type of get
-router.get('/addAdminUser',function(req,res){
+}).get('/addAdminUser',function(req,res){
 	let username = req.body.username,
 		password = req.body.password
 		username = 'liyali'
@@ -138,7 +138,7 @@ router.get('/addAdminUser',function(req,res){
 			return res.json({'errCode':0,'errMsg':'添加用户成功'})
 	})
 })
-//get apply record for approve
+//render a page for admin user to check apply
 router.get('/applyApprove',function(req,res){
 	//获取分页参数
 	let limit = req.query.limit, 	//这个相当于条数
@@ -170,7 +170,7 @@ router.get('/applyApprove',function(req,res){
 		}
 	})
 })
-//get applyDetail
+//ajax to get apply detail and put on bootstrap modal
 router.post('/applyDetail',function(req,res){
 	let _id = req.body._id
 	console.log('----- in applyDetail router -----')
@@ -187,7 +187,7 @@ router.post('/applyDetail',function(req,res){
 		}
 	})
 })
-//update approve
+//ajax for update apply status
 router.post('/updateApprove',function(req,res){
 	let _id = req.body._id,
 		is_approved = req.body.is_approved
@@ -200,7 +200,7 @@ router.post('/updateApprove',function(req,res){
 		return res.json({'errCode':0,'errMsg':'success'})
 	})
 })
-//for apply test
+//just for apply test postman 
 router.post('/test_apply',function(req,res){
 	console.log('----- apply test -----')
 	var room_name = req.body.room_name,

@@ -45,7 +45,7 @@ app.use(session({
   	saveUninitialized: true, //添加 saveUninitialized 选项 
     secret: 'secret',
     cookie:{ 
-        maxAge: 1000*60*30*24
+        maxAge: 1000*60*60*24
     }
 }));
 app.use(function(req,res,next){ 
@@ -62,7 +62,7 @@ app.use(function(req,res,next){
 });
 
 app.use('/', index);
-app.use('/users', users);
+//app.use('/users', users);
 app.use('/manage',manage)
 app.use('/reserve',reserve)
 //app.use('/test',test_route)

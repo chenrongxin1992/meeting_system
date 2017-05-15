@@ -370,7 +370,7 @@ exports.applyApprove = function(limit,offset,callback){
 			offset = parseInt(offset)
 			let numSkip = (offset)*limit
 			console.log('skip num is: ',numSkip)
-			let search = apply.find({},{'room_name':1,'meeting_name':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1 })
+			let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1 })
 				search.sort({'apply_time':-1})
 				search.limit(limit)
 				search.skip(numSkip)
@@ -389,6 +389,7 @@ exports.applyApprove = function(limit,offset,callback){
 							//格式化时间戳
 							//docs[i].apply_time = moment(docs[i].apply_time).format('YYYY-MM-DD HH:mm:ss')
 							//console.log('check applytime : ',docs[i].apply_time)
+							docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
 							console.log('docs.is_approved: ',docs[i].is_approved)
 							if(docs[i].is_approved == 1){
 								console.log('--- check here -----')
@@ -401,9 +402,9 @@ exports.applyApprove = function(limit,offset,callback){
 							}
 						}
 
-						 docs = {//你这是干啥的？就是传参数给前端呀docs
+						 docs = {
 						 	total : length,
-						 	docs : docs,////这句？？这句是记录，所有的记录哦哦感觉怪怪的，你继续你等下
+						 	docs : docs,
 						 	offset : offset
 						 }
 						 cb(null,docs)
