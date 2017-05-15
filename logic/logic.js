@@ -49,12 +49,14 @@ exports.add_meeting_room = function(room_name,callback){
 			console.log('----- room_name is existed -----')
 			callback(1)
 		}
-		if(err && !result){
+		else if(err && !result){
 			console.log('----- async err -----')
 		}
-		console.log('----- final result -----')
-		console.log(result)
-		callback(result)
+		else{
+			console.log('----- final result -----')
+			console.log(result)
+			callback(result)
+		}
 	})
 	
 }
@@ -71,14 +73,16 @@ exports.apply_record = function(week,callback){
 					console.log('----- docs is null -----')
 					cb(1)
 				}
-				console.log('meeting_room: ',docs)
-				cb(null,docs)
+				if(docs && docs.length != 0){
+					console.log('meeting_room: ',docs)
+					cb(null,docs)
+				}
 			})
 		},
 		function(docs,cb){
 			var list = new Array(),
 				resultList = new Array()
-			async.eachLimit(docs,1,function(item,cb){
+			async.eachLimit(docs,1,function(item,cbb){
 				console.log('----- check each docs -----')
 				console.log(item)
 				list.push(item.room_name)
@@ -93,7 +97,7 @@ exports.apply_record = function(week,callback){
 
 				console.log('dateArr:',dateArr)
 
-				async.eachLimit(dateArr,1,function(val,cbb){
+				async.eachLimit(dateArr,1,function(val,cbbb){
 					console.log('----- check dateArr val -----')
 					console.log(val)
 					var timeArr = new Array()
@@ -102,7 +106,7 @@ exports.apply_record = function(week,callback){
 						timeArr.push('下午')
 						timeArr.push('晚上')
 					console.log('timeArr:',timeArr)
-					async.eachLimit(timeArr,1,function(v,cbbb){
+					async.eachLimit(timeArr,1,function(v,cbbbb){
 						console.log('----- check timeArr val -----')
 						//console.log(v)
 						console.log('meeting_date && meeting_time && room_name',val,v,item.room_name)
@@ -113,7 +117,7 @@ exports.apply_record = function(week,callback){
 							if(!doc || doc.length ==0){
 								console.log('----- doc is null -----')
 								list.push('0')
-								cbbb()
+								cbbbb()
 							}
 							if(doc && doc.length != 0) {
 								var temp = '1'
@@ -125,7 +129,7 @@ exports.apply_record = function(week,callback){
 									}
 								}
 								list.push(temp)
-								cbbb()
+								cbbbb()
 							}
 						})
 					},function(err){
@@ -133,10 +137,11 @@ exports.apply_record = function(week,callback){
 								console.log('----- each timeArr err -----')
 							}
 							//console.log('list:',list)
+							console.log('----- each timeArr finish -----')
 							console.log('list length',list.length)
 							//分割结果
 							resultList = chunk(list,29)
-							cbb()		
+							cbbb()		
 					})
 				},function(err){
 					if(err){
@@ -144,20 +149,33 @@ exports.apply_record = function(week,callback){
 					}
 					//resultList.push(list)
 					//console.log('resultList:',resultList)
+					console.log('----- each week days finish -----')
 					console.log('resultList length',resultList.length)
-					cb()
+					cbb()
 				})
 			},function(err){
 				if(err){
 					console.log('----- each docs err -----')
 				}
-				console.log('----- final result -----')
+				console.log('----- async waterfall finish -----')
 				//console.log('resultList: ',resultList)
-				callback(resultList)
+				cb(null,resultList)
 			})
 		}
 	],function(err,result){
-
+		if(err && err == 1){
+			console.log('----- async err and result is null -----')
+			callback(null)
+		}
+		else if(err && err != 1){
+			console.log('----- async err -----')
+			console.log(err.message)
+		}
+		else{
+			console.log('----- async end and final result is -----')
+			console.log(result)
+			callback(result)
+		}
 	})
 }
 //获取点击查看申请详情
@@ -229,7 +247,8 @@ exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meet
 				meeting_time : meeting_time,
 				apply_name : apply_name,
 				apply_phone : apply_phone,
-				exact_meeting_time : exact_meeting_time
+				exact_meeting_time : exact_meeting_time,
+				apply_time : moment().format('YYYY-MM-DD HH:mm:ss')
 			})
 			console.log(new_apply)
 			new_apply.save(function(err,doc){
@@ -395,11 +414,11 @@ exports.applyApprove = function(limit,offset,callback){
 				console.log('----- async no records -----')
 				callback(err,1)
 			}
-			if(err && result == null){
+			else if(err && result == null){
 				console.log('----- async err -----')
 				callback(err,null)
 			}
-			if(result && result.length != 0){
+			else{//(result && result.length != 0)
 				console.log('----- async final result -----')
 				callback(null,result)
 			}

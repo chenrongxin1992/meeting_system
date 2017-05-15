@@ -157,10 +157,10 @@ router.get('/applyApprove',function(req,res){
 		if(error && result == null){//查询出错
 			return res.json({'errCode':-1,'errMsg':error.message})
 		}
-		if(error && result == 1){
+		else if(error && result == 1){
 			return res.json({'errCode':-1,'errMsg':'当前没有记录'})
 		}
-		if(error == null && result){
+		else{//(error == null && result)
 			let total = result.length,
 				rows = result
 			console.log('total is ',result.total)
