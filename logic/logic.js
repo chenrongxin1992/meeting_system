@@ -4,6 +4,25 @@ const admin = require('../db/admin')
 const async = require('async')
 const moment = require('moment')
 const chunk =require("lodash/chunk")
+const nodemailer = require('nodemailer')
+
+var config_email = {
+	host : 'smtp.qq.com',
+	secureConnection: true,
+	auth : {
+		user : '848536190@qq.com',
+		pass : 'zotdwugmkmipbchd'
+	}
+}
+var transporter = nodemailer.createTransport(config_email)
+
+var data = {
+	from : '848536190@qq.com',
+	to : '',
+	subject : '计算机与软件学院 会议室申请结果 通知',
+	html : ''
+}
+
 
 exports.add_meeting_room = function(room_name,callback){
 	async.waterfall([
@@ -217,7 +236,7 @@ exports.select_room = function(callback){
 	})
 }
 //添加申请记录
-exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meeting_date,meeting_time,apply_name,apply_phone,exact_meeting_time,callback){
+exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meeting_date,meeting_time,apply_name,apply_phone,exact_meeting_time,apply_email,callback){
 	async.waterfall([
 		function(cb){//检查该时间段会议室是否已被批准使用
 			apply.find({'room_name':room_name,'meeting_date':meeting_date,'exact_meeting_time':exact_meeting_time,'is_approved':1},function(err,doc){
@@ -248,7 +267,8 @@ exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meet
 				apply_name : apply_name,
 				apply_phone : apply_phone,
 				exact_meeting_time : exact_meeting_time,
-				apply_time : moment().format('YYYY-MM-DD HH:mm:ss')
+				apply_time : moment().format('YYYY-MM-DD HH:mm:ss'),
+				email :apply_email
 			})
 			console.log(new_apply)
 			new_apply.save(function(err,doc){
@@ -454,7 +474,29 @@ exports.updateApprove = function(_id,is_approved,callback){
 			callback(err,null)
 		}
 		console.log('----- update success -----')
-		callback(null)
+		//find this record and send a email
+		apply.findOne({'_id':_id},function(err,doc){
+			if(err){
+				console.log('----- search err -----')
+				console.log(err.message)
+			}else{
+				let sendTo = doc.email
+				console.log('check email: ',sendTo)
+				data.to = sendTo
+				data.html = '你好，你申请的 <strong>'+doc.room_name+' </strong>已通过审批,会议时间: <strong style="color:red">' + doc.meeting_date + ' ' + doc.exact_meeting_time + '</strong>。'
+				console.log('check send data: ',data)
+				transporter.sendMail(data,function(err,info){
+					if(err){
+						console.log('----- send email err -----')
+						console.log(e.message)
+					}else{
+						console.log('message sent: ',info.response)
+						callback(null)
+					}
+				})
+			}
+		})
+		//callback(null)
 	})
 }
 //测试添加申请记录

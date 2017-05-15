@@ -100,6 +100,14 @@
                  placeholder="请输入手机号码">
           </div>
         </div>
+
+        <div class="form-group">
+          <label for="email" class="col-sm-2 col-sm-offset-1  control-label">邮箱</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" id="apply_email" 
+                 placeholder="用于接收审批结果通知">
+          </div>
+        </div>
         
         <div class="form-group">
           <label for="meeting_date" class="col-sm-2 col-sm-offset-1 control-label">会议日期</label>
@@ -188,7 +196,8 @@
               apply_name = $('#apply_name').val(),
               apply_phone = $('#apply_phone').val(),
               meeting_date = $('#meeting_date').val(),
-              meeting_time = $('#meeting_time option:selected').val()
+              meeting_time = $('#meeting_time option:selected').val(),
+              apply_email = $('#apply_email').val()
 
           if(!meeting_name || typeof meeting_name == 'undefined'){
             $('.modal-msg').modal('show')
@@ -244,6 +253,19 @@
               $('.modal-body').text('请输入正确的手机号！')
               return 
           }
+          console.log('check email: ',apply_email)
+          if(!apply_email || typeof apply_email == 'undefined'){
+            $('.modal-msg').modal('show')
+            $('.modal-body').text('邮箱不能为空！')
+            return 
+          }
+          let checkemail = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/
+          if(!checkemail.exec(apply_email)){
+              $('.modal-msg').modal('show')
+              $('.modal-body').text('请输入正确的邮箱！')
+              return 
+          }
+          //return 
 
 
           console.log('check args',room_name,meeting_name,meeting_num,meeting_content,apply_name,apply_phone,meeting_date,meeting_time)
@@ -289,7 +311,8 @@
               apply_phone:apply_phone,
               meeting_date:meeting_date,
               meeting_time:meeting_time,
-              exact_meeting_time:exact_meeting_time
+              exact_meeting_time:exact_meeting_time,
+              apply_email:apply_email
             },
 
             success: function(result){

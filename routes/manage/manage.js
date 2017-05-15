@@ -36,8 +36,9 @@ router.post('/apply',function(req,res){
 		apply_phone = req.body.apply_phone,
 		meeting_date = req.body.meeting_date,
 		meeting_time = req.body.meeting_time,
-		exact_meeting_time = req.body.exact_meeting_time
-	logic.apply(room_name,meeting_name,meeting_num,meeting_content,meeting_date,meeting_time,apply_name,apply_phone,exact_meeting_time,function(err,result){
+		exact_meeting_time = req.body.exact_meeting_time,
+		apply_email = req.body.apply_email
+	logic.apply(room_name,meeting_name,meeting_num,meeting_content,meeting_date,meeting_time,apply_name,apply_phone,exact_meeting_time,apply_email,function(err,result){
 		if(err){
 			return res.json({'errCode':-1,'errMsg':err.message})
 		}
@@ -221,4 +222,5 @@ router.post('/test_apply',function(req,res){
 		return res.json(result)
 	})
 })
+
 module.exports = router
