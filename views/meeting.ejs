@@ -61,6 +61,24 @@
     	#time_line{
     		background-color: rgb(226,234,254);
     	}
+    	.table{
+    		font-size: 12px;
+    	}
+    	.bottom_bg{
+    		background-color: #80AAD3;
+    	}
+    	.bottom_img{
+    		vertical-align: middle; 
+    		border: 1px solid #FFFFFF;
+    		margin-bottom: 1px;
+    	}
+    	.bottom_span{
+    		height: 21px;
+    	}
+    	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+    		padding: 5px;
+    	}
+
 
 
     </style>
@@ -112,10 +130,10 @@
 					</tr>
 					<tr id="time_line">
 						<% for (var a=0;a<7;a++){ %>
-							<td>上午</td>
-							<td>中午</td>
-							<td>下午</td>
-							<td>晚上</td>
+							<td>上</td>
+							<td>中</td>
+							<td>下</td>
+							<td>晚</td>
 						<% } %>
 					</tr>
 				</thead>
@@ -143,11 +161,11 @@
 			</div>
 		  </div>
 		  
-		  <div class="row">
-			<div class="col-md-12">
-				<span>注：1、红色代表该时间段已被占用;</span>
-				<span>2、橙色代表该时间段有人申请;</span>
-				<span>3、白色代表该时间段空闲</span>
+		  <div class="row bottom_bg">
+			<div class="col-md-12 ">
+				<span class="bottom_span">注：1.<img src="/images/red.png" class="bottom_img"   /> 红色代表该时间段已被占用;</span>
+				<span class="bottom_span">2.<img src="/images/orange.png"  class="bottom_img"  /> 橙色代表该时间段有人申请;</span>
+				<span class="bottom_span">3.<img src="/images/white.png"   class="bottom_img"  />白色代表该时间段空闲</span>
 			</div>
 		  </div>
 
@@ -201,7 +219,7 @@
         var year = date.getFullYear()+'年';
         var month = (date.getMonth()+1)+'月';
         var day = date.getDate()+'日';
-        var week = '('+['星期天','星期一','星期二','星期三','星期四','星期五','星期六'][date.getDay()]+')'; 
+        var week = '('+['周天','周一','周二','周三','周四','周五','周六'][date.getDay()]+')'; 
  
         return month+day+' '+week;
       };

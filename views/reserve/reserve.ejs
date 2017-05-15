@@ -97,7 +97,7 @@
           <label for="phone" class="col-sm-2 col-sm-offset-1  control-label">联系电话</label>
           <div class="col-sm-4">
             <input type="text" class="form-control" id="apply_phone" 
-                 placeholder="请输入联系电话">
+                 placeholder="请输入手机号码">
           </div>
         </div>
         
@@ -234,7 +234,7 @@
           }
           if(!apply_phone || typeof apply_phone == 'undefined'){
             $('.modal-msg').modal('show')
-            $('.modal-body').text('联系号码不能为空！')
+            $('.modal-body').text('手机号码不能为空！')
             return 
             //alert('联系号码不能为空！')
           }
