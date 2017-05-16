@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" >
     <link rel="stylesheet" href="/stylesheets/bootstrap-table.min.css" >
     <link rel='stylesheet' href='/stylesheets/bootstrap-datetimepicker.css' />
-    <!-- <link rel='stylesheet' href='/stylesheets/bootstrap-select.css' /> -->
     <style type="text/css">
          html{
             height:100%;//让html的高度等于屏幕
@@ -69,6 +68,10 @@
             line-height: auto;
             vertical-align: middle;
         }
+        .bootstrap-table>.fixed-table-container>.fixed-table-header {
+            display: none;
+        }
+
 
 
     </style>
@@ -208,7 +211,6 @@
     <script type="text/javascript" src="/javascripts/moment.js"></script>
     <script type="text/javascript" src='/javascripts/bootstrap-datetimepicker.js' ></script>
     <script type="text/javascript" src='/javascripts/bootstrap-datetimepicker.zh-CN.js' ></script>
-    <!-- <script type="text/javascript" src='/javascripts/bootstrap-select.js' ></script> -->
     <script type="text/javascript">
         jQuery.browser={};(function(){jQuery.browser.msie=false; 
       jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)./)){ jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
@@ -261,13 +263,40 @@
                 $('#tb_departments').bootstrapTable('refresh');
             }
         })
-
          //弹出模态框
       $('.fixed-table-body').on('click','td',function(){
         console.log('hhhhhh')
         var uniqueId = $(this).attr('uniqueId');
         console.log(uniqueId)
       })
+
+      //查询功能
+      $('#btn_query').on('click',function(){
+        var begin_time = $('#begin_time').val()
+            end_time =$('#end_time').val()
+        console.log('check time: ',begin_time,end_time)
+        var begin_time_arr = begin_time.split('-')
+            end_time_arr = end_time.split('-')
+        if(begin_time_arr[1] > end_time_arr[1]){
+            $('.alert-modal').modal('show')
+             $('.modal-body').text('开始时间不能大于结束时间！')
+             return 
+        }
+        if((begin_time_arr[1] == end_time_arr[1]) && (begin_time_arr[2] > end_time_arr[2]) ){
+            $('.alert-modal').modal('show')
+             $('.modal-body').text('开始时间不能大于结束时间！')
+             return 
+        }
+        $('#tb_departments').bootstrapTable('refresh', {url: '/manage/queryHistory'});  
+      })
+       $(".alert-modal").on("hidden.bs.modal", function() {
+              console.log('---- here ----')
+            //$(this).removeData("bs.modal");
+            $(".modal-body").children().remove();  
+            console.log('----- clear modal window -----')
+            //$(".modal-body").remove()
+            //console.log('----- clear again -----')
+        });
 
 
         //1.初始化Table
