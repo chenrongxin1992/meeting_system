@@ -269,26 +269,6 @@
         var uniqueId = $(this).attr('uniqueId');
         console.log(uniqueId)
       })
-
-      //查询功能
-      $('#btn_query').on('click',function(){
-        var begin_time = $('#begin_time').val()
-            end_time =$('#end_time').val()
-        console.log('check time: ',begin_time,end_time)
-        var begin_time_arr = begin_time.split('-')
-            end_time_arr = end_time.split('-')
-        if(begin_time_arr[1] > end_time_arr[1]){
-            $('.alert-modal').modal('show')
-             $('.modal-body').text('开始时间不能大于结束时间！')
-             return 
-        }
-        if((begin_time_arr[1] == end_time_arr[1]) && (begin_time_arr[2] > end_time_arr[2]) ){
-            $('.alert-modal').modal('show')
-             $('.modal-body').text('开始时间不能大于结束时间！')
-             return 
-        }
-        $('#tb_departments').bootstrapTable('refresh', {url: '/manage/queryHistory'});  
-      })
        $(".alert-modal").on("hidden.bs.modal", function() {
               console.log('---- here ----')
             //$(this).removeData("bs.modal");
