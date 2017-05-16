@@ -445,6 +445,110 @@ exports.applyApprove = function(limit,offset,callback){
 			}
 	})
 }
+exports.applyApproveQuery = function(limit,offset,begin_date,end_date,callback){
+	//如果begin_date为空，取默认值2017-01-01,end_time为空，取当前时间戳
+	if(!begin_date || typeof begin_date == 'undefined'){
+		begin_date = moment('2017-01-01','YYYY-MM-DD').format('X')
+		console.log('begin_date is null')
+		console.log('check begin_date timeStamp',begin_date)
+	}else{
+		console.log('begin_date is not null')
+		begin_date = moment(begin_date,'YYYY-MM-DD').format('X')
+		console.log('check begin_date timeStamp',begin_date)
+	}
+	if(!end_date || typeof end_date == 'undefined'){
+		end_date = moment().format('X')
+		console.log('end_date is null ')
+		console.log('check end_date timeStamp',end_date)
+	}else{
+		end_date = moment(end_date,'YYYY-MM-DD').add(1,'days').format('X')
+		console.log('end_date is not null')
+		console.log('check end_date timeStamp',begin_date)
+	}
+	async.waterfall([
+		function(cb){
+			let search = apply.find({})
+				search.where('apply_timeStamp').gte(begin_date)
+				search.where('apply_timeStamp').lte(end_date)
+				search.where('is_approved').equals('1')
+				search.exec(function(err,docs){
+					if(err){
+						console.log('----- search err -----')
+						console.log(err.message)
+						cb(err,null)
+					}
+					if(!docs || docs.length == 0){
+						console.log('----- no result now -----')
+						cb(1,1)
+					}
+					if(docs && docs.length !=0){
+						console.log('check apply records that fetch condition: ',docs)
+						cb(null,docs.length)
+					}
+				})
+		},
+		function(length,cb){
+			console.log('check records length: ',length)
+			limit = parseInt(limit)
+			offset = parseInt(offset)
+			let numSkip = (offset)*limit
+			console.log('skip num is: ',numSkip)
+			let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1})
+				secondSearch.where('apply_timeStamp').gte(begin_date)
+				secondSearch.where('apply_timeStamp').lte(end_date)
+				//secondSearch.select()
+				secondSearch.where('is_approved').equals('1')
+				secondSearch.sort({'apply_time':-1})
+				secondSearch.limit(limit)
+				secondSearch.skip(numSkip)
+				secondSearch.exec(function(err,docs){
+					if(err){
+						console.log('----- search err -----')
+						console.log(err.message)
+						cb(err,null)
+					}
+					if(!docs || docs.length == 0){
+						console.log('----- no result now -----')
+						cb(1,1)
+					}
+					if(docs && docs.length != 0){
+						for(let i=0;i<docs.length;i++){
+							docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
+							console.log('docs.is_approved: ',docs[i].is_approved)
+							if(docs[i].is_approved == 1){
+								console.log('--- check here -----')
+								docs[i].is_approved = '已批准'
+								console.log(docs[i].is_approved)
+							}
+							else{
+								console.log('----- check here hrere -----')
+								docs[i].is_approved = '未批准'
+							}
+						}
+						docs = {
+							 	total : length,
+							 	docs : docs,
+							 	offset : offset
+							 }
+						cb(null,docs)
+					}
+				})
+		}
+	],function(err,result){
+		if(err && result == 1){
+			console.log('----- async no records -----')
+			callback(err,1)
+		}
+		else if(err && result == null){
+			console.log('----- async err -----')
+			callback(err,null)
+		}
+		else{//(result && result.length != 0)
+			console.log('----- async final result -----')
+			callback(null,result)
+		}
+	})
+}
 //applyDetail
 exports.applyDetail = function(_id,callback){
 	apply.findOne({'_id':_id},function(err,doc){
@@ -529,7 +633,8 @@ exports.test_apply = function(room_name,meeting_name,meeting_num,meeting_content
 				meeting_date : meeting_date,
 				meeting_time : meeting_time,
 				apply_name : apply_name,
-				apply_phone : apply_phone
+				apply_phone : apply_phone,
+				apply_timeStamp : moment().format('X')
 			})
 			console.log('new_apply: ',new_apply)
 			new_apply.save(function(err,doc){

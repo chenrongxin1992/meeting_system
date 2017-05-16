@@ -17,7 +17,8 @@ var applySchema = new Schema({
     apply_phone : {type : String},                                     //联系方式
     is_approved : {type : String,default : 0},                         //是否批准(0：未批，1：批准，2：不批)
     exact_meeting_time : {type : String},
-    email : {type : String}
+    email : {type : String},
+    apply_timeStamp : {type : String,default:moment().format('X')}
 })
 
 module.exports = mongoose.model('apply',applySchema);
