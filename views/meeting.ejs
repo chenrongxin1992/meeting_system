@@ -230,21 +230,21 @@
       var setDate = function(date){       
         // 调用方法
         solidDate = date
-        console.log('原始日期',date)
+        console.log('原始日期-->',date)
 		  var week=GetQueryString("week");
-		  console.log(week)
+		  console.log('get week from url -->',week)
 		  if(week !=null && week.toString().length>=1)
 		  {
-			    console.log('week is ' + week);
+			    console.log('week is-->' + week);
 		  } 
 		  tempstamp = moment().format('X')
-		  console.log('临时时间戳',tempstamp)
+		  console.log('当前时间戳-->',tempstamp)
 		timeStamp = moment().add(week,'week').format('X')
-		console.log('加参数时间戳',timeStamp)
+		console.log('加上week参数后的时间戳-->',timeStamp)
 		//date = new Date()
 		date = new Date(timeStamp*1000)
 		//newDate = newDate.toDateString()
-		console.log('新日期',date)
+		console.log('新日期(加上week参数)-->',date)
         currentFirstDate = new Date(date);
 		showdate.innerHTML = currentFirstDate.getFullYear() + '年' + formatDate(solidDate); //显示日期  
  
@@ -285,11 +285,10 @@
       	}
       	console.log('点击的方框信息：会议室名称,横坐标，纵坐标',title)
       	var msg = title.split(',')
-      	console.log('msg: ',msg)
+      	console.log('msg-->',msg)
       	var room_name = msg[0],
       		i = msg[1],
       		k = msg[2]
-
       	
       	if(k == 0){
       		return 
@@ -297,11 +296,11 @@
 
       	//根据i,k求出日期和时间段
       	var arr = dateAndTime(k)
-      	console.log('arr: ',arr)
+      	console.log('arr-->',arr)
       	var meeting_date = arr[0]
       	var meeting_time = arr[1]
       	var week = arr[2]
-      	console.log('meeting_date && meeting_time : ',meeting_date,meeting_time)
+      	console.log('meeting_date && meeting_time-->',meeting_date,meeting_time)
 
       	//ajax请求数据
       	$.ajax({
@@ -316,9 +315,8 @@
               week:week
             },
             success: function(result){
-              console.log(result)
+              console.log('result-->',result)
               $('.modal-msg').modal('show')
-
               $('#gridSystemModalLabel').text(room_name+'预订信息')
 
               if(!result || result.length == 0) {
@@ -429,9 +427,7 @@
 
 				    parentdiv.appendTo('.modal-body');            //将父div添加到body中
 
-              }
-
-              
+              }   
             },
             error: function(jqXHR , textStatus , errorThrown){
               console.log("error");
@@ -439,13 +435,7 @@
             },
            
           });
-
-
-      	//if(classname == 'white') return;//
-      	//$('.modal-msg').modal('show');//显示莫态框
-      	//$('.modal-msg').find('.getclassname').text(title);
       })
-	
 		
 	$(".modal-msg").on("hidden.bs.modal", function() {
             	console.log('---- here ----')
@@ -457,18 +447,63 @@
      });
 
     var format_month_day = function(date,n){ 
-    	console.log('----- check n -----')
-    	console.log(n)      
-        var month = (date.getMonth()+1)+'月';
-        var day = (date.getDate()+n)+'日';
-        console.log('day is -->',day)
-        if(day.length == 2){
+    	console.log('in format_month_day function check arg n-->',n)    
+    	console.log('in format_month_day function check arg date-->',date)  
+        var month = (date.getMonth()+1);
+        var day = (date.getDate()+n);
+        // if(day.length == 1){
+        // 	day = '0' + day
+        // }
+        // if(month.length == 1){
+        // 	month = '0' + month
+        // }
+        console.log('修改前计算的月份-->',month)
+        console.log('修改前计算的日-->',day)
+
+        //本周周一的日，加上n之后如果大于本月的天数，则月加1，日为（date+n-天数）
+        var thisYear = date.getFullYear(),
+        	thisMonth = date.getMonth() + 1
+        var dateForGetDaysNum = new Date(thisYear,thisMonth,0),
+        	daysNum = dateForGetDaysNum.getDate()
+        // var curDate = date,
+        // 	curMonth = curDate.getMonth()+1
+        // console.log('curMonth-->',curMonth)
+        // curDate.setMonth(curMonth)
+        // curDate.setDate(0)
+        // console.log('curDate-->',curDate)
+        // var daysNum = curDate.getDate()
+        console.log('本周周一所在月份的天数-->',daysNum)
+
+        if(day > daysNum){
+        	console.log('click day is in next month')
+        	month = month + 1
+        	day = day - daysNum
+        }
+        if(day.toString().length == 1){
         	day = '0' + day
         }
+        if(month.toString().length == 1){
+        	month = '0' + month
+        }
+		console.log('修改之后计算的月份-->',month)
+		console.log('修改之后计算的日-->',day)
+
+        day = day + '日'
+        month = month + '月'
+        console.log('day is -->',day)
+        console.log('month is -->',month)
         return month+day;
      };
+ //     var getDaysNum = function getCountDays() {
+	//        var curDate = new Date();
+	//        var curMonth = curDate.getMonth();
+	//        curDate.setMonth(curMonth + 1);
+	//        curDate.setDate(0);
+
+	//        return curDate.getDate();
+	// }
     var dateAndTime = function(arg){
-    	var tem1 = parseInt(arg/4)  //取整,(0-6)
+    	var tem1 = parseInt(arg/4)  //取整,(0-6),代表星期几
 
     	if(tem1 == 0){//1 2 3
     		tem1 = 0
@@ -514,19 +549,21 @@
     	}
 
     	var week=GetQueryString("week");
-		console.log(week)
 		if(week !=null && week.toString().length>=1){
-			console.log('week is ' + week);
+			console.log('week is-->' + week);
 		} 
 		var tempstamp = moment().format('X')
-		console.log('临时时间戳',tempstamp)
+		console.log('当前时间戳-->',tempstamp)
+		console.log('当前日期-->',moment.unix(tempstamp).format('YYYY-MM-DD'))
 		timeStamp = moment().add(week,'week').format('X')
-		console.log('加参数时间戳',timeStamp)
+		console.log('当前时间戳加上week参数后的时间戳-->',timeStamp)
+		console.log('当前日期加上week参数后的日期-->',moment.unix(timeStamp).format('YYYY-MM-DD'))
 		//date = new Date(timeStamp*1000)
 
     	var date = new Date(timeStamp * 1000)
+    	console.log('new date-->',date)
     	var tem2 = format_month_day(date,tem1)
-    	console.log('----- check date -----',tem2)
+    	console.log('check date-->',tem2)
     	var tem3 = arg%4
     	switch(tem3){
     		case 1 : tem3 = '上午'

@@ -273,10 +273,10 @@
 
           console.log('check args',room_name,meeting_name,meeting_num,meeting_content,apply_name,apply_phone,meeting_date,meeting_time)
 
-          meeting_date = meeting_date.substring(6)
+          meeting_date = meeting_date.substring(5)
           let temp_meeting_date = meeting_date.split('-')
           meeting_date = temp_meeting_date[0] + '月' + temp_meeting_date[1] + '日'
-          console.log('meeting_date',meeting_date)
+          console.log('meeting_date-->',meeting_date)
 
           let temp_meeting_time = meeting_time.substring(0,2),
               exact_meeting_time = ''
