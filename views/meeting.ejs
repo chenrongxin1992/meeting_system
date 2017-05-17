@@ -461,6 +461,10 @@
     	console.log(n)      
         var month = (date.getMonth()+1)+'月';
         var day = (date.getDate()+n)+'日';
+        console.log('day is -->',day)
+        if(day.length == 2){
+        	day = '0' + day
+        }
         return month+day;
      };
     var dateAndTime = function(arg){
