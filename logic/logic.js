@@ -587,7 +587,7 @@ exports.updateApprove = function(_id,is_approved,callback){
 				let sendTo = doc.email
 				console.log('check email: ',sendTo)
 				data.to = sendTo
-				data.html = '你好，你申请的 <strong>'+doc.room_name+' </strong>已通过审批,会议时间: <strong style="color:red">' + doc.meeting_date + ' ' + doc.exact_meeting_time + '</strong>。'
+				data.html = '您好，你申请的 <strong>'+doc.room_name+' </strong>已通过审批,会议时间: <strong style="color:red">' + doc.meeting_date + ' ' + doc.exact_meeting_time + '</strong>。'
 				console.log('check send data: ',data)
 				transporter.sendMail(data,function(err,info){
 					if(err){
