@@ -365,24 +365,52 @@ exports.checkLogin = function(username,password,callback){
 	})
 }
 //get apply for approve 'room_name,meeting_name,exact_meeting_time,meeting_content,meeting_num,apply_name,apply_phone,is_approved'
-exports.applyApprove = function(limit,offset,callback){
+exports.applyApprove = function(limit,offset,username,callback){
+	console.log('session username is -->',username)
+	if(username == 'admin1'){
+		var room_name_arr = ['计软624会议室','计软623会议室']
+	}
+	else if(username == 'admin2'){
+		var room_name_arr = ['报告厅']
+	}
+	else{
+		var room_name_arr = ['计软624会议室','计软623会议室','报告厅','计软1019会议室','计软938会议室','计软407会议室']
+	}
+	console.log('check room_name_arr -->',room_name_arr)
+
 	async.waterfall([
 		function(cb){
-			apply.find({},function(err,docs){
-				if(err){
-					console.log('----- search err -----')
-					console.log(err.message)
-					cb(err,null)
-				}
-				if(!docs || docs.length == 0){
-					console.log('----- no result now -----')
-					cb(1,1)
-				}
-				if(docs && docs.length !=0){
-					//console.log('check apply records: ',docs)
-					cb(null,docs.length)
-				}
-			})
+			let query = apply.find({})
+				query.where('room_name').in(room_name_arr)
+				query.exec(function(err,docs){
+					if(err){
+						console.log('----- search err -----')
+						console.log(err.message)
+						cb(err,null)
+					}
+					if(!docs || docs.length == 0){
+						console.log('----- no result now -----')
+				 		cb(1,1)
+					}
+					if(docs && docs.length !=0){
+						cb(null,docs.length)
+					}
+				})
+			// apply.find({},function(err,docs){
+			// 	if(err){
+			// 		console.log('----- search err -----')
+			// 		console.log(err.message)
+			// 		cb(err,null)
+			// 	}
+			// 	if(!docs || docs.length == 0){
+			// 		console.log('----- no result now -----')
+			// 		cb(1,1)
+			// 	}
+			// 	if(docs && docs.length !=0){
+			// 		//console.log('check apply records: ',docs)
+			// 		cb(null,docs.length)
+			// 	}
+			// })
 		},
 		function(length,cb){
 			console.log('total length: ',length)
@@ -391,6 +419,7 @@ exports.applyApprove = function(limit,offset,callback){
 			let numSkip = (offset)*limit
 			console.log('skip num is: ',numSkip)
 			let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1 })
+				search.where('room_name').in(room_name_arr)
 				search.sort({'apply_time':-1})
 				search.limit(limit)
 				search.skip(numSkip)
@@ -445,7 +474,19 @@ exports.applyApprove = function(limit,offset,callback){
 			}
 	})
 }
-exports.applyApproveQuery = function(limit,offset,begin_date,end_date,callback){
+exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,callback){
+	console.log('session username is -->',username)
+	if(username == 'admin1'){
+		var room_name_arr = ['计软624会议室','计软623会议室']
+	}
+	else if(username == 'admin2'){
+		var room_name_arr = ['报告厅']
+	}
+	else{
+		var room_name_arr = ['计软624会议室','计软623会议室','报告厅','计软1019会议室','计软938会议室','计软407会议室']
+	}
+	console.log('check room_name_arr -->',room_name_arr)
+
 	//如果begin_date为空，取默认值2017-01-01,end_time为空，取当前时间戳
 	if(!begin_date || typeof begin_date == 'undefined'){
 		begin_date = moment('2017-01-01','YYYY-MM-DD').format('X')
@@ -468,6 +509,7 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,callback){
 	async.waterfall([
 		function(cb){
 			let search = apply.find({})
+				search.where('room_name').in(room_name_arr)
 				search.where('apply_timeStamp').gte(begin_date)
 				search.where('apply_timeStamp').lte(end_date)
 				search.where('is_approved').equals('1')
@@ -494,6 +536,7 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,callback){
 			let numSkip = (offset)*limit
 			console.log('skip num is: ',numSkip)
 			let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1})
+				secondSearch.where('room_name').in(room_name_arr)
 				secondSearch.where('apply_timeStamp').gte(begin_date)
 				secondSearch.where('apply_timeStamp').lte(end_date)
 				//secondSearch.select()
