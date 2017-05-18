@@ -11,7 +11,7 @@ var config_email = {
 	secureConnection: true,
 	auth : {
 		user : '848536190@qq.com',
-		pass : 'zotdwugmkmipbchd'
+		pass : 'eerjruzzkiaxbfcg'
 	}
 }
 var transporter = nodemailer.createTransport(config_email)
@@ -592,7 +592,7 @@ exports.updateApprove = function(_id,is_approved,callback){
 				transporter.sendMail(data,function(err,info){
 					if(err){
 						console.log('----- send email err -----')
-						console.log(e.message)
+						console.log(err.message)
 					}else{
 						console.log('message sent: ',info.response)
 						callback(null)
