@@ -373,6 +373,9 @@ exports.applyApprove = function(limit,offset,username,callback){
 	else if(username == 'admin2'){
 		var room_name_arr = ['报告厅']
 	}
+	else if(username == 'admin3'){
+		var room_name_arr = ['计软407会议室']
+	}
 	else{
 		var room_name_arr = ['计软624会议室','计软623会议室','报告厅','计软1019会议室','计软938会议室','计软407会议室']
 	}
@@ -481,6 +484,9 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,c
 	}
 	else if(username == 'admin2'){
 		var room_name_arr = ['报告厅']
+	}
+	else if(username == 'admin3'){
+		var room_name_arr = ['计软407会议室']
 	}
 	else{
 		var room_name_arr = ['计软624会议室','计软623会议室','报告厅','计软1019会议室','计软938会议室','计软407会议室']
