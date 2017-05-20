@@ -298,6 +298,7 @@ exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meet
 		callback(null,result)
 	})
 }
+//add admin user
 exports.addAdminUser = function(username,password,callback){
 	admin.find({'username':username},function(err,doc){
 		if(err){
@@ -481,6 +482,7 @@ exports.applyApprove = function(limit,offset,username,callback){
 			}
 	})
 }
+//get apply for approve matching query date
 exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,callback){
 	console.log('session username is -->',username)
 	if(username == 'admin1'){
@@ -621,7 +623,7 @@ exports.applyDetail = function(_id,callback){
 		}
 	})
 }
-//updateApprove
+//updateApprove and send email to notice applier
 exports.updateApprove = function(_id,is_approved,callback){
 	//{$set:{name:'MDragon'}}
 	apply.update({'_id':_id},{$set:{'is_approved':is_approved}},function(err){
