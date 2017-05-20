@@ -1,11 +1,13 @@
 /**
- * 会议室
+ *  @Author:    chenrongxin
+ *  @Create Date:   2017-05-15
+ *  @Description:   会议室
  */
 var mongoose = require('./db'),
     Schema = mongoose.Schema
 
 var meeting_roomSchema = new Schema({          
-    room_name : { type: String },                    //会议室name
+    room_name : { type: String },                    //会议室name(唯一)
     created_at : {
     	type:Date,
     	default:Date.now()

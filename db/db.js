@@ -1,3 +1,8 @@
+/**
+ *  @Author:    chenrongxin
+ *  @Create Date:   2017-05-15
+ *  @Description:   数据库配置
+ */
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise;
 const DB_URL = 'mongodb://localhost:27017/meeting_system'

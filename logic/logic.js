@@ -1,3 +1,8 @@
+/**
+ *  @Author:    chenrongxin
+ *  @Create Date:   2017-05-15
+ *  @Description:   逻辑实现
+ */
 const meeting_room = require('../db/meeting_room')
 const apply = require('../db/apply')
 const admin = require('../db/admin')
@@ -5,7 +10,7 @@ const async = require('async')
 const moment = require('moment')
 const chunk =require("lodash/chunk")
 const nodemailer = require('nodemailer')
-
+//邮件配置
 var config_email = {
 	host : 'smtp.qq.com',
 	secureConnection: true,
@@ -15,15 +20,14 @@ var config_email = {
 	}
 }
 var transporter = nodemailer.createTransport(config_email)
-
+//邮件内容
 var data = {
 	from : '848536190@qq.com',
 	to : '',
 	subject : '计算机与软件学院 会议室申请结果 通知',
 	html : ''
 }
-
-
+//添加会议室
 exports.add_meeting_room = function(room_name,callback){
 	async.waterfall([
 		function(cb){//check the if the record is existed

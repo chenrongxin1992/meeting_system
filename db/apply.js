@@ -1,5 +1,7 @@
 /**
- * 申请表
+ *  @Author:    chenrongxin
+ *  @Create Date:   2017-05-15
+ *  @Description:   申请表
  */
 var mongoose = require('./db'),
     Schema = mongoose.Schema,

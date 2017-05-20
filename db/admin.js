@@ -1,5 +1,7 @@
 /**
- * 后台登录账号
+ *  @Author:    chenrongxin
+ *  @Create Date:   2017-05-15
+ *  @Description:   后台登录账号
  */
 var mongoose = require('./db'),
     Schema = mongoose.Schema
