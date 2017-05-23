@@ -373,16 +373,16 @@ exports.checkLogin = function(username,password,callback){
 exports.applyApprove = function(limit,offset,username,callback){
 	console.log('session username is -->',username)
 	if(username == 'admin1'){
-		var room_name_arr = ['计软624会议室','计软623会议室']
+		var room_name_arr = ['624小教室--有电脑(68人)','623会议室--无电脑(16-24人)']
 	}
 	else if(username == 'admin2'){
-		var room_name_arr = ['报告厅']
+		var room_name_arr = ['1楼报告厅--无电脑(452人)']
 	}
 	else if(username == 'admin3'){
-		var room_name_arr = ['计软407会议室']
+		var room_name_arr = ['412会议室--无电脑(11人)']
 	}
 	else{
-		var room_name_arr = ['计软624会议室','计软623会议室','报告厅','计软1019会议室','计软938会议室','计软407会议室']
+		var room_name_arr = ['624小教室--有电脑(68人)','623会议室--无电脑(16-24人)','1楼报告厅--无电脑(452人)','412会议室--无电脑(11人)','1019会议室--无电脑(20人)','407小教室--无电脑(42人)','938会议室--有电脑(48-60人)']
 	}
 	console.log('check room_name_arr -->',room_name_arr)
 
