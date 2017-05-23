@@ -426,7 +426,7 @@ exports.applyApprove = function(limit,offset,username,callback){
 			offset = parseInt(offset)
 			let numSkip = (offset)*limit
 			console.log('skip num is: ',numSkip)
-			let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1 })
+			let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
 				search.where('room_name').in(room_name_arr)
 				search.sort({'apply_time':-1})
 				search.limit(limit)
@@ -448,12 +448,19 @@ exports.applyApprove = function(limit,offset,username,callback){
 							//console.log('check applytime : ',docs[i].apply_time)
 							docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
 							console.log('docs.is_approved: ',docs[i].is_approved)
-							if(docs[i].is_approved == 1){
+							console.log('docs.is_allowed: ',docs[i].is_allowed)
+							console.log(docs[i])
+							if(docs[i].is_approved == 0 && docs[i].is_allowed == 0){
+								console.log('--- check here -----')
+								docs[i].is_approved = '未审批'
+								console.log(docs[i].is_approved)
+							}
+							else if(docs[i].is_approved == 1 && docs[i].is_allowed == 0){
 								console.log('--- check here -----')
 								docs[i].is_approved = '已批准'
 								console.log(docs[i].is_approved)
 							}
-							else{
+							else{//docs[i].is_approved == 0 && docs[i].is_allowed == 1
 								console.log('----- check here hrere -----')
 								docs[i].is_approved = '未批准'
 							}
@@ -547,7 +554,7 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,c
 			offset = parseInt(offset)
 			let numSkip = (offset)*limit
 			console.log('skip num is: ',numSkip)
-			let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1})
+			let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
 				secondSearch.where('room_name').in(room_name_arr)
 				secondSearch.where('apply_timeStamp').gte(begin_date)
 				secondSearch.where('apply_timeStamp').lte(end_date)
@@ -626,37 +633,81 @@ exports.applyDetail = function(_id,callback){
 //updateApprove and send email to notice applier
 exports.updateApprove = function(_id,is_approved,callback){
 	//{$set:{name:'MDragon'}}
-	apply.update({'_id':_id},{$set:{'is_approved':is_approved}},function(err){
-		if(err){
-			console.log('----- update err -----')
-			console.log(err.message)
-			callback(err,null)
-		}
-		console.log('----- update success -----')
-		//find this record and send a email
-		apply.findOne({'_id':_id},function(err,doc){
+	if(is_approved == 1){
+		apply.update({'_id':_id},{$set:{'is_approved':is_approved}},function(err){
 			if(err){
-				console.log('----- search err -----')
+				console.log('----- update err -----')
 				console.log(err.message)
-			}else{
-				let sendTo = doc.email
-				console.log('check email: ',sendTo)
-				data.to = sendTo
-				data.html = '您好，你申请的 <strong>'+doc.room_name+' </strong>已通过审批,会议时间: <strong style="color:red">' + doc.meeting_date + ' ' + doc.exact_meeting_time + '</strong>。'
-				console.log('check send data: ',data)
-				transporter.sendMail(data,function(err,info){
-					if(err){
-						console.log('----- send email err -----')
-						console.log(err.message)
-					}else{
-						console.log('message sent: ',info.response)
-						callback(null)
-					}
-				})
+				callback(err,null)
 			}
+			console.log('----- update success -----')
+			//find this record and send a email
+			apply.findOne({'_id':_id},function(err,doc){
+				if(err){
+					console.log('----- search err -----')
+					console.log(err.message)
+				}else{
+					let sendTo = doc.email
+					console.log('check email: ',sendTo)
+					data.to = sendTo
+					data.html = '您好，你申请的 <strong>'+doc.room_name+' </strong>已通过审批,会议时间: <strong style="color:red">' + doc.meeting_date + ' ' + doc.exact_meeting_time + '</strong>。'
+					console.log('check send data: ',data)
+					transporter.sendMail(data,function(err,info){
+						if(err){
+							console.log('----- send email err -----')
+							console.log(err.message)
+						}else{
+							console.log('message sent: ',info.response)
+							callback(null)
+						}
+					})
+				}
+			})
+			//callback(null)
 		})
-		//callback(null)
-	})
+	}else{//send email to inform applier the result is not pass
+		console.log('is_approved is -->',is_approved)
+		apply.update({'_id':_id},{$set:{'is_allowed':1}},function(err){
+			if(err){
+				console.log('----- update err -----')
+				console.log(err.message)
+				callback(err,null)
+			}
+			console.log('----- update success -----')
+			apply.findOne({'_id':_id},function(err,doc){
+				if(err){
+					console.log('----- search err -----')
+					console.log(err.message)
+				}else{
+					let sendTo = doc.email
+					console.log('check email-->',sendTo)
+					data.to = sendTo
+					if(doc.room_name == '624小教室--有电脑(68人)' || doc.room_name == '623会议室--无电脑(16-24人)'){
+						data.html = '您好，你申请的 <strong>'+doc.room_name+' </strong>已被占用,会议时间: <strong style="color:red">' + doc.meeting_date + ' ' + doc.exact_meeting_time + '</strong>，特殊情况请联系管理员 曾小告(15220159520)。'
+					}
+					else if(doc.room_name == '1楼报告厅--无电脑(452人)'){
+						data.html = '您好，你申请的 <strong>'+doc.room_name+' </strong>已被占用,会议时间: <strong style="color:red">' + doc.meeting_date + ' ' + doc.exact_meeting_time + '</strong>，特殊情况请联系管理员 冯春(13603010438)。'
+					}
+					else if(doc.room_name == '412会议室--无电脑(11人)'){
+						data.html = '您好，你申请的 <strong>'+doc.room_name+' </strong>已被占用,会议时间: <strong style="color:red">' + doc.meeting_date + ' ' + doc.exact_meeting_time + '</strong>，特殊情况请联系管理员 余芳(13760178106)。'
+					}
+					else{
+						data.html = '您好，你申请的 <strong>'+doc.room_name+' </strong>已被占用,会议时间: <strong style="color:red">' + doc.meeting_date + ' ' + doc.exact_meeting_time + '</strong>，特殊情况请联系管理员 李雅丽(15818677129)。'
+					}
+					console.log('check send data: ',data)
+					transporter.sendMail(data,function(err,info){
+						if(err){
+							console.log('----- send email err -----')
+							console.log(err.message)
+						}else{
+							console.log('message sent: ',info.response)
+							callback(null)
+						}
+					})
+				}
+			})
+		})
+	}
 }
 //测试添加申请记录
 exports.test_apply = function(room_name,meeting_name,meeting_num,meeting_content,meeting_date,meeting_time,apply_name,apply_phone,callback){

@@ -302,6 +302,8 @@
                         console.log('check _id: ',_id)
                         if(row.is_approved == '已批准')
                             return
+                        if(row.is_approved == '未批准')
+                          return 
                         $.ajax({ 
                             url:'/manage/applyDetail',
                             type:'post',
@@ -577,7 +579,7 @@
               if(result.errCode == 0){
                 //弹出模态框
                 $('.result-modal').modal('show')
-                $('.modal-body').text('审批成功')
+                $('.modal-body').text('审批成功，结果将以邮件方式通知申请人。')
                 //setTimeout(window.location.reload(),3000)
               }
               if(result.errCode == -1){

@@ -120,8 +120,8 @@ router.post('/addAdminUser',function(req,res){
 }).get('/addAdminUser',function(req,res){
 	let username = req.body.username,
 		password = req.body.password
-		username = 'admin2'
-		password = 'admin@1234'
+		username = 'liyali'
+		password = 'liyali'
 	if(!username || typeof username == 'undefined'){
 		return res.json({'errCode':-1,'errMsg':'username can not be null'})
 	}

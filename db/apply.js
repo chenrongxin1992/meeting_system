@@ -20,7 +20,8 @@ var applySchema = new Schema({
     is_approved : {type : String,default : 0},                         //是否批准(0：未批，1：批准，2：不批)
     exact_meeting_time : {type : String},
     email : {type : String},
-    apply_timeStamp : {type : String,default:moment().format('X')}
+    apply_timeStamp : {type : String,default:moment().format('X')},
+    is_allowed : {type:String,default:0}//设置不批准的时候置为1
 })
 
 module.exports = mongoose.model('apply',applySchema);
