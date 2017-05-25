@@ -33,6 +33,7 @@
         .head1{
             height: 39px;
             line-height: 39px;
+            text-align: right;
         }
         .table-body{
             padding:0px;
@@ -94,8 +95,9 @@
 
         <div class="row-fluid">
             <div class="col-md-4"><span><h4 style="padding-left: 15px">会议室申请记录</h4></span></div>
-            <div class="col-md-1 head1 pull-right"><a href="/manage/logout">退出</a></div>
-            <div class="col-md-2 head1 pull-right">当前用户:<span style="color: red"> <%=user.username%></span></div>
+            <div class="col-md-3 head1 pull-right"><a href="/reserve/meeting">返回查看一周申请情况</a> | 
+            当前用户:<span style="color: red"> <%=user.username%></span>  |  
+            <a href="/manage/logout">退出</a></div>
         </div>
 
        <div class="row-fluid">
