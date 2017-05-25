@@ -350,6 +350,9 @@
         $('#success-btn').on("click",function(){
           //window.location.reload()
         })
+        $('#check_record').on("click",function(){
+          window.location.href = '/manage/record'
+        })
         $(".modal-msg").on("hidden.bs.modal", function() {
               console.log('---- here ----')
             //$(this).removeData("bs.modal");
@@ -384,7 +387,7 @@
   </div>
   <!-- 申请结果模态框 -->
   <div class="modal fade result-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="result-modal">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog " role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -394,7 +397,8 @@
         
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default sure" data-dismiss="modal" id="success-btn">确定</button>
+          <botton type="button" class="btn btn-default check_record" data-dismiss="modal" id="check_record">查询申请记录</botton>
+          <button type="button" class="btn btn-success sure" data-dismiss="modal" id="success-btn">确定</button>
         </div>
       </div>
     </div>
