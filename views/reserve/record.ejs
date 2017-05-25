@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>查看申请记录</title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" >
+    <link rel="stylesheet" href="/stylesheets/bootstrap-table.min.css" >
+    <link rel='stylesheet' href='/stylesheets/bootstrap-datetimepicker.css' />
+    <style type="text/css">
+         html{
+            height:100%;//让html的高度等于屏幕
+        }
+        body{
+            height:100%;
+            margin:0;
+        }
+        hr{
+            margin-bottom: 0px;
+            border: 0;
+            border-top: 1px solid #d0a8a8;
+            margin-top: 0px;
+          }
+        .hh4{
+            line-height: 39px;
+          }
+        .bottom{
+            margin-top:15px;
+        }
+        .head{
+            height: 64.03px;
+        }
+        .head1{
+            height: 39px;
+            line-height: 39px;
+        }
+        .table-body{
+            padding:0px;
+            text-align: center;
+        }
+        .table th{
+            text-align: center;
+        }
+        .hide_id{
+            display: none;
+        }
+        td{
+            max-width: 150px;
+            cursor: pointer;
+        }
+        .apply_info{
+            text-align: center;
+            font-weight: bold;
+        }
+        .col-md-3 ,.col-md-6{
+            height: 34px;
+            line-height: 34px;
+        }
+        .col-md-3{
+            text-align: right;
+            font-weight: bold;
+        }
+        .table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+            vertical-align: middle;
+        }
+        .col-md-9{
+            height: auto;
+            line-height: auto;
+            vertical-align: middle;
+        }
+        .bootstrap-table>.fixed-table-container>.fixed-table-header {
+            display: none;
+        }
+        .bootstrap-table>.fixed-table-container{
+          height: 550px !important;
+        }
+        
+
+    </style>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="/javascripts/html5shiv.min.js"></script>
+      <script src="/javascripts/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="col-md-12 ">
+                <img src="/images/szucsselogo.png">
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="col-md-4"><span><h4 style="padding-left: 15px">会议室申请记录查询</h4></span></div>
+            <div class="col-md-4 head1 pull-right" style="text-align: center;"><a href="/reserve/meeting">返回查看一周申请情况</a> | <a href="/reserve/reserve">申请会议室</a></div>
+        </div>
+
+       <div class="row-fluid">
+           <div class="col-sm-12"><hr></div>
+       </div>
+
+        <div class="row-fluid">
+            <div class="col-md-12">               
+                <div class="panel-body table-body" >
+                    <div class="panel panel-default">
+                                  <div class="panel-heading">查询会议室申请记录</div>
+                                  <div class="panel-body">
+                                      <form id="formSearch" class="form-horizontal">
+                                          <div class="form-group" style="margin-top:15px">
+                                              <label class="control-label col-sm-1" for="b_time">开始日期</label>
+                                              <div class="col-sm-2">
+                                                    <input class="form-control" type="text" value="" id="b_time" placeholder="请输入日期(可以为空)">
+                                                        
+                                              </div>
+                                              <label class="control-label col-sm-1" for="e_time">结束日期</label>
+                                              <div class="col-sm-2">
+                                                  <input type="text" class="form-control" id="e_time" placeholder="请输入日期(可以为空)">
+                                              </div>
+                                              <label class="control-label col-sm-1" for="applier">申请人</label>
+                                              <div class="col-sm-1" style="text-align:left;">
+                                                  <input type="text" class="form-control" id="applier" placeholder="不能为空">
+                                              </div>
+                                              <div class="col-sm-1" style="text-align:left;">
+                                                  <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
+                                              </div>
+                                          </div>
+                                      </form>
+                                  </div>
+                              </div>  
+
+                    <!-- <div id="toolbar" class="btn-group">
+                        <button id="btn_add" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                        </button>
+                        <button id="btn_edit" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>审批
+                        </button>
+                        <button id="btn_delete" type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+                        </button>
+                    </div> -->
+                    <table id="tb_departments"></table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row-fluid bottom">
+            <div class="col-sm-12"><hr></div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="col-md-5 col-md-offset-3">
+              <address><p class="pull-right">©深圳大学 计算机与软件学院</p><p>©2017 </p></address>
+            </div>
+          </div>
+    </div>
+
+
+    <!-- 模态框 -->
+    <!-- Large modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bs-example-modal-lg">Large modal</button> -->
+
+    <div class="modal fade modal-msg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="data-modal">
+      <div class="modal-dialog " role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="gridSystemModalLabel"></h4>
+          </div>
+          <div class="modal-body">
+
+          </div>
+
+          <div class="modal-footer">
+            <button id="mybutton" type="button" class="btn btn-default sure" data-dismiss="modal">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <!-- 申请结果模态框 -->
+  <div class="modal fade result-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="result-modal">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">提交结果</h4>
+        </div>
+        <div class="modal-body">
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default sure" data-dismiss="modal" id="success-btn">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade alert-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="alert-modal">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">提示</h4>
+        </div>
+        <div class="modal-body">
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default sure" data-dismiss="modal" id="alert-btn">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script type="text/javascript" src="/javascripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/javascripts/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="/javascripts/bootstrap-table-zh-CN.js"></script>
+    <script type="text/javascript" src="/javascripts/moment.js"></script>
+    <script type="text/javascript" src='/javascripts/bootstrap-datetimepicker.js' ></script>
+    <script type="text/javascript" src='/javascripts/bootstrap-datetimepicker.zh-CN.js' ></script>
+    <script type="text/javascript">
+        jQuery.browser={};(function(){jQuery.browser.msie=false; 
+      jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)./)){ jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
+    </script>
+    <script type="text/javascript">
+    $(function () {
+
+        $("#b_time").datetimepicker({
+          minView: "month",//设置只显示到月
+          format: "yyyy-mm-dd",
+          autoclose: true,
+          todayBtn: true,
+          language:'zh-CN',
+          pickerPosition:"bottom-left",
+          endDate : new Date() 
+        });
+        $("#e_time").datetimepicker({
+          minView: "month",//设置只显示到月
+          format: "yyyy-mm-dd",
+          autoclose: true,
+          todayBtn: true,
+          language:'zh-CN',
+          pickerPosition:"bottom-left",
+          endDate : new Date() 
+        });
+        //查询
+        $('#btn_query').on('click',function(){
+            var b_time = $('#b_time').val()
+                e_time = $('#e_time').val()
+                click_applier = $('#applier').val()
+            if(!b_time || typeof b_time == 'undefined'){
+                console.log('b_time is null')
+            }
+            if(!e_time || typeof e_time == 'undefined'){
+                console.log('e_time is null ')
+            }
+            if(!click_applier || typeof click_applier == 'undefined'){
+              console.log('click_applier is null')
+              $('.alert-modal').modal('show')
+              $('.modal-body').text('申请人不能为空！')
+              return
+            }
+            console.log('click_applier is -->',click_applier)
+            if(b_time || e_time || click_applier){
+                console.log('check b_time & e_time',b_time,e_time)
+                var b_time_arr = b_time.split('-')
+                    e_time_arr = e_time.split('-')
+                if(b_time_arr[1] > e_time_arr[1]){
+                    $('.alert-modal').modal('show')
+                    $('.modal-body').text('开始时间月份不能大于结束时间月份！')
+                    return 
+                }
+                if(b_time_arr[2] > e_time_arr[2]){
+                    $('.alert-modal').modal('show')
+                    $('.modal-body').text('开始日期不能大于结束日期！')
+                    return 
+                }
+                $('#tb_departments').bootstrapTable('refresh');
+            }
+        })
+         //弹出模态框
+      $('.fixed-table-body').on('click','td',function(){
+        console.log('hhhhhh')
+        var uniqueId = $(this).attr('uniqueId');
+        console.log('uniqueId is-->',uniqueId)
+      })
+       $(".alert-modal").on("hidden.bs.modal", function() {
+              console.log('---- here ----')
+            //$(this).removeData("bs.modal");
+            $(".modal-body").children().remove();  
+            console.log('----- clear modal window -----')
+            //$(".modal-body").remove()
+            //console.log('----- clear again -----')
+        });
+
+        //1.初始化Table
+        var oTable = new TableInit();
+        oTable.Init();
+
+        //2.初始化Button的点击事件
+        var oButtonInit = new ButtonInit();
+        oButtonInit.Init();
+
+        });
+
+        var TableInit = function () {
+            var oTableInit = new Object();
+            //初始化Table
+            oTableInit.Init = function () {
+                $('#tb_departments').bootstrapTable({
+                    onClickRow:function(row,tr){
+                        console.log(row)
+                        console.log(tr)
+                        let _id = row._id
+                        console.log('check _id: ',_id)
+                        if(row.is_approved == '已批准')
+                            return
+                        if(row.is_approved == '未批准')
+                          return 
+                        $.ajax({ 
+                            url:'/manage/applyDetail',
+                            type:'post',
+                            data: {'_id':_id},
+                            success: function(result){ 
+                                console.log('result: ',result)
+                                console.log(result.result._id)
+                                if(result.errCode == -1){
+                                    console.log('err occurd!')
+                                    console.log(result.errMsg)
+                                    return 
+                                }
+                                if(result.errCode == 0){
+                                    //弹出模态框
+                                    $('.modal-msg').modal('show')
+                                    $('#gridSystemModalLabel').text(result.result.room_name + '预订信息')
+                                    /*let first_row = $('<div></div>')
+                                        first_row.addClass('row')
+                                    let first_col = $('<div></div>')
+                                        first_col.addClass('col-md-12 apply_info')
+                                        first_col.text('申请信息')
+                                        
+                                        first_col.appendTo(first_row)
+                                        first_row.appendTo('.modal-body')*/
+                                        
+                                    let second_row = $('<div></div>')
+                                        second_row.addClass('row')
+                                    let second_row_first_col = $('<div></div>')
+                                        second_row_first_col.addClass('col-md-3')
+                                        second_row_first_col.text('会议名称')
+                                    let second_row_second_col = $('<div></div>')
+                                        second_row_second_col.addClass('col-md-6')
+                                        second_row_second_col.text(result.result.meeting_name)
+                                        
+                                    // let three_row = $('<div></div>')
+                                    //     three_row.addClass('row')
+                                    // let three_row_first_col = $('<div></div>')
+                                    //     three_row_first_col.addClass('col-md-3')
+                                    //     three_row_first_col.text('会议内容')
+                                    // let three_row_second_col = $('<div></div>')
+                                    //     three_row_second_col.addClass('col-md-6')
+                                    //     three_row_second_col.text(result.result.meeting_content)
+                                    
+                                    //显示内容
+                                    let content_row = $('<div></div>')
+                                        content_row.addClass('row')
+                                    let content_row_first_col = $('<div></div>')
+                                        content_row_first_col.addClass('col-md-3')
+                                        content_row_first_col.text('会议内容')
+                                    let content_row_second_col = $('<div></div>')
+                                        content_row_second_col.addClass('col-md-9')
+                                        content_row_second_col.text(result.result.meeting_content)
+                                        
+                                    //增加一行显示预订时间
+                                    let insert_apply_time_row = $('<div></div>')
+                                        insert_apply_time_row.addClass('row')
+                                    let insert_apply_time_row_first_col = $('<div></div>')
+                                        insert_apply_time_row_first_col.addClass('col-md-3')
+                                        insert_apply_time_row_first_col.text('申请时间')
+                                    let insert_apply_time_row_second_col = $('<div></div>')
+                                        insert_apply_time_row_second_col.addClass('col-md-6')
+                                        insert_apply_time_row_second_col.text(result.result.apply_time)
+                                    
+
+                                    let four_row = $('<div></div>')
+                                        four_row.addClass('row')
+                                    let four_row_first_col = $('<div></div>')
+                                        four_row_first_col.addClass('col-md-3')
+                                        four_row_first_col.text('会议人数')
+                                    let four_row_second_col = $('<div></div>')
+                                        four_row_second_col.addClass('col-md-6')
+                                        four_row_second_col.text(result.result.meeting_num)
+                                        
+                                    let five_row = $('<div></div>')
+                                        five_row.addClass('row')
+                                    let five_row_first_col = $('<div></div>')
+                                        five_row_first_col.addClass('col-md-3')
+                                        five_row_first_col.text('申请人')
+                                    let five_row_second_col = $('<div></div>')
+                                        five_row_second_col.addClass('col-md-6')
+                                        five_row_second_col.text(result.result.apply_name)
+                                        
+                                    let six_row = $('<div></div>')
+                                        six_row.addClass('row')
+                                    let six_row_first_col = $('<div></div>')
+                                        six_row_first_col.addClass('col-md-3')
+                                        six_row_first_col.text('联系方式')
+                                    let six_row_second_col = $('<div></div>')
+                                        six_row_second_col.addClass('col-md-6')
+                                        six_row_second_col.text(result.result.apply_phone)
+                                        
+                                    let seven_row = $('<div></div>')
+                                        seven_row.addClass('row')
+                                    let seven_row_first_col = $('<div></div>')
+                                        seven_row_first_col.addClass('col-md-3')
+                                        seven_row_first_col.text('操作')
+                                    let seven_row_second_col = $('<div></div>')
+                                        seven_row_second_col.addClass('col-md-6')//form-control这个类是bootstrap自己写好的，你用惯了，知道他写的啥，就能用了？？
+                                        seven_row_second_col.html('<select id="check_delete" class="selectpicker form-control" data-hide-disabled="true" data-live-search="false"><option>删除</option><select>')
+
+                                 /*   let eight_row = $('<div></div>')
+                                        eight_row.addClass('row')
+                                        //eight_row.addClass('hide_id')
+                                        eight_row.attr('id', 'myid');//zheli
+                                    let eight_row_first_col = $('<div></div>')
+                                        eight_row_first_col.addClass('col-md-12')
+                                        //eight_row_first_col.addClass('hide_id')
+                                        //eight_row_first_col.attr('id', 'myid')
+                                        eight_row_first_col.text(result.result._id)//你这里都是text*/
+                                         $('.modal-msg').attr('myid',result.result._id);
+
+                                    second_row_first_col.appendTo(second_row)
+                                    second_row_second_col.appendTo(second_row)
+                                    second_row.appendTo('.modal-body')
+                                        
+                                    // three_row_first_col.appendTo(three_row)
+                                    // three_row_second_col.appendTo(three_row)
+                                    // three_row.appendTo('modal-body')
+                                    
+                                    content_row_first_col.appendTo(content_row)
+                                    content_row_second_col.appendTo(content_row)
+                                    content_row.appendTo('.modal-body')
+
+                                    //insert
+                                    insert_apply_time_row_first_col.appendTo(insert_apply_time_row)
+                                    insert_apply_time_row_second_col.appendTo(insert_apply_time_row)
+                                    insert_apply_time_row.appendTo('.modal-body')
+
+                                    four_row_first_col.appendTo(four_row)
+                                    four_row_second_col.appendTo(four_row)
+                                    four_row.appendTo('.modal-body')
+
+                                    five_row_first_col.appendTo(five_row)
+                                    five_row_second_col.appendTo(five_row)
+                                    five_row.appendTo('.modal-body')
+
+                                    six_row_first_col.appendTo(six_row)
+                                    six_row_second_col.appendTo(six_row)
+                                    six_row.appendTo('.modal-body')
+
+                                    seven_row_first_col.appendTo(seven_row)
+                                    seven_row_second_col.appendTo(seven_row)
+                                    seven_row.appendTo('.modal-body')
+
+                                   /* eight_row_first_col.appendTo(eight_row)
+                                    eight_row.appendTo('.modal-body')*/
+                                }
+                            },
+                            error: function(e){ 
+                                console.log('error')
+                                console.log(e.message)
+                            }
+                        });
+                    },
+                    url: '/manage/applyRecord',         //请求后台的URL（*）
+                    method: 'get',                      //请求方式（*）
+                    toolbar: '#toolbar',                //工具按钮用哪个容器
+                    striped: true,                      //是否显示行间隔色
+                    cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true,                   //是否显示分页（*）
+                    sortable: false,                     //是否启用排序
+                    sortOrder: "asc",                   //排序方式
+                    queryParams: oTableInit.queryParams,//传递参数（*）
+                    sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber:1,                       //初始化加载第一页，默认第一页
+                    pageSize: 10,                       //每页的记录行数（*）
+                    pageList: [10, 25],        //可供选择的每页的行数（*）
+                    search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                    strictSearch: false,
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 2,             //最少允许的列数
+                    clickToSelect: true,                //是否启用点击选中行
+                    //height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+                    showToggle:false,                    //是否显示详细视图和列表视图的切换按钮
+                    cardView: false,                    //是否显示详细视图
+                    detailView: false,                   //是否显示父子表
+                    columns: [/*{
+                        checkbox: true
+                    },*/ {
+                        field: 'room_name',
+                        title: '会议室'
+                    }, {
+                        field: 'meeting_name',
+                        title: '会议名称'
+                    }, {
+                        field: 'exact_meeting_time',
+                        title: '会议时间'
+                    }, {
+                        field: 'meeting_content',
+                        title: '会议内容'
+                    },{
+                        field: 'apply_time',
+                        title: '申请时间'
+                    },{
+                        field: 'meeting_num',
+                        title: '会议人数'
+                    }, {
+                        field: 'apply_name',
+                        title: '申请人'
+                    },{
+                        field: 'apply_phone',
+                        title: '联系电话'
+                    },{
+                        field: 'is_approved',
+                        title: '审批状态'
+                    },]
+                });
+            };
+
+            //得到查询的参数
+            oTableInit.queryParams = function (params) {
+                var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                    limit: params.limit,   //页面大小
+                    offset: params.offset,  //页码
+                    /*departmentname: $("#txt_search_departmentname").val(),
+                    statu: $("#txt_search_statu").val()*/
+                    begin_date : $('#b_time').val(),
+                    end_date : $('#e_time').val(),
+                    applier : $('#applier').val()
+                };
+                return temp;
+            };
+            return oTableInit;
+        };
+
+        var ButtonInit = function () {
+            var oInit = new Object();
+            var postdata = {};
+
+            oInit.Init = function () {
+                //初始化页面上面的按钮事件
+            };
+
+        return oInit;
+    };
+    //success-btn
+    $("#success-btn").click(function(){ 
+        //window.location.reload()
+        $('#tb_departments').bootstrapTable('refresh');
+    })
+    $("#mybutton").click(function(){ 
+        /*let myid = $('#myid').text()//用id获取 我改了这里不是val,是text
+        alert(myid);
+        console.log('here _id: ',myid)*/
+        let check_delete = $('#check_delete option:selected').val()
+        console.log('here check_delete info',check_delete)
+        let myid = $('.modal-msg').attr('myid');
+        console.log('myid-->',myid)
+
+        if(check_delete == '删除'){
+            check_delete = '1'
+        }
+        else{
+            check_delete = '0'
+            return 
+        }
+
+        $.ajax({
+            url: '/manage/deleteRecord', 
+            async: true,
+            dataType: 'json',
+            type: 'POST',
+            data: {
+              _id:myid,
+              check_delete:check_delete
+            },
+
+            success: function(result){
+              console.log('success')
+              console.log(result)
+              if(result.errCode == 0){
+                //弹出模态框
+                $('.result-modal').modal('show')
+                $('.modal-body').text('该申请记录已删除。')
+                return 
+                //$('#tb_departments').bootstrapTable('refresh');
+                //setTimeout(window.location.reload(),3000)
+              }
+              if(result.errCode == -1){
+                //弹出模态框
+                $('.result-modal').modal('show')
+                $('.modal-body').text(result.errMsg)
+              }
+            },
+            error: function(e){
+              console.log("error");
+              console.error(e.message)
+              $('.result-modal').modal('show')
+              $('.modal-body').text('操作失败')
+            },
+          });
+
+    })
+    $(".modal-msg").on("hidden.bs.modal", function() {
+                console.log('---- clear modal-body ----')
+                //$(this).removeData("bs.modal");
+                $(".modal-body").children().remove();  
+            });
+    </script>
+</body>
+</head>
+</html>

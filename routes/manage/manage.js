@@ -93,6 +93,11 @@ router.get('/approve',function(req,res){
 	}
 	return res.render('manage/approve',{username:req.session.user.username})
 })
+//reder a apply record
+router.get('/record',function(req,res){
+	console.log('----- in record router -----')
+	return res.render('reserve/record')
+})
 //render a logout page
 router.get('/logout',function(req,res){
 	console.log('----- in router logout -----')
@@ -141,6 +146,67 @@ router.post('/addAdminUser',function(req,res){
 		if(result && result.length != 0)
 			return res.json({'errCode':0,'errMsg':'添加用户成功'})
 	})
+})
+//render a page for applier to check applyRecord
+router.get('/applyRecord',function(req,res){
+	//获取分页参数
+	let limit = req.query.limit
+		offset = req.query.offset
+	if(!limit || limit == null || typeof limit == 'undefined'){//页面记录数
+		limit = 10
+	}
+	if(!offset || offset == null || typeof offset == 'undefined'){//当前页数
+		offset = 0
+	}
+	offset = parseInt(offset/limit)
+	console.log('----- in router applyRecord -----')
+	console.log('check limit && offset: ',limit,offset)
+
+	let begin_date = req.query.begin_date,
+		end_date = req.query.end_date
+
+	let applier = req.query.applier
+	//如果日期都为空，则默认全部取出
+	if(!begin_date && !end_date){
+		console.log('begin_date && end_date are null,default')
+		logic.applyRecord(limit,offset,applier,function(error,result){
+			if(error && result == null){//查询出错
+				return res.json({'errCode':-1,'errMsg':error.message})
+			}
+			else if(error && result == 1){
+				return res.json({total:0,rows:[],offset:0})
+			}
+			else{//(error == null && result)
+				let total = result.length,
+					rows = result
+				console.log('total is ',result.total)
+				//console.log('rows is ',result.docs)
+				console.log('offset is ',result.offset)
+				return res.json({total:result.total,rows:result.docs,offset:result.offset})
+			}
+		})
+	}
+	else{
+		console.log('begin_date && end_date is not null and applier is not null')
+		console.log('check date-->',begin_date,end_date)
+		logic.applyRecordQuery(limit,offset,begin_date,end_date,applier,function(error,result){
+			if(error && result == null){
+				return res.json({'errCode':-1,'errMsg':error.message})
+			}
+			else if(error && result == 1){
+				console.log('----- here -----')
+				return res.json({total:0,rows:[],offset:0})
+			}
+			else{
+				let total = result.length
+					rows  = result
+				console.log('total is ',result.total)
+				//console.log('rows is ',result.docs)
+				console.log('offset is ',result.offset)
+				return res.json({total:result.total,rows:result.docs,offset:result.offset})
+			}
+		})
+	}
 })
 //render a page for admin user to check apply
 router.get('/applyApprove',function(req,res){
@@ -198,7 +264,6 @@ router.get('/applyApprove',function(req,res){
 				return res.json({total:result.total,rows:result.docs,offset:result.offset})
 			}
 		})
-
 	}
 })
 //backup method applyApprove
@@ -284,6 +349,20 @@ router.post('/updateApprove',function(req,res){
 	logic.updateApprove(_id,is_approved,function(error,result){
 		if(error){
 			console.log('----- router error -----')
+			console.log(error.message)
+			return res.json({'errCode':-1,'errMsg':error.message})
+		}
+		return res.json({'errCode':0,'errMsg':'success'})
+	})
+})
+//ajax for delete apply record
+router.post('/deleteRecord',function(req,res){
+	let _id = req.body._id	
+		check_delete = req.body.check_delete
+	console.log('----- in deleteRecord router -----')
+	logic.deleteRecord(_id,check_delete,function(error,result){
+		if(error){
+			console.log('----- deleteRecord error -----')
 			console.log(error.message)
 			return res.json({'errCode':-1,'errMsg':error.message})
 		}
