@@ -78,10 +78,13 @@
     	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
     		padding: 5px;
     	}
-
-
-
     </style>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="/javascripts/html5shiv.min.js"></script>
+      <script src="/javascripts/respond.min.js"></script>
+    <![endif]-->
   </head>
   <body>
         <div class="container">
@@ -93,8 +96,10 @@
 	        <div class="col-md-5"><h3>会议室申请</h3></div>
 	      </div>
 	      <div class="row">
-	        <div class="col-md-2 pull-right"><a href="/manage/approve">管理申请</a></div>
-	        <div class="col-md-2 pull-right"><a href="/reserve/reserve">申请会议室</a></div>
+	      	<div class="col-md-4 pull-right" ><a href="/manage/approve">管理申请</a> | <a href="/reserve/reserve">申请会议室</a> | <a href="/reserve/record">查看申请记录</a></div>
+<!-- 	        <div class="col-md-2 pull-right" style="text-align: right;"><a href="/manage/approve">管理申请</a></div>
+<div class="col-md-2 pull-right" style="text-align: right;"><a href="/reserve/reserve">申请会议室</a></div>
+<div class="col-md-2 pull-right" style="text-align: right;"><a href="/reserve/record">查看申请记录</a></div> -->
 	      </div>
 	      
           
