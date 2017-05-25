@@ -45,6 +45,9 @@ router.post('/apply',function(req,res){
 		if(result == 1){
 			return res.json({'errCode':-1,'errMsg':'该时间段已被占用，不能申请!'})
 		}
+		if(result == 2){
+			return res.json({'errCode':-1,'errMsg':'抱歉，同一申请人同一时间段不能提交相同申请!'})
+		}
 		console.log('----- reply in router -----')
 		console.log(result)
 		return res.json({'errCode':0,'data':result})

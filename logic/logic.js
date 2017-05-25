@@ -250,13 +250,31 @@ exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meet
 					return cb(err)
 				}
 				if(!doc || doc.length == 0){
-					console.log('----- 没有申请 -----')
+					console.log('----- 没有批准记录 -----')
 					cb(null)
 				}
 				if(doc && doc.length != 0){
 					console.log('----- 已有批准记录 -----')
 					console.log(doc)
 					cb(1,doc)
+				}
+			})
+		},
+		function(cb){//当同一个人连续点两次提交，申请的是同一条记录的时候，返回提示
+			apply.find({'room_name':room_name,'meeting_date':meeting_date,'exact_meeting_time':exact_meeting_time},function(err,doc){
+				if(err){
+					console.log('----- search err -----')
+					console.log(err.message)
+					return cb(err)
+				}
+				if(!doc || doc.length == 0){
+					console.log('----- 同一申请人没有重复申请 -----')
+					cb(null)
+				}
+				if(doc && doc.length != 0){
+					console.log('----- 同一申请人相同时间重复申请 -----')
+					console.log(doc)
+					cb(1,2)
 				}
 			})
 		},
@@ -287,9 +305,13 @@ exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meet
 			})
 		}
 	],function(err,result){
-		if(err && result){
+		if(err && result != 2){
 			console.log('----- 已有批准记录 -----')
 			return callback(null,1)
+		}
+		if(err && result == 2){
+			console.log('----- async 重复申请 -----')
+			return callback(null,2)
 		}
 		if(err){
 			console.log('----- async err -----')
@@ -379,10 +401,10 @@ exports.applyApprove = function(limit,offset,username,callback){
 		var room_name_arr = ['1楼报告厅--无电脑(452人)']
 	}
 	else if(username == 'admin3'){
-		var room_name_arr = ['412会议室--无电脑(11人)']
+		var room_name_arr = ['412会议室--无电脑(11人)','407小教室--无电脑(42人)']
 	}
 	else{
-		var room_name_arr = ['624小教室--有电脑(68人)','623会议室--无电脑(16-24人)','1楼报告厅--无电脑(452人)','412会议室--无电脑(11人)','1019会议室--无电脑(20人)','407小教室--无电脑(42人)','938会议室--有电脑(48-60人)']
+		var room_name_arr = ['407小教室--无电脑(42人)','624小教室--有电脑(68人)','623会议室--无电脑(16-24人)','1楼报告厅--无电脑(452人)','412会议室--无电脑(11人)','1019会议室--无电脑(20人)','407小教室--无电脑(42人)','938会议室--有电脑(48-60人)']
 	}
 	console.log('check room_name_arr -->',room_name_arr)
 
