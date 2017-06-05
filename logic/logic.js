@@ -983,3 +983,45 @@ exports.test_apply = function(room_name,meeting_name,meeting_num,meeting_content
 		callback(null,result)
 	})
 }
+//删除无效审批记录
+exports.deleteApprove = function(ids,callback){
+	if(typeof ids != 'object'){
+		console.log('typeof ids --->',typeof ids)
+		console.log('----- delete only one record -----')
+		console.log('id is --->',ids)
+		apply.remove({'_id':ids},function(err){
+			console.log('remove')
+			if(err){
+				console.log('----- delete record err -----')
+				console.log(err.message)
+				callback(err,null)
+			}
+			console.log('----- delete record success -----')
+			callback(null)
+		})
+	}
+	else{
+		console.log('----- delete more than one record -----')
+		console.log('ids are --->',ids)
+		async.eachLimit(ids,1,function(item,cb){
+			apply.remove({'_id':item},function(err){
+				console.log('check item --->',item)
+				if(err){
+					console.log('----- delete record err -----')
+					console.log(err.message)
+					cb(err,null)
+				}
+				console.log('----- delete records success -----')
+				cb()
+			})
+		},function(err){
+			if(err){
+				console.log('----- async each err -----')
+				console.log(err.message)
+				callback(err,null)
+			}
+			console.log('----- delete all applyApprove success -----')
+			callback(null)
+		})
+	}
+}

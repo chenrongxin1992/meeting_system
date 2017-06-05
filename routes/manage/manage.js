@@ -390,5 +390,17 @@ router.post('/test_apply',function(req,res){
 		return res.json(result)
 	})
 })
-
+//for delete approve
+router.post('/deleteApprove',function(req,res){
+	console.log('----- delete approve router -----')
+	var ids = req.body._id
+	console.log(req.body)
+	logic.deleteApprove(req.body,function(error,result){
+		if(error){
+			return res.json({'errCode':-1,'errMsg':error.message})
+		}else{
+			return res.json({'errCode':0,'errMsg':'success'})
+		}
+	})
+})
 module.exports = router
