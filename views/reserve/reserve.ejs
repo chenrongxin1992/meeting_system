@@ -30,6 +30,32 @@
       #ui-datepicker-div{
         display: none;
       }
+
+      .bootstrap-select > .dropdown-toggle{
+        width: auto;
+      }
+      .dropdown-menu > .open{
+        width: auto;
+      }
+      .bootstrap-select.btn-group .dropdown-menu{
+        min-width: 10%;
+      }
+      .to{
+        width: 10px;
+        font-size: medium;
+        line-height: 34px;
+        padding-left: 0px;
+      }
+      @media screen and (max-width:1024px){
+        .to{ 
+            width: 10px;
+            font-size: medium;
+            line-height: 34px;
+            padding-left:20px;
+         }
+      }
+     
+   
     </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -125,11 +151,11 @@
           </div>
         </div>
         
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="meeting_time" class="col-sm-2 col-sm-offset-1 control-label">会议时间</label>
           <div class="col-sm-4">
-            <!-- <input type="text" class="form-control" id="meeting_time" 
-                 placeholder="请输入会议时间"> -->
+            <input type="text" class="form-control" id="meeting_time" 
+                 placeholder="请输入会议时间">
               <select id="meeting_time" class="selectpicker" data-hide-disabled="true" data-live-search="false">
                 <optgroup label="上午">
                   <option>08:30-09:30</option>
@@ -151,6 +177,51 @@
                   <option>20:00-21:00</option>
                 </optgroup>
               </select>
+          </div>
+        </div> -->
+
+        <!-- 尝试切割时间 -->
+        <div class="form-group">
+          <label for="shijianduan" class="col-sm-2 col-sm-offset-1 control-label">会议时间段</label>
+          <div class="col-sm-4">
+            <select id="shijianduan" class="selectpicker" data-hide-disabled="true" data-live-search="false" >
+              <option>上午</option>
+              <option>中午</option>
+              <option>下午</option>
+              <option>晚上</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="meeting_time" class="col-sm-2 col-sm-offset-1 control-label  col-xs-3">会议时间</label>
+          <div class="col-sm-1  col-xs-3">
+            <select id="first_hour" class="selectpicker" data-hide-disabled="true" data-live-search="false">
+                <option>08</option>
+                <option>09</option>
+                <option>10</option>
+                <option>11</option>
+            </select>
+          </div> 
+          <div class="col-sm-1   col-xs-3">
+            <select id="first_minute" class="selectpicker" data-hide-disabled="true" data-live-search="false">
+              <option>00</option>
+              <option>30</option>
+            </select>
+          </div> 
+          <div class="col-sm-1 to  col-xs-4">To</div>
+          <div class="col-sm-1  col-xs-3">
+            <select id="second_hour" class="selectpicker" data-hide-disabled="true" data-live-search="false">
+                <option>09</option>
+                <option>10</option>
+                <option>11</option>
+            </select>
+          </div> 
+          <div class="col-sm-1  col-xs-3 ">
+            <select id="second_minute" class="selectpicker" data-hide-disabled="true" data-live-search="false">
+              <option>00</option>
+              <option>30</option>
+            </select>
           </div>
         </div>
         
@@ -186,6 +257,74 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
+        //动态改变时间段
+        //$("#select_id").change(function(){//code...});
+        $('#shijianduan').change(function(){
+          var temp_shijianduan = $('#shijianduan option:selected').val()
+          console.log('temp_shijianduan-->',temp_shijianduan)
+          if(temp_shijianduan == '上午'){
+            console.log('上午')
+              $("#first_hour option").remove()
+              $("#first_hour").append("<option>"+'08'+"</option>");    
+              $("#first_hour").append("<option>"+'09'+"</option>");
+              $("#first_hour").append("<option>"+'10'+"</option>");
+              $("#first_hour").append("<option>"+'11'+"</option>");
+              $("#first_hour").selectpicker("refresh")
+
+              $("#second_hour option").remove()
+              $("#second_hour").append("<option>"+'08'+"</option>");    
+              $("#second_hour").append("<option>"+'09'+"</option>");
+              $("#second_hour").append("<option>"+'10'+"</option>");
+              $("#second_hour").append("<option>"+'11'+"</option>");
+              $("#second_hour").selectpicker("refresh")
+          }
+          else if(temp_shijianduan == '中午'){
+              console.log('中午')
+              $("#first_hour option").remove()
+              $("#first_hour").append("<option>"+'12'+"</option>");    
+              $("#first_hour").append("<option>"+'13'+"</option>");
+              $("#first_hour").append("<option>"+'14'+"</option>");
+              $("#first_hour").selectpicker("refresh")
+
+              $("#second_hour option").remove()
+              $("#second_hour").append("<option>"+'12'+"</option>");    
+              $("#second_hour").append("<option>"+'13'+"</option>");
+              $("#second_hour").append("<option>"+'14'+"</option>");
+              $("#second_hour").selectpicker("refresh")
+          }
+          else if(temp_shijianduan == '下午'){
+              console.log('下午')
+              $("#first_hour option").remove()
+              $("#first_hour").append("<option>"+'14'+"</option>");    
+              $("#first_hour").append("<option>"+'15'+"</option>");
+              $("#first_hour").append("<option>"+'16'+"</option>");
+              $("#first_hour").append("<option>"+'17'+"</option>");
+              $("#first_hour").selectpicker("refresh")
+
+              $("#second_hour option").remove()
+              $("#second_hour").append("<option>"+'14'+"</option>");    
+              $("#second_hour").append("<option>"+'15'+"</option>");
+              $("#second_hour").append("<option>"+'16'+"</option>");
+              $("#second_hour").append("<option>"+'17'+"</option>");
+              $("#second_hour").selectpicker("refresh")
+          }
+          else{
+            console.log('晚上')
+            $("#first_hour option").remove()
+              $("#first_hour").append("<option>"+'18'+"</option>");    
+              $("#first_hour").append("<option>"+'19'+"</option>");
+              $("#first_hour").append("<option>"+'20'+"</option>");
+              $("#first_hour").append("<option>"+'21'+"</option>");
+              $("#first_hour").selectpicker("refresh")
+
+              $("#second_hour option").remove()
+              $("#second_hour").append("<option>"+'18'+"</option>");    
+              $("#second_hour").append("<option>"+'19'+"</option>");
+              $("#second_hour").append("<option>"+'20'+"</option>");
+              $("#second_hour").append("<option>"+'21'+"</option>");
+              $("#second_hour").selectpicker("refresh")
+          }
+        })
         //时间选择
         $('#meeting_date').datepicker({
            format: 'yyyy-mm-dd',
@@ -206,7 +345,36 @@
               apply_phone = $('#apply_phone').val(),
               meeting_date = $('#meeting_date').val(),
               meeting_time = $('#meeting_time option:selected').val(),
-              apply_email = $('#apply_email').val()
+              apply_email = $('#apply_email').val(),
+              first_hour = $('#first_hour option:selected').val(),
+              first_minute = $('#first_minute option:selected').val(),
+              second_hour = $('#second_hour option:selected').val(),
+              second_minute = $('#second_minute option:selected').val()
+
+          if(first_hour > second_hour){
+            $('.modal-msg').modal('show')
+            $('.modal-body').text('开始时间不能大于结束时间！')
+            return false
+          }
+          if(first_hour == second_hour && first_minute > second_minute){
+            $('.modal-msg').modal('show')
+            $('.modal-body').text('开始时间不能大于结束时间！')
+            return false
+          }
+          if(first_hour == second_hour && first_minute == second_minute){
+            $('.modal-msg').modal('show')
+            $('.modal-body').text('请选择会议时间')
+            return false
+          }
+
+          //临时测试数据
+          /*room_name = '938'
+          meeting_name = '测试'
+          meeting_num = '22'
+          meeting_content = 'for test'
+          apply_name = 'dddd'
+          apply_phone = '13760277012'
+          apply_email = '848536190@qq.com'*/
 
           if(!meeting_name || typeof meeting_name == 'undefined'){
             $('.modal-msg').modal('show')
@@ -280,11 +448,12 @@
           console.log('check args',room_name,meeting_name,meeting_num,meeting_content,apply_name,apply_phone,meeting_date,meeting_time)
 
           meeting_date = meeting_date.substring(5)
+          console.log('meeting_date-->',meeting_date)
           let temp_meeting_date = meeting_date.split('-')
           meeting_date = temp_meeting_date[0] + '月' + temp_meeting_date[1] + '日'
           console.log('meeting_date-->',meeting_date)
 
-          let temp_meeting_time = meeting_time.substring(0,2),
+          /*let temp_meeting_time = meeting_time.substring(0,2),
               exact_meeting_time = ''
           console.log('临时截取时间：',temp_meeting_time)
           if(temp_meeting_time == '08' || temp_meeting_time == '09' || temp_meeting_time == '10'){
@@ -304,9 +473,73 @@
             meeting_time = '晚上'
           }
           console.log('meeting_time: ',meeting_time)
-          console.log('exact_meeting_time: ',exact_meeting_time)
+          console.log('exact_meeting_time: ',exact_meeting_time)*/
+          console.log('first_hour-->',first_hour,'first_minute-->',first_minute,'second_hour-->',second_hour,'second_minute-->',second_minute)
+          if(first_hour == '08' || first_hour == '09' || first_hour == '10' || first_hour == '11'){
+            meeting_time = '上午'
+            exact_meeting_time = '上午' + first_hour + ':' + first_minute + '-' + second_hour + ':' + second_minute
+          }
+          if(first_hour == '12' || first_hour == '13' ){
+            meeting_time = '中午'
+            exact_meeting_time = '中午' + first_hour + ':' + first_minute + '-' + second_hour + ':' + second_minute
+          }
+          if(first_hour == '14' || first_hour == '15' || first_hour == '16' || first_hour == '17'){
+            meeting_time = '下午'
+            exact_meeting_time = '下午' + first_hour + ':' + first_minute + '-' + second_hour + ':' + second_minute
+          }
+          if(first_hour == '18' || first_hour == '19' || first_hour == '20' || first_hour == '21'){
+            meeting_time = '晚上'
+            exact_meeting_time = '晚上' + first_hour + ':' + first_minute + '-' + second_hour + ':' + second_minute
+          }
+          console.log('meeting_time-->',meeting_time)
+          console.log('exact_meeting_time-->',exact_meeting_time)
 
           $.ajax({
+            url: '/manage/applyTwo', 
+            async: true,
+            dataType: 'json',
+            type: 'POST',
+            data: {
+              room_name:room_name,
+              meeting_name:meeting_name,
+              meeting_num:meeting_num,
+              meeting_content:meeting_content,
+              apply_name:apply_name,
+              apply_phone:apply_phone,
+              meeting_date:meeting_date,
+              meeting_time:meeting_time,
+              exact_meeting_time:exact_meeting_time,
+              apply_email:apply_email,
+              first_hour:first_hour,
+              first_minute:first_minute,
+              second_hour:second_hour,
+              second_minute:second_minute
+            },
+
+            success: function(result){
+              console.log('success')
+              console.log(result)
+              if(result.errCode == 0){
+                //弹出模态框
+                $('.result-modal').modal('show')
+                $('.modal-body').text('申请操作成功，请等待审批。')
+              }
+              if(result.errCode == -1){
+                //弹出模态框
+                $('.result-modal').modal('show')
+                $('.modal-body').text(result.errMsg)
+              }
+            },
+            error: function(e){
+              console.log("error");
+              //console.error(e.message)
+              $('.result-modal').modal('show')
+              $('.modal-body').text('申请操作失败')
+            },
+           
+          });
+
+          /*$.ajax({
             url: '/manage/apply', 
             async: true,
             dataType: 'json',
@@ -345,7 +578,7 @@
               $('.modal-body').text('申请操作失败')
             },
            
-          });
+          });*/
         });
         $('#success-btn').on("click",function(){
           //window.location.reload()

@@ -25,7 +25,7 @@ router.get('/add_meeting_room',function(req,res){
 		}
 	})
 })
-//for apply a new meeting room
+//提交申请
 router.post('/apply',function(req,res){
 	console.log('----- apply -----')
 	var room_name = req.body.room_name,
@@ -44,6 +44,24 @@ router.post('/apply',function(req,res){
 		}
 		if(result == 1){
 			return res.json({'errCode':-1,'errMsg':'该时间段已被占用，不能申请!'})
+		}
+		if(result == 2){
+			return res.json({'errCode':-1,'errMsg':'抱歉，同一申请人同一时间段不能提交相同申请!'})
+		}
+		console.log('----- reply in router -----')
+		console.log(result)
+		return res.json({'errCode':0,'data':result})
+	})
+})
+//提交申请(切割时间)
+router.post('/applyTwo',function(req,res){
+	console.log('----- apply -----')
+	logic.applyTwo(req.body,function(err,result){
+		if(err){
+			return res.json({'errCode':-1,'errMsg':err.message})
+		}
+		if(result == 1){
+			return res.json({'errCode':-1,'errMsg':'会议开始时间已被占用，请检查!'})
 		}
 		if(result == 2){
 			return res.json({'errCode':-1,'errMsg':'抱歉，同一申请人同一时间段不能提交相同申请!'})

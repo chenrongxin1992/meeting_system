@@ -7,7 +7,7 @@ var mongoose = require('./db'),
     Schema = mongoose.Schema,
     moment = require('moment')
 
-var applySchema = new Schema({          
+var applyTwoSchema = new Schema({          
     room_name : {type : String },                                      //会议室name
     meeting_name :{type : String },                                    //会议名称
     meeting_num:{type : Number},                                       //人数
@@ -21,11 +21,11 @@ var applySchema = new Schema({
     exact_meeting_time : {type : String},
     email : {type : String},
     apply_timeStamp : {type : String,default:moment().format('X')},
-    is_allowed : {type:String,default:0},//设置不批准的时候置为1
+    is_allowed : {type : String,default:0},//设置不批准的时候置为1
     first_hour : {type : String},
     second_hour : {type : String},
     first_minute : {type : String},
     second_minute : {type :String}
 })
 
-module.exports = mongoose.model('apply',applySchema);
+module.exports = mongoose.model('applyTwo',applyTwoSchema);

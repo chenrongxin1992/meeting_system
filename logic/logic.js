@@ -10,6 +10,7 @@ const async = require('async')
 const moment = require('moment')
 const chunk =require("lodash/chunk")
 const nodemailer = require('nodemailer')
+const applyTwo = require('../db/applyTwo')
 //邮件配置
 var config_email = {
 	host : 'smtp.qq.com',
@@ -261,7 +262,7 @@ exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meet
 			})
 		},
 		function(cb){//当同一个人连续点两次提交，申请的是同一条记录的时候，返回提示
-			apply.find({'room_name':room_name,'meeting_date':meeting_date,'exact_meeting_time':exact_meeting_time},function(err,doc){
+			apply.find({'room_name':room_name,'meeting_date':meeting_date,'exact_meeting_time':exact_meeting_time,'apply_name':apply_name},function(err,doc){
 				if(err){
 					console.log('----- search err -----')
 					console.log(err.message)
@@ -301,6 +302,163 @@ exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meet
 				}
 				console.log('---- save success -----')
 				console.log('new_apply: ',doc)
+				cb(null,doc)
+			})
+		}
+	],function(err,result){
+		if(err && result != 2){
+			console.log('----- 已有批准记录 -----')
+			return callback(null,1)
+		}
+		if(err && result == 2){
+			console.log('----- async 重复申请 -----')
+			return callback(null,2)
+		}
+		if(err){
+			console.log('----- async err -----')
+			return callback(err)
+		}
+		callback(null,result)
+	})
+}
+//添加申请记录(分割时间)
+exports.applyTwo = function(attribute,callback){
+	var room_name = attribute.room_name,
+		meeting_name = attribute.meeting_name,
+		meeting_num = attribute.meeting_num,
+		meeting_content = attribute.meeting_content,
+		apply_name = attribute.apply_name,
+		apply_phone = attribute.apply_phone,
+		meeting_date = attribute.meeting_date,
+		meeting_time = attribute.meeting_time,
+		exact_meeting_time = attribute.exact_meeting_time,
+		apply_email = attribute.apply_email,
+		first_hour = attribute.first_hour,
+		first_minute = attribute.first_minute,
+		second_hour = attribute.second_hour,
+		second_minute = attribute.second_minute
+	console.log('first_hour-->',first_hour,'second_hour-->',second_hour,'first_minute-->',first_minute,'second_minute-->',second_minute)
+	async.waterfall([
+		function(cb){//检查申请时间段会议室是否已被批准使用
+			//情况1：审批结果的结束时间(second_minute)为00的时候
+			let search = apply.find({})
+				search.where('room_name').equals(room_name)
+				search.where('meeting_date').equals(meeting_date)
+				search.where('is_approved').equals('1')
+				search.where('second_minute').equals('00')
+				search.where('second_hour').gt(first_hour)
+				search.exec(function(err,docs){
+					if(err){
+						console.log('----- search err -----')
+						console.log(err.message)
+						 cb(err)
+					}
+					if(!docs || docs.length == 0){
+						console.log('----- 没有批准记录(情况1) -----')
+						 cb(null)
+					}
+					if(docs && docs.length != 0){
+						console.log('----- 已有批准记录(时间段冲突(情况1)) -----')
+						cb(1,docs)
+					}
+				})
+		},
+		function(cb){
+			//情况2，审批结果的结束时间(second_minute)为30并且新申请first_hour小于second_hour的时候
+			let search = apply.find({})
+				search.where('room_name').equals(room_name)
+				search.where('meeting_date').equals(meeting_date)
+				search.where('is_approved').equals('1')
+				search.where('second_minute').equals('30')
+				search.where('second_hour').gt(first_hour)
+				search.exec(function(err,docs){
+					if(err){
+						console.log('----- search err -----')
+						console.log(err.message)
+						cb(err)
+					}
+					if(!docs || docs.length == 0){
+						console.log('----- 没有批准记录(情况2) -----')
+						 cb(null)
+					}
+					if(docs && docs.length != 0){
+						console.log('----- 已有批准记录(时间段冲突(情况2--新申请开始时间冲突)) -----')
+						cb(1,docs)
+					}
+				})
+		},
+		function(cb){
+			let search = apply.find({})
+				search.where('room_name').equals(room_name)
+				search.where('meeting_date').equals(meeting_date)
+				search.where('is_approved').equals('1')
+				search.where('second_minute').equals('30')
+				search.where('second_hour').equals(first_hour)
+				search.exec(function(err,docs){
+					if(err){
+						console.log('----- search err -----')
+						console.log(err.message)
+						cb(err)
+					}
+					if(!docs || docs.length == 0){
+						console.log('----- 没有批准记录(情况2) -----')
+						 cb(null)
+					}
+					if(docs && docs.length !=0 && first_minute == '00'){
+						console.log('----- 已有批准记录(时间段冲突(情况3--新申请开始时间冲突)) -----')
+						cb(1,docs)
+					}
+					if(docs && docs.length !=0 && first_minute == '30'){
+						console.log('----- 情况3没有冲突 -----')
+						cb(null)
+					}
+				})
+		},
+		function(cb){
+			apply.find({'room_name':room_name,'meeting_date':meeting_date,'exact_meeting_time':exact_meeting_time,'apply_name':apply_name},function(err,doc){
+				if(err){
+					console.log('----- search err -----')
+					console.log(err.message)
+					return cb(err)
+				}
+				if(!doc || doc.length == 0){
+					console.log('----- 同一申请人没有重复申请 -----')
+					cb(null)
+				}
+				if(doc && doc.length != 0){
+					console.log('----- 同一申请人相同时间重复申请 -----')
+					console.log(doc)
+					cb(1,2)
+				}
+			})
+		},
+		function(cb){
+			var new_apply_Two = new apply({
+				room_name : room_name,
+				meeting_name : meeting_name,
+				meeting_num : meeting_num,
+				meeting_content : meeting_content,
+				meeting_date : meeting_date,
+				meeting_time : meeting_time,
+				apply_name : apply_name,
+				apply_phone : apply_phone,
+				exact_meeting_time : exact_meeting_time,
+				apply_time : moment().format('YYYY-MM-DD HH:mm:ss'),
+				email :apply_email,
+				first_hour : first_hour,
+				second_hour : second_hour,
+				first_minute : first_minute,
+				second_minute : second_minute
+			})
+			console.log(new_apply_Two)
+			new_apply_Two.save(function(err,doc){
+				if(err){
+					console.log('----- save err -----')
+					console.error(err)
+					return cb(err)
+				}
+				console.log('---- save success -----')
+				console.log('new_apply_Two-->',doc)
 				cb(null,doc)
 			})
 		}
