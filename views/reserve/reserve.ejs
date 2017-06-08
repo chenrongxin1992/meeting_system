@@ -395,12 +395,12 @@
             //alert('参会人数不能为空！')
             return false
           }
-          let judge = /^[1-9]+[0-9]*]*$/
+          /*let judge = /^[1-9]+[0-9]*]*$/
           if(!judge.exec(meeting_num)){
               $('.modal-msg').modal('show')
               $('.modal-body').text('参会人数只能为正整数！')
               return 
-            }
+            }*/
           if(!meeting_content || typeof meeting_content == 'undefined'){
             $('.modal-msg').modal('show')
             $('.modal-body').text('会议内容不能为空!')
