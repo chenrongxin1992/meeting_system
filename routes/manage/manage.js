@@ -116,6 +116,11 @@ router.get('/record',function(req,res){
 	console.log('----- in record router -----')
 	return res.render('reserve/record')
 })
+//render a apply record by apply_name
+router.get('/recordByName',function(req,res){
+	console.log('----- in recordByName router -----')
+	return res.render('reserve/recordByName')
+})
 //render a logout page
 router.get('/logout',function(req,res){
 	console.log('----- in router logout -----')

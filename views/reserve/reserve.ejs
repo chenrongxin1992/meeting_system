@@ -523,6 +523,8 @@
                 //弹出模态框
                 $('.result-modal').modal('show')
                 $('.modal-body').text('申请操作成功，请等待审批。')
+                //$('.modal-msg').attr('myid',result.result._id);
+                $('.modal-msg').attr('apply_name',apply_name);
               }
               if(result.errCode == -1){
                 //弹出模态框
@@ -584,7 +586,9 @@
           //window.location.reload()
         })
         $('#check_record').on("click",function(){
-          window.location.href = '/manage/record'
+          let apply_name = $('.modal-msg').attr('apply_name');
+          console.log('apply_name-->',apply_name)
+          window.location.href = '/manage/recordByName' + '?apply_name=' + apply_name
         })
         $(".modal-msg").on("hidden.bs.modal", function() {
               console.log('---- here ----')

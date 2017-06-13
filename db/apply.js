@@ -10,7 +10,7 @@ var mongoose = require('./db'),
 var applySchema = new Schema({          
     room_name : {type : String },                                      //会议室name
     meeting_name :{type : String },                                    //会议名称
-    meeting_num:{type : Number},                                       //人数
+    meeting_num:{type : String},                                       //人数
     meeting_content :{type:String},                                    //会议内容
     apply_time : {type : String, default : moment().format('YYYY-MM-DD HH:mm:ss') },     //申请时间 
     meeting_date : {type : String },                                   //会议日期 5月10日
