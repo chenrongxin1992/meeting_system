@@ -585,7 +585,8 @@
     };
     //success-btn
     $("#success-btn").click(function(){ 
-        window.location.reload()
+      $('#tb_departments').bootstrapTable('refresh');
+        //window.location.reload()
     })
     $("#mybutton").click(function(){ 
         /*let myid = $('#myid').text()//用id获取 我改了这里不是val,是text
