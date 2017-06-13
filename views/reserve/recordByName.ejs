@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>查看申请记录</title>
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" >
@@ -231,7 +231,7 @@
     {
          var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
          var r = window.location.search.substr(1).match(reg);
-         if(r!=null)return  unescape(r[2]); return null;
+         if(r!=null)return  decodeURI(r[2]); return null;
     }
     $(function () {
 
