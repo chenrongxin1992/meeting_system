@@ -248,10 +248,13 @@ router.get('/applyApprove',function(req,res){
 
 	let begin_date = req.query.begin_date,
 		end_date = req.query.end_date
+
+	let applier = req.query.applier
+	console.log('applier-->',applier)
 	//如果日期都为空，则默认全部取出
 	if(!begin_date && !end_date){
 		console.log('begin_date && end_date are null,default ')
-		logic.applyApprove(limit,offset,req.session.user.username,function(error,result){
+		logic.applyApprove(limit,offset,req.session.user.username,applier,function(error,result){
 			if(error && result == null){//查询出错
 				return res.json({'errCode':-1,'errMsg':error.message})
 			}
@@ -270,7 +273,7 @@ router.get('/applyApprove',function(req,res){
 	}
 	else{//日期不为空情况
 		console.log('check begin_date && end_date: ',begin_date,end_date)
-		logic.applyApproveQuery(limit,offset,begin_date,end_date,req.session.user.username,function(error,result){
+		logic.applyApproveQuery(limit,offset,begin_date,end_date,req.session.user.username,applier,function(error,result){
 			if(error && result == null){
 				return res.json({'errCode':-1,'errMsg':error.message})
 			}

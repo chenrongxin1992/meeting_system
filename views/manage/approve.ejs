@@ -113,13 +113,17 @@
                                       <form id="formSearch" class="form-horizontal">
                                           <div class="form-group" style="margin-top:15px">
                                               <label class="control-label col-sm-1" for="b_time">开始日期</label>
-                                              <div class="col-sm-3">
+                                              <div class="col-sm-2">
                                                     <input class="form-control" type="text" value="" id="b_time">
                                                         
                                               </div>
                                               <label class="control-label col-sm-1" for="e_time">结束日期</label>
-                                              <div class="col-sm-3">
+                                              <div class="col-sm-2">
                                                   <input type="text" class="form-control" id="e_time">
+                                              </div>
+                                              <label class="control-label col-sm-1" for="applier">申请人</label>
+                                              <div class="col-sm-1" style="text-align:left;">
+                                                  <input type="text" class="form-control" id="applier" placeholder="">
                                               </div>
                                               <div class="col-sm-4" style="text-align:left;">
                                                   <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
@@ -266,15 +270,19 @@
         });
         //查询
         $('#btn_query').on('click',function(){
-            var b_time = $('#b_time').val()
-                e_time = $('#e_time').val()
+            var b_time = $('#b_time').val(),
+                e_time = $('#e_time').val(),
+                click_applier = $('#applier').val()
             if(!b_time || typeof b_time == 'undefined'){
                 console.log('b_time is null')
             }
             if(!e_time || typeof e_time == 'undefined'){
                 console.log('e_time is null ')
             }
-            if(b_time || e_time){
+            if(!click_applier || typeof click_applier == 'undefined'){
+              console.log('click_applier is null')
+            }
+            if(b_time || e_time || click_applier){
                 console.log('check b_time & e_time',b_time,e_time)
                 var b_time_arr = b_time.split('-')
                     e_time_arr = e_time.split('-')
@@ -289,6 +297,9 @@
                     return 
                 }
                 $('#tb_departments').bootstrapTable('refresh');
+                return
+            }else{
+              $('#tb_departments').bootstrapTable('refresh');
             }
         })
          //弹出模态框
@@ -553,7 +564,8 @@
                     /*departmentname: $("#txt_search_departmentname").val(),
                     statu: $("#txt_search_statu").val()*/
                     begin_date : $('#b_time').val(),
-                    end_date : $('#e_time').val()
+                    end_date : $('#e_time').val(),
+                    applier : $('#applier').val()
                 };
                 return temp;
             };

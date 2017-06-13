@@ -642,7 +642,7 @@ exports.applyRecord = function(limit,offset,applier,callback){
 	})
 }
 //get apply for approve 'room_name,meeting_name,exact_meeting_time,meeting_content,meeting_num,apply_name,apply_phone,is_approved'
-exports.applyApprove = function(limit,offset,username,callback){
+exports.applyApprove = function(limit,offset,username,applier,callback){
 	console.log('session username is -->',username)
 	if(username == 'admin1'){
 		var room_name_arr = ['624小教室--有电脑(68人)','623会议室--无电脑(16-24人)']
@@ -658,93 +658,186 @@ exports.applyApprove = function(limit,offset,username,callback){
 	}
 	console.log('check room_name_arr -->',room_name_arr)
 
-	async.waterfall([
-		function(cb){
-			let query = apply.find({})
-				query.where('room_name').in(room_name_arr)
-				query.exec(function(err,docs){
-					if(err){
-						console.log('----- search err -----')
-						console.log(err.message)
-						cb(err,null)
-					}
-					if(!docs || docs.length == 0){
-						console.log('----- no result now -----')
-				 		cb(1,1)
-					}
-					if(docs && docs.length !=0){
-						cb(null,docs.length)
-					}
-				})
-		},
-		function(length,cb){
-			console.log('total length: ',length)
-			limit = parseInt(limit)
-			offset = parseInt(offset)
-			let numSkip = (offset)*limit
-			console.log('skip num is: ',numSkip)
-			let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
-				search.where('room_name').in(room_name_arr)
-				search.sort({'apply_time':-1})
-				search.limit(limit)
-				search.skip(numSkip)
-				search.exec(function(err,docs){
-					if(err){
-						console.log('----- search err -----')
-						console.log(err.message)
-						cb(err,null)
-					}
-					if(!docs || docs.length == 0){
-						console.log('----- no result now -----')
-						cb(1,1)
-					}
-					if(docs && docs.length !=0){//格式化并将length加入
-						for(let i=0;i<docs.length;i++){
-							//格式化时间戳
-							//docs[i].apply_time = moment(docs[i].apply_time).format('YYYY-MM-DD HH:mm:ss')
-							//console.log('check applytime : ',docs[i].apply_time)
-							docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
-							console.log('docs.is_approved: ',docs[i].is_approved)
-							console.log('docs.is_allowed: ',docs[i].is_allowed)
-							console.log(docs[i])
-							if(docs[i].is_approved == 0 && docs[i].is_allowed == 0){
-								console.log('--- check here -----')
-								docs[i].is_approved = '未审批'
-								console.log(docs[i].is_approved)
-							}
-							else if(docs[i].is_approved == 1 && docs[i].is_allowed == 0){
-								console.log('--- check here -----')
-								docs[i].is_approved = '已批准'
-								console.log(docs[i].is_approved)
-							}
-							else{//docs[i].is_approved == 0 && docs[i].is_allowed == 1
-								console.log('----- check here hrere -----')
-								docs[i].is_approved = '未批准'
-							}
+	if(!applier){console.log('----- 没有输入申请人 -----')
+		async.waterfall([
+			function(cb){
+				let query = apply.find({})
+					query.where('room_name').in(room_name_arr)
+					query.exec(function(err,docs){
+						if(err){
+							console.log('----- search err -----')
+							console.log(err.message)
+							cb(err,null)
 						}
+						if(!docs || docs.length == 0){
+							console.log('----- no result now -----')
+					 		cb(1,1)
+						}
+						if(docs && docs.length !=0){
+							cb(null,docs.length)
+						}
+					})
+			},
+			function(length,cb){
+				console.log('total length: ',length)
+				limit = parseInt(limit)
+				offset = parseInt(offset)
+				let numSkip = (offset)*limit
+				console.log('skip num is: ',numSkip)
+				let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
+					search.where('room_name').in(room_name_arr)
+					search.sort({'apply_time':-1})
+					search.limit(limit)
+					search.skip(numSkip)
+					search.exec(function(err,docs){
+						if(err){
+							console.log('----- search err -----')
+							console.log(err.message)
+							cb(err,null)
+						}
+						if(!docs || docs.length == 0){
+							console.log('----- no result now -----')
+							cb(1,1)
+						}
+						if(docs && docs.length !=0){//格式化并将length加入
+							for(let i=0;i<docs.length;i++){
+								//格式化时间戳
+								//docs[i].apply_time = moment(docs[i].apply_time).format('YYYY-MM-DD HH:mm:ss')
+								//console.log('check applytime : ',docs[i].apply_time)
+								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
+								console.log('docs.is_approved: ',docs[i].is_approved)
+								console.log('docs.is_allowed: ',docs[i].is_allowed)
+								console.log(docs[i])
+								if(docs[i].is_approved == 0 && docs[i].is_allowed == 0){
+									console.log('--- check here -----')
+									docs[i].is_approved = '未审批'
+									console.log(docs[i].is_approved)
+								}
+								else if(docs[i].is_approved == 1 && docs[i].is_allowed == 0){
+									console.log('--- check here -----')
+									docs[i].is_approved = '已批准'
+									console.log(docs[i].is_approved)
+								}
+								else{//docs[i].is_approved == 0 && docs[i].is_allowed == 1
+									console.log('----- check here hrere -----')
+									docs[i].is_approved = '未批准'
+								}
+							}
 
-						 docs = {
-						 	total : length,
-						 	docs : docs,
-						 	offset : offset
-						 }
-						 cb(null,docs)
-					}
-				})
-		}],function(err,result){
-			if(err && result == 1){
-				console.log('----- async no records -----')
-				callback(err,1)
-			}
-			else if(err && result == null){
-				console.log('----- async err -----')
-				callback(err,null)
-			}
-			else{//(result && result.length != 0)
-				console.log('----- async final result -----')
-				callback(null,result)
-			}
-	})
+							 docs = {
+							 	total : length,
+							 	docs : docs,
+							 	offset : offset
+							 }
+							 cb(null,docs)
+						}
+					})
+			}],function(err,result){
+				if(err && result == 1){
+					console.log('----- async no records -----')
+					callback(err,1)
+				}
+				else if(err && result == null){
+					console.log('----- async err -----')
+					callback(err,null)
+				}
+				else{//(result && result.length != 0)
+					console.log('----- async final result -----')
+					callback(null,result)
+				}
+		})
+	}else{console.log('----- 输入了申请人 -----')
+		async.waterfall([
+			function(cb){
+				let query = apply.find({})
+					query.where('room_name').in(room_name_arr)
+					query.where('apply_name').equals(applier)
+					query.exec(function(err,docs){
+						if(err){
+							console.log('----- search err -----')
+							console.log(err.message)
+							cb(err,null)
+						}
+						if(!docs || docs.length == 0){
+							console.log('----- no result now -----')
+					 		cb(1,1)
+						}
+						if(docs && docs.length !=0){
+							cb(null,docs.length)
+						}
+					})
+			},
+			function(length,cb){
+				console.log('total length: ',length)
+				limit = parseInt(limit)
+				offset = parseInt(offset)
+				let numSkip = (offset)*limit
+				console.log('skip num is: ',numSkip)
+				let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
+					search.where('room_name').in(room_name_arr)
+					search.where('apply_name').equals(applier)
+					search.sort({'apply_time':-1})
+					search.limit(limit)
+					search.skip(numSkip)
+					search.exec(function(err,docs){
+						if(err){
+							console.log('----- search err -----')
+							console.log(err.message)
+							cb(err,null)
+						}
+						if(!docs || docs.length == 0){
+							console.log('----- no result now -----')
+							cb(1,1)
+						}
+						if(docs && docs.length !=0){//格式化并将length加入
+							for(let i=0;i<docs.length;i++){
+								//格式化时间戳
+								//docs[i].apply_time = moment(docs[i].apply_time).format('YYYY-MM-DD HH:mm:ss')
+								//console.log('check applytime : ',docs[i].apply_time)
+								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
+								console.log('docs.is_approved: ',docs[i].is_approved)
+								console.log('docs.is_allowed: ',docs[i].is_allowed)
+								console.log(docs[i])
+								if(docs[i].is_approved == 0 && docs[i].is_allowed == 0){
+									console.log('--- check here -----')
+									docs[i].is_approved = '未审批'
+									console.log(docs[i].is_approved)
+								}
+								else if(docs[i].is_approved == 1 && docs[i].is_allowed == 0){
+									console.log('--- check here -----')
+									docs[i].is_approved = '已批准'
+									console.log(docs[i].is_approved)
+								}
+								else{//docs[i].is_approved == 0 && docs[i].is_allowed == 1
+									console.log('----- check here hrere -----')
+									docs[i].is_approved = '未批准'
+								}
+							}
+
+							 docs = {
+							 	total : length,
+							 	docs : docs,
+							 	offset : offset
+							 }
+							 cb(null,docs)
+						}
+					})
+			}],function(err,result){
+				if(err && result == 1){
+					console.log('----- async no records -----')
+					callback(err,1)
+				}
+				else if(err && result == null){
+					console.log('----- async err -----')
+					callback(err,null)
+				}
+				else{//(result && result.length != 0)
+					console.log('----- async final result -----')
+					callback(null,result)
+				}
+		})
+	}
+	
 }
 exports.applyRecordQuery = function(limit,offset,begin_date,end_date,applier,callback){
 	console.log('applier is-->',applier)
@@ -851,7 +944,7 @@ exports.applyRecordQuery = function(limit,offset,begin_date,end_date,applier,cal
 	})
 }
 //get apply for approve matching query date
-exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,callback){
+exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,applier,callback){
 	console.log('session username is -->',username)
 	if(username == 'admin1'){
 		var room_name_arr = ['624小教室--有电脑(68人)','623会议室--无电脑(16-24人)']
@@ -886,91 +979,183 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,c
 		console.log('end_date is not null')
 		console.log('check end_date timeStamp',begin_date)
 	}
-	async.waterfall([
-		function(cb){
-			let search = apply.find({})
-				search.where('room_name').in(room_name_arr)
-				search.where('apply_timeStamp').gte(begin_date)
-				search.where('apply_timeStamp').lte(end_date)
-				search.where('is_approved').equals('1')
-				search.exec(function(err,docs){
-					if(err){
-						console.log('----- search err -----')
-						console.log(err.message)
-						cb(err,null)
-					}
-					if(!docs || docs.length == 0){
-						console.log('----- no result now -----')
-						cb(1,1)
-					}
-					if(docs && docs.length !=0){
-						console.log('check apply records that fetch condition: ',docs)
-						cb(null,docs.length)
-					}
-				})
-		},
-		function(length,cb){
-			console.log('check records length: ',length)
-			limit = parseInt(limit)
-			offset = parseInt(offset)
-			let numSkip = (offset)*limit
-			console.log('skip num is: ',numSkip)
-			let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
-				secondSearch.where('room_name').in(room_name_arr)
-				secondSearch.where('apply_timeStamp').gte(begin_date)
-				secondSearch.where('apply_timeStamp').lte(end_date)
-				//secondSearch.select()
-				secondSearch.where('is_approved').equals('1')
-				secondSearch.sort({'apply_time':-1})
-				secondSearch.limit(limit)
-				secondSearch.skip(numSkip)
-				secondSearch.exec(function(err,docs){
-					if(err){
-						console.log('----- search err -----')
-						console.log(err.message)
-						cb(err,null)
-					}
-					if(!docs || docs.length == 0){
-						console.log('----- no result now -----')
-						cb(1,1)
-					}
-					if(docs && docs.length != 0){
-						for(let i=0;i<docs.length;i++){
-							docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
-							console.log('docs.is_approved: ',docs[i].is_approved)
-							if(docs[i].is_approved == 1){
-								console.log('--- check here -----')
-								docs[i].is_approved = '已批准'
-								console.log(docs[i].is_approved)
-							}
-							else{
-								console.log('----- check here hrere -----')
-								docs[i].is_approved = '未批准'
-							}
+	if(!applier){
+		console.log('----- 没有输入申请人 -----')
+		async.waterfall([
+			function(cb){
+				let search = apply.find({})
+					search.where('room_name').in(room_name_arr)
+					search.where('apply_timeStamp').gte(begin_date)
+					search.where('apply_timeStamp').lte(end_date)
+					search.where('is_approved').equals('1')
+					search.exec(function(err,docs){
+						if(err){
+							console.log('----- search err -----')
+							console.log(err.message)
+							cb(err,null)
 						}
-						docs = {
-							 	total : length,
-							 	docs : docs,
-							 	offset : offset
-							 }
-						cb(null,docs)
-					}
-				})
-		}
-	],function(err,result){
-		if(err && result == 1){
-			console.log('----- async no records -----')
-			callback(err,1)
-		}
-		else if(err && result == null){
-			console.log('----- async err -----')
-			callback(err,null)
-		}
-		else{//(result && result.length != 0)
-			console.log('----- async final result -----')
-			callback(null,result)
-		}
-	})
+						if(!docs || docs.length == 0){
+							console.log('----- no result now -----')
+							cb(1,1)
+						}
+						if(docs && docs.length !=0){
+							console.log('check apply records that fetch condition: ',docs)
+							cb(null,docs.length)
+						}
+					})
+			},
+			function(length,cb){
+				console.log('check records length: ',length)
+				limit = parseInt(limit)
+				offset = parseInt(offset)
+				let numSkip = (offset)*limit
+				console.log('skip num is: ',numSkip)
+				let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
+					secondSearch.where('room_name').in(room_name_arr)
+					secondSearch.where('apply_timeStamp').gte(begin_date)
+					secondSearch.where('apply_timeStamp').lte(end_date)
+					//secondSearch.select()
+					secondSearch.where('is_approved').equals('1')
+					secondSearch.sort({'apply_time':-1})
+					secondSearch.limit(limit)
+					secondSearch.skip(numSkip)
+					secondSearch.exec(function(err,docs){
+						if(err){
+							console.log('----- search err -----')
+							console.log(err.message)
+							cb(err,null)
+						}
+						if(!docs || docs.length == 0){
+							console.log('----- no result now -----')
+							cb(1,1)
+						}
+						if(docs && docs.length != 0){
+							for(let i=0;i<docs.length;i++){
+								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
+								console.log('docs.is_approved: ',docs[i].is_approved)
+								if(docs[i].is_approved == 1){
+									console.log('--- check here -----')
+									docs[i].is_approved = '已批准'
+									console.log(docs[i].is_approved)
+								}
+								else{
+									console.log('----- check here hrere -----')
+									docs[i].is_approved = '未批准'
+								}
+							}
+							docs = {
+								 	total : length,
+								 	docs : docs,
+								 	offset : offset
+								 }
+							cb(null,docs)
+						}
+					})
+			}
+		],function(err,result){
+			if(err && result == 1){
+				console.log('----- async no records -----')
+				callback(err,1)
+			}
+			else if(err && result == null){
+				console.log('----- async err -----')
+				callback(err,null)
+			}
+			else{//(result && result.length != 0)
+				console.log('----- async final result -----')
+				callback(null,result)
+			}
+		})
+	}else{
+		console.log('----- 输入申请人 -----')
+		async.waterfall([
+			function(cb){
+				let search = apply.find({})
+					search.where('room_name').in(room_name_arr)
+					search.where('apply_name').equals(applier)
+					search.where('apply_timeStamp').gte(begin_date)
+					search.where('apply_timeStamp').lte(end_date)
+					search.where('is_approved').equals('1')
+					search.exec(function(err,docs){
+						if(err){
+							console.log('----- search err -----')
+							console.log(err.message)
+							cb(err,null)
+						}
+						if(!docs || docs.length == 0){
+							console.log('----- no result now -----')
+							cb(1,1)
+						}
+						if(docs && docs.length !=0){
+							console.log('check apply records that fetch condition: ',docs)
+							cb(null,docs.length)
+						}
+					})
+			},
+			function(length,cb){
+				console.log('check records length: ',length)
+				limit = parseInt(limit)
+				offset = parseInt(offset)
+				let numSkip = (offset)*limit
+				console.log('skip num is: ',numSkip)
+				let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
+					secondSearch.where('room_name').in(room_name_arr)
+					secondSearch.where('apply_name').equals(applier)
+					secondSearch.where('apply_timeStamp').gte(begin_date)
+					secondSearch.where('apply_timeStamp').lte(end_date)
+					//secondSearch.select()
+					secondSearch.where('is_approved').equals('1')
+					secondSearch.sort({'apply_time':-1})
+					secondSearch.limit(limit)
+					secondSearch.skip(numSkip)
+					secondSearch.exec(function(err,docs){
+						if(err){
+							console.log('----- search err -----')
+							console.log(err.message)
+							cb(err,null)
+						}
+						if(!docs || docs.length == 0){
+							console.log('----- no result now -----')
+							cb(1,1)
+						}
+						if(docs && docs.length != 0){
+							for(let i=0;i<docs.length;i++){
+								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
+								console.log('docs.is_approved: ',docs[i].is_approved)
+								if(docs[i].is_approved == 1){
+									console.log('--- check here -----')
+									docs[i].is_approved = '已批准'
+									console.log(docs[i].is_approved)
+								}
+								else{
+									console.log('----- check here hrere -----')
+									docs[i].is_approved = '未批准'
+								}
+							}
+							docs = {
+								 	total : length,
+								 	docs : docs,
+								 	offset : offset
+								 }
+							cb(null,docs)
+						}
+					})
+			}
+		],function(err,result){
+			if(err && result == 1){
+				console.log('----- async no records -----')
+				callback(err,1)
+			}
+			else if(err && result == null){
+				console.log('----- async err -----')
+				callback(err,null)
+			}
+			else{//(result && result.length != 0)
+				console.log('----- async final result -----')
+				callback(null,result)
+			}
+		})
+	}
 }
 //applyDetail
 exports.applyDetail = function(_id,callback){
