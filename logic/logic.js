@@ -1075,7 +1075,7 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 					search.where('apply_name').equals(applier)
 					search.where('apply_timeStamp').gte(begin_date)
 					search.where('apply_timeStamp').lte(end_date)
-					search.where('is_approved').equals('1')
+					//search.where('is_approved').equals('1')
 					search.exec(function(err,docs){
 						if(err){
 							console.log('----- search err -----')
@@ -1104,7 +1104,7 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 					secondSearch.where('apply_timeStamp').gte(begin_date)
 					secondSearch.where('apply_timeStamp').lte(end_date)
 					//secondSearch.select()
-					secondSearch.where('is_approved').equals('1')
+					//secondSearch.where('is_approved').equals('1')
 					secondSearch.sort({'apply_time':-1})
 					secondSearch.limit(limit)
 					secondSearch.skip(numSkip)
