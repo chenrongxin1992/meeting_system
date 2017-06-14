@@ -346,6 +346,7 @@ exports.applyTwo = function(attribute,callback){
 				search.where('meeting_date').equals(meeting_date)
 				search.where('is_approved').equals('1')
 				search.where('second_minute').equals('00')
+				search.where('meeting_time').equals(meeting_time)
 				search.where('second_hour').gt(first_hour)
 				search.exec(function(err,docs){
 					if(err){
@@ -370,6 +371,7 @@ exports.applyTwo = function(attribute,callback){
 				search.where('meeting_date').equals(meeting_date)
 				search.where('is_approved').equals('1')
 				search.where('second_minute').equals('30')
+				search.where('meeting_time').equals(meeting_time)
 				search.where('second_hour').gt(first_hour)
 				search.exec(function(err,docs){
 					if(err){
@@ -383,6 +385,7 @@ exports.applyTwo = function(attribute,callback){
 					}
 					if(docs && docs.length != 0){
 						console.log('----- 已有批准记录(时间段冲突(情况2--新申请开始时间冲突)) -----')
+						console.log(docs)
 						cb(1,docs)
 					}
 				})
