@@ -227,26 +227,10 @@
       jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)./)){ jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
     </script>
     <script type="text/javascript">
-    $(function () {
 
-      $('#success-btn').on('click',function(){
-        console.log('----- click btn -----')
-        setTimeout(function(){
-                  let table_ = $("#tb_departments tbody tr")
-                  console.log(table_)
-                  $(table_).find('td').each(function (i,n) { 
-                    console.log('n-->',n)
-                    if($(n).text() == '未审批'){
-                      console.log('找到了')
-                      $(n).parent().css({
-                        background:'#E2EAFE',
-                      })
-                    }
-                  }); 
-                },200)
-      })
-    $(function () {
 
+
+    $(function () {
         $("#b_time").datetimepicker({
           minView: "month",//设置只显示到月
           format: "yyyy-mm-dd",
@@ -298,6 +282,20 @@
                     return 
                 }
                 $('#tb_departments').bootstrapTable('refresh');
+                console.log('----- click btn -----')
+                  setTimeout(function(){
+                            let table_ = $("#tb_departments tbody tr")
+                            console.log(table_)
+                            $(table_).find('td').each(function (i,n) { 
+                              console.log('n-->',n)
+                              if($(n).text() == '未审批'){
+                                console.log('找到了')
+                                $(n).parent().css({
+                                  background:'#E2EAFE',
+                                })
+                              }
+                            }); 
+                          },300)
             }
         })
          //弹出模态框
@@ -496,7 +494,7 @@
                     url: '/manage/applyRecord',         //请求后台的URL（*）
                     method: 'get',                      //请求方式（*）
                     toolbar: '#toolbar',                //工具按钮用哪个容器
-                    striped: true,                      //是否显示行间隔色
+                    striped: false,                      //是否显示行间隔色
                     cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
                     pagination: true,                   //是否显示分页（*）
                     sortable: false,                     //是否启用排序

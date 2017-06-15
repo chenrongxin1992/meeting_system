@@ -235,22 +235,7 @@
     }
     $(function () {
 
-      $('#success-btn').on('click',function(){
-        console.log('----- click btn -----')
-        setTimeout(function(){
-                  let table_ = $("#tb_departments tbody tr")
-                  console.log(table_)
-                  $(table_).find('td').each(function (i,n) { 
-                    console.log('n-->',n)
-                    if($(n).text() == '未审批'){
-                      console.log('找到了')
-                      $(n).parent().css({
-                        background:'#E2EAFE',
-                      })
-                    }
-                  }); 
-                },200)
-      })
+      
 
       //根据窗口调整表格高度
         // $(window).resize(function() {
@@ -336,6 +321,22 @@
                     return 
                 }
                 $('#tb_departments').bootstrapTable('refresh');
+               // $('#success-btn').on('click',function(){
+                  console.log('----- click btn -----')
+                  setTimeout(function(){
+                            let table_ = $("#tb_departments tbody tr")
+                            console.log(table_)
+                            $(table_).find('td').each(function (i,n) { 
+                              console.log('n-->',n)
+                              if($(n).text() == '未审批'){
+                                console.log('找到了')
+                                $(n).parent().css({
+                                  background:'#E2EAFE',
+                                })
+                              }
+                            }); 
+                          },200)
+               // })
             }
         })
          //弹出模态框
@@ -680,6 +681,7 @@
       // var optino = $("#tb_departments").bootstrapTable('getVisibleColumns');
       // console.log(optino)
       setTimeout(function(){
+        console.log('what happen')
         let table_ = $("#tb_departments tbody tr")
         console.log(table_)
         $(table_).find('td').each(function (i,n) { 
