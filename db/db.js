@@ -5,7 +5,7 @@
  */
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise;
-const DB_URL = 'mongodb://localhost:27017/meeting_system'
+const DB_URL = 'mongodb://formeetinguse:youtrytry@localhost:27017/meeting_system'
 mongoose.connect(DB_URL)
 
 /**
