@@ -1,6 +1,0 @@
-[2017-05-07 14:52:17.307] [DEBUG] log_info - here
-[2017-05-07 14:52:17.336] [INFO] log_info - GET /
-[2017-05-07 14:52:17.347] [INFO] log_info - GET /stylesheets/style.css
-[2017-05-07 14:53:59.956] [DEBUG] log_info - here
-[2017-05-07 14:53:59.977] [INFO] log_info - GET /
-[2017-05-07 14:53:59.983] [INFO] log_info - GET /stylesheets/style.css
