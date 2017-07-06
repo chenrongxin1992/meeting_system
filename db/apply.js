@@ -25,7 +25,8 @@ var applySchema = new Schema({
     first_hour : {type : String},
     second_hour : {type : String},
     first_minute : {type : String},
-    second_minute : {type :String}
+    second_minute : {type :String},
+    week_day : {type :String}
 })
 
 module.exports = mongoose.model('apply',applySchema);

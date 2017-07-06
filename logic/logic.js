@@ -8,6 +8,7 @@ const apply = require('../db/apply')
 const admin = require('../db/admin')
 const async = require('async')
 const moment = require('moment')
+moment.locale('zh-cn')
 const chunk =require("lodash/chunk")
 const nodemailer = require('nodemailer')
 const applyTwo = require('../db/applyTwo')
@@ -436,6 +437,10 @@ exports.applyTwo = function(attribute,callback){
 			})
 		},
 		function(cb){
+			let for_week_use_1 = meeting_date.substring(0,2),
+				for_week_use_2 = meeting_date.substring(3,5),
+				week_day_use = '2017-' + for_week_use_1 + '-' + for_week_use_2
+
 			var new_apply_Two = new apply({
 				room_name : room_name,
 				meeting_name : meeting_name,
@@ -451,9 +456,11 @@ exports.applyTwo = function(attribute,callback){
 				first_hour : first_hour,
 				second_hour : second_hour,
 				first_minute : first_minute,
-				second_minute : second_minute
+				second_minute : second_minute,
+				week_day : moment(week_day_use).format('dddd')
 			})
 			console.log(new_apply_Two)
+
 			new_apply_Two.save(function(err,doc){
 				if(err){
 					console.log('----- save err -----')
@@ -580,7 +587,7 @@ exports.applyRecord = function(limit,offset,applier,callback){
 			offset = parseInt(offset)
 			let numSkip = (offset) * limit
 			console.log('skip num is -->',numSkip)
-			let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
+			let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 				search.where('apply_name').equals(applier)
 				search.sort({'apply_time':-1})
 				search.limit(limit)
@@ -600,7 +607,11 @@ exports.applyRecord = function(limit,offset,applier,callback){
 							//格式化时间戳
 							//docs[i].apply_time = moment(docs[i].apply_time).format('YYYY-MM-DD HH:mm:ss')
 							//console.log('check applytime : ',docs[i].apply_time)
-							docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
+							if(typeof(docs[i].week_day) == 'undefined'){
+								docs[i].week_day = ''
+							}
+
+							docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].week_day + ' ' + docs[i].exact_meeting_time 
 							console.log('docs.is_approved: ',docs[i].is_approved)
 							console.log('docs.is_allowed: ',docs[i].is_allowed)
 							console.log(docs[i])
@@ -687,7 +698,7 @@ exports.applyApprove = function(limit,offset,username,applier,callback){
 				offset = parseInt(offset)
 				let numSkip = (offset)*limit
 				console.log('skip num is: ',numSkip)
-				let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
+				let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 					search.where('room_name').in(room_name_arr)
 					search.sort({'apply_time':-1})
 					search.limit(limit)
@@ -707,7 +718,10 @@ exports.applyApprove = function(limit,offset,username,applier,callback){
 								//格式化时间戳
 								//docs[i].apply_time = moment(docs[i].apply_time).format('YYYY-MM-DD HH:mm:ss')
 								//console.log('check applytime : ',docs[i].apply_time)
-								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
+								if(typeof(docs[i].week_day) == 'undefined'){
+									docs[i].week_day = ''
+								}
+								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' +docs[i].week_day + ' '+ docs[i].exact_meeting_time
 								console.log('docs.is_approved: ',docs[i].is_approved)
 								console.log('docs.is_allowed: ',docs[i].is_allowed)
 								console.log(docs[i])
@@ -776,7 +790,7 @@ exports.applyApprove = function(limit,offset,username,applier,callback){
 				offset = parseInt(offset)
 				let numSkip = (offset)*limit
 				console.log('skip num is: ',numSkip)
-				let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
+				let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 					search.where('room_name').in(room_name_arr)
 					search.where('apply_name').equals(applier)
 					search.sort({'apply_time':-1})
@@ -797,7 +811,10 @@ exports.applyApprove = function(limit,offset,username,applier,callback){
 								//格式化时间戳
 								//docs[i].apply_time = moment(docs[i].apply_time).format('YYYY-MM-DD HH:mm:ss')
 								//console.log('check applytime : ',docs[i].apply_time)
-								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
+								if(typeof(docs[i].week_day) == 'undefined'){
+									docs[i].week_day = ''
+								}
+								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].week_day + ' ' + docs[i].exact_meeting_time
 								console.log('docs.is_approved: ',docs[i].is_approved)
 								console.log('docs.is_allowed: ',docs[i].is_allowed)
 								console.log(docs[i])
@@ -891,7 +908,7 @@ exports.applyRecordQuery = function(limit,offset,begin_date,end_date,applier,cal
 			offset = parseInt(offset)
 			let numSkip = (offset)*limit
 			console.log('skip num is: ',numSkip)
-			let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
+			let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 				secondSearch.where('apply_name').equals(applier)
 				secondSearch.where('apply_timeStamp').gte(begin_date)
 				secondSearch.where('apply_timeStamp').lte(end_date)
@@ -909,8 +926,12 @@ exports.applyRecordQuery = function(limit,offset,begin_date,end_date,applier,cal
 						cb(1,1)
 					}
 					if(docs && docs.length != 0){
+						
 						for(let i=0;i<docs.length;i++){
-							docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
+							if(typeof(docs[i].week_day) == 'undefined'){
+								docs[i].week_day = ''
+							}
+							docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].week_day + ' ' + docs[i].exact_meeting_time
 							console.log('docs.is_approved: ',docs[i].is_approved)
 							if(docs[i].is_approved == 1){
 								console.log('--- check here -----')
@@ -1013,7 +1034,7 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 				offset = parseInt(offset)
 				let numSkip = (offset)*limit
 				console.log('skip num is: ',numSkip)
-				let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
+				let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 					secondSearch.where('room_name').in(room_name_arr)
 					secondSearch.where('apply_timeStamp').gte(begin_date)
 					secondSearch.where('apply_timeStamp').lte(end_date)
@@ -1033,8 +1054,12 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 							cb(1,1)
 						}
 						if(docs && docs.length != 0){
+							
 							for(let i=0;i<docs.length;i++){
-								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
+								if(typeof(docs[i].week_day) == 'undefined'){
+									docs[i].week_day = ''
+								}
+								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].week_day + ' ' + docs[i].exact_meeting_time
 								console.log('docs.is_approved: ',docs[i].is_approved)
 								if(docs[i].is_approved == 1){
 									console.log('--- check here -----')
@@ -1101,7 +1126,7 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 				offset = parseInt(offset)
 				let numSkip = (offset)*limit
 				console.log('skip num is: ',numSkip)
-				let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1})
+				let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 					secondSearch.where('room_name').in(room_name_arr)
 					secondSearch.where('apply_name').equals(applier)
 					secondSearch.where('apply_timeStamp').gte(begin_date)
@@ -1122,8 +1147,12 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 							cb(1,1)
 						}
 						if(docs && docs.length != 0){
+							
 							for(let i=0;i<docs.length;i++){
-								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].exact_meeting_time
+								if(typeof(docs[i].week_day) == 'undefined'){
+									docs[i].week_day = ''
+								}
+								docs[i].exact_meeting_time = docs[i].meeting_date + ' ' + docs[i].week_day + ' ' + docs[i].exact_meeting_time
 								console.log('docs.is_approved: ',docs[i].is_approved)
 								if(docs[i].is_approved == 1){
 									console.log('--- check here -----')
