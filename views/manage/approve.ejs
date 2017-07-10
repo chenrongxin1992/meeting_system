@@ -86,7 +86,16 @@
             text-align: center;
             font-weight: 700;
           }
+          .pull-right{
+            float: left !important;
+          }
+          .col-md-12{
+
+            padding-left: 0px; 
+            padding-right: 0px; 
+          }
         }
+
     </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -105,6 +114,7 @@
 
         <div class="row-fluid">
             <div class="col-md-4"><span><h4 style="">会议室申请记录</h4></span></div>
+            <div class="col-md-5"></div>
             <div class="col-md-3 head1 pull-right"><a href="/reserve/meeting">返回查看一周申请情况</a> | 
             当前用户:<span style="color: red"> <%=user.username%></span>  |  
             <a href="/manage/logout">退出</a></div>
@@ -381,10 +391,10 @@
                                     let second_row = $('<div></div>')
                                         second_row.addClass('row')
                                     let second_row_first_col = $('<div></div>')
-                                        second_row_first_col.addClass('col-md-3')
+                                        second_row_first_col.addClass('col-md-3 col-xs-4')
                                         second_row_first_col.text('会议名称')
                                     let second_row_second_col = $('<div></div>')
-                                        second_row_second_col.addClass('col-md-6')
+                                        second_row_second_col.addClass('col-md-6 col-xs-8')
                                         second_row_second_col.text(result.result.meeting_name)
                                         
                                     // let three_row = $('<div></div>')
@@ -400,57 +410,57 @@
                                     let content_row = $('<div></div>')
                                         content_row.addClass('row')
                                     let content_row_first_col = $('<div></div>')
-                                        content_row_first_col.addClass('col-md-3')
+                                        content_row_first_col.addClass('col-md-3 col-xs-4')
                                         content_row_first_col.text('会议内容')
                                     let content_row_second_col = $('<div></div>')
-                                        content_row_second_col.addClass('col-md-9')
+                                        content_row_second_col.addClass('col-md-6 col-xs-8')
                                         content_row_second_col.text(result.result.meeting_content)
                                         
                                     //增加一行显示预订时间
                                     let insert_apply_time_row = $('<div></div>')
                                         insert_apply_time_row.addClass('row')
                                     let insert_apply_time_row_first_col = $('<div></div>')
-                                        insert_apply_time_row_first_col.addClass('col-md-3')
+                                        insert_apply_time_row_first_col.addClass('col-md-3 col-xs-4')
                                         insert_apply_time_row_first_col.text('申请时间')
                                     let insert_apply_time_row_second_col = $('<div></div>')
-                                        insert_apply_time_row_second_col.addClass('col-md-6')
+                                        insert_apply_time_row_second_col.addClass('col-md-6 col-xs-8')
                                         insert_apply_time_row_second_col.text(result.result.apply_time)
                                     
 
                                     let four_row = $('<div></div>')
                                         four_row.addClass('row')
                                     let four_row_first_col = $('<div></div>')
-                                        four_row_first_col.addClass('col-md-3')
+                                        four_row_first_col.addClass('col-md-3 col-xs-4')
                                         four_row_first_col.text('会议人数')
                                     let four_row_second_col = $('<div></div>')
-                                        four_row_second_col.addClass('col-md-6')
+                                        four_row_second_col.addClass('col-md-6 col-xs-8')
                                         four_row_second_col.text(result.result.meeting_num)
                                         
                                     let five_row = $('<div></div>')
                                         five_row.addClass('row')
                                     let five_row_first_col = $('<div></div>')
-                                        five_row_first_col.addClass('col-md-3')
+                                        five_row_first_col.addClass('col-md-3 col-xs-4')
                                         five_row_first_col.text('申请人')
                                     let five_row_second_col = $('<div></div>')
-                                        five_row_second_col.addClass('col-md-6')
+                                        five_row_second_col.addClass('col-md-6 col-xs-8')
                                         five_row_second_col.text(result.result.apply_name)
                                         
                                     let six_row = $('<div></div>')
                                         six_row.addClass('row')
                                     let six_row_first_col = $('<div></div>')
-                                        six_row_first_col.addClass('col-md-3')
+                                        six_row_first_col.addClass('col-md-3 col-xs-4')
                                         six_row_first_col.text('联系方式')
                                     let six_row_second_col = $('<div></div>')
-                                        six_row_second_col.addClass('col-md-6')
+                                        six_row_second_col.addClass('col-md-6 col-xs-8')
                                         six_row_second_col.text(result.result.apply_phone)
                                         
                                     let seven_row = $('<div></div>')
                                         seven_row.addClass('row')
                                     let seven_row_first_col = $('<div></div>')
-                                        seven_row_first_col.addClass('col-md-3')
+                                        seven_row_first_col.addClass('col-md-3 col-xs-4')
                                         seven_row_first_col.text('是否批准')
                                     let seven_row_second_col = $('<div></div>')
-                                        seven_row_second_col.addClass('col-md-6')//form-control这个类是bootstrap自己写好的，你用惯了，知道他写的啥，就能用了？？
+                                        seven_row_second_col.addClass('col-md-6 col-xs-8')//form-control这个类是bootstrap自己写好的，你用惯了，知道他写的啥，就能用了？？
                                         seven_row_second_col.html('<select id="approve" class="selectpicker form-control" data-hide-disabled="true" data-live-search="false"><option>批准</option><option>不批准</option><select>')
 
                                  /*   let eight_row = $('<div></div>')
