@@ -75,8 +75,18 @@
         .bootstrap-table>.fixed-table-container{
           height: 550px !important;
         }
-        
+        #btn_query{
 
+        }
+        @media (max-width: 767px) {
+          #btn_query{
+              margin-top: 7px;
+            }
+          h4{
+            text-align: center;
+            font-weight: 700;
+          }
+        }
     </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -94,7 +104,7 @@
         </div>
 
         <div class="row-fluid">
-            <div class="col-md-4"><span><h4 style="padding-left: 15px">会议室申请记录</h4></span></div>
+            <div class="col-md-4"><span><h4 style="">会议室申请记录</h4></span></div>
             <div class="col-md-3 head1 pull-right"><a href="/reserve/meeting">返回查看一周申请情况</a> | 
             当前用户:<span style="color: red"> <%=user.username%></span>  |  
             <a href="/manage/logout">退出</a></div>
@@ -125,8 +135,8 @@
                                               <div class="col-sm-1" style="text-align:left;">
                                                   <input type="text" class="form-control" id="applier" placeholder="">
                                               </div>
-                                              <div class="col-sm-4" style="text-align:left;">
-                                                  <button type="button" style="margin-left:50px" id="btn_query" class="btn btn-primary">查询</button>
+                                              <div class="col-sm-4" style="">
+                                                  <button type="button" style="" id="btn_query" class="btn btn-primary">查询</button>
                                               </div>
                                           </div>
                                       </form>
