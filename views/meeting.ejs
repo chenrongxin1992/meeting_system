@@ -38,6 +38,7 @@
     		font-weight : normal;
     	}
     	.col-md-4{
+    		padding-left: 0px;
 			font-weight : normal;
     	}
     	.col-md-8{
@@ -78,6 +79,16 @@
     	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
     		padding: 5px;
     	}
+    	#showdate{
+    		font-weight: bold;
+    		color: red;
+    	}
+    	.note{
+    		padding-left: 0px;
+    	}
+    	.weekinfo{
+    		font-weight: bold;
+    	}
     </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -104,7 +115,7 @@
 	      
           
           <div class="row">
-			<div class="col-md-4">
+			<div class="col-md-4 weekinfo">
 				会议室一周申请情况
 			</div>
 			<div class="col-md-4">
@@ -167,10 +178,10 @@
 		  </div>
 		  
 		  <div class="row bottom_bg">
-			<div class="col-md-12 ">
+			<div class="col-md-12 note">
 				<span class="bottom_span">注：1.<img src="/images/red.png" class="bottom_img"   /> 红色代表该时间段已被占用;</span>
 				<span class="bottom_span">2.<img src="/images/orange.png"  class="bottom_img"  /> 橙色代表该时间段有人申请;</span>
-				<span class="bottom_span">3.<img src="/images/white.png"   class="bottom_img"  />白色代表该时间段空闲</span>
+				<span class="bottom_span">3.<img src="/images/white.png"   class="bottom_img"  /> 白色代表该时间段空闲</span>
 			</div>
 		  </div>
 

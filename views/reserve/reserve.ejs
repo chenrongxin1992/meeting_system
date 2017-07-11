@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=4, minimum-scale=1, user-scalable=yes" />
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>会议室申请</title>
 
@@ -13,6 +13,7 @@
     <link rel='stylesheet' href='/stylesheets/bootstrapValidator.min.css' />
     <link rel='stylesheet' href='/stylesheets/jquery-ui.css' />
     <link rel='stylesheet' href='/stylesheets/bootstrap-select.css' />
+    <link rel='stylesheet' href='/stylesheets/tipso.css' />
     <style type="text/css">
       h3{
         padding-top: 10px;
@@ -46,13 +47,26 @@
         line-height: 34px;
         padding-left: 0px;
       }
-      @media screen and (max-width:1024px){
+      @media screen and (max-width:767px){
         .to{ 
-            width: 10px;
+            text-align: center;
             font-size: medium;
             line-height: 34px;
-            padding-left:20px;
+            width: 33.33333333%;
          }
+         .timepick{
+          margin-top: 5px;
+         }
+         .hideh3{
+          display: none;
+         }
+      }
+      .note_email{
+        display: none;
+        text-align: left;
+        vertical-align: middle;
+        line-height: 32px;
+        color:red;
       }
      
    
@@ -67,27 +81,27 @@
   <body>
     <div class="container">
       <div class="row">
-        <div class="col-md-5 col-md-offset-1">
+        <div class="col-md-5 col-md-offset-1 col-xs-12">
           <img src="/images/szucsselogo.png" class="img-responsive" alt="Responsive image"/>
           
         </div>
-        <div class="col-md-5"><h3>会议室申请</h3></div>
+        <div class="col-md-5 hideh3"><h3>会议室申请</h3></div>
       </div>
       <div class="row apply_form">
-        <div class="col-md-3 col-md-offset-3"><h4>会议室申请表</h4></div>
-        <div class="col-md-6 pull-left"><span style="line-height: 39px"><a href="/reserve/meeting">返回</a> | <a href="/manage/record">查询申请记录</a></span></div>
+        <div class="col-md-3 col-md-offset-3 col-xs-6"><h4><strong>会议室申请表</strong></h4></div>
+        <div class="col-md-6 pull-left col-xs-6"><span style="line-height: 39px"><a href="/reserve/meeting">返回</a> | <a href="/manage/record">查询申请记录</a></span></div>
         
       </div>
 
       <div class="row">
-        <div class="col-md-7 col-md-offset-1"><hr></div>
+        <div class="col-md-7 col-md-offset-1 col-xs-12"><hr></div>
       </div>
-
+      
       <form class="form-horizontal" role="form">
 
         <div class="form-group">
-          <label for="room_name" class="col-sm-2 col-sm-offset-1 control-label">会议室</label>
-          <div class="col-sm-4">
+          <label for="room_name" class="col-sm-2 col-sm-offset-1 control-label col-xs-4">会议室</label>
+          <div class="col-sm-4 col-xs-8">
             <select id="room_name" class="selectpicker" data-hide-disabled="true" data-live-search="false">
                   <% for(let i=0;i<data.length;i++) { %>
                     <option><%=data[i]%></option>
@@ -97,56 +111,57 @@
         </div>
 
         <div class="form-group">
-          <label for="meeting_name" class="col-sm-2 col-sm-offset-1 control-label">会议名称</label>
-          <div class="col-sm-4">
+          <label for="meeting_name" class="col-sm-2 col-sm-offset-1 control-label col-xs-4">会议名称</label>
+          <div class="col-sm-4 col-xs-8">
             <input type="text" class="form-control" id="meeting_name" 
                  placeholder="请输入会议名称">
           </div>
           
         </div>
         <div class="form-group">
-          <label for="meeting_num" class="col-sm-2 col-sm-offset-1 control-label">参会人数</label>
-          <div class="col-sm-4">
+          <label for="meeting_num" class="col-sm-2 col-sm-offset-1 control-label col-xs-4">参会人数</label>
+          <div class="col-sm-4 col-xs-8">
             <input type="text" class="form-control" id="meeting_num" 
                  placeholder="请输入人数">
           </div>
         </div>
         
         <div class="form-group">
-          <label for="meeting_content" class="col-sm-2 col-sm-offset-1 control-label">会议内容</label>
-          <div class="col-sm-4">
+          <label for="meeting_content" class="col-sm-2 col-sm-offset-1 control-label col-xs-4">会议内容</label>
+          <div class="col-sm-4 col-xs-8">
             <textarea class="form-control" rows="3" id="meeting_content" placeholder="请输入会议内容"></textarea>
           </div>
         </div>
         
         
         <div class="form-group">
-          <label for="apply_name" class="col-sm-2 col-sm-offset-1 control-label">申请人</label>
-          <div class="col-sm-4">
+          <label for="apply_name" class="col-sm-2 col-sm-offset-1 control-label col-xs-4">申请人</label>
+          <div class="col-sm-4 col-xs-8">
             <input type="text" class="form-control" id="apply_name" 
                  placeholder="请输入申请人">
           </div>
         </div>
         
         <div class="form-group">
-          <label for="phone" class="col-sm-2 col-sm-offset-1  control-label">联系电话</label>
-          <div class="col-sm-4">
+          <label for="phone" class="col-sm-2 col-sm-offset-1  control-label col-xs-4">联系电话</label>
+          <div class="col-sm-4 col-xs-8">
             <input type="text" class="form-control" id="apply_phone" 
                  placeholder="请输入手机号码">
           </div>
         </div>
 
         <div class="form-group">
-          <label for="email" class="col-sm-2 col-sm-offset-1  control-label">邮箱</label>
-          <div class="col-sm-4">
-            <input type="text" class="form-control" id="apply_email" 
+          <label for="email" class="col-sm-2 col-sm-offset-1  control-label col-xs-4">邮箱</label>
+          <div class="col-sm-4 col-xs-8">
+            <input type="text" class="form-control" id="apply_email" data-tipso="dowebok"
                  placeholder="用于接收审批结果通知">
           </div>
+          <div class="col-sm-5 col-xs-12 note_email col-xs-offset-4">*用于接收审批结果通知</div>
         </div>
         
         <div class="form-group">
-          <label for="meeting_date" class="col-sm-2 col-sm-offset-1 control-label">会议日期</label>
-          <div class="col-sm-4">
+          <label for="meeting_date" class="col-sm-2 col-sm-offset-1 control-label col-xs-4">会议日期</label>
+          <div class="col-sm-4 col-xs-8">
             <input type="text" class="form-control" id="meeting_date">
           </div>
         </div>
@@ -182,8 +197,8 @@
 
         <!-- 尝试切割时间 -->
         <div class="form-group">
-          <label for="shijianduan" class="col-sm-2 col-sm-offset-1 control-label">会议时间段</label>
-          <div class="col-sm-4">
+          <label for="shijianduan" class="col-sm-2 col-sm-offset-1 control-label col-xs-4" >会议时间段</label>
+          <div class="col-sm-4 col-xs-4">
             <select id="shijianduan" class="selectpicker" data-hide-disabled="true" data-live-search="false" >
               <option>上午</option>
               <option>中午</option>
@@ -194,8 +209,8 @@
         </div>
 
         <div class="form-group">
-          <label for="meeting_time" class="col-sm-2 col-sm-offset-1 control-label  col-xs-3">会议时间</label>
-          <div class="col-sm-1  col-xs-3">
+          <label for="meeting_time" class="col-sm-2 col-sm-offset-1 control-label  col-xs-4">会议时间</label>
+          <div class="col-sm-1  col-xs-4">
             <select id="first_hour" class="selectpicker" data-hide-disabled="true" data-live-search="false">
                 <option>08</option>
                 <option>09</option>
@@ -203,21 +218,21 @@
                 <option>11</option>
             </select>
           </div> 
-          <div class="col-sm-1   col-xs-3">
+          <div class="col-sm-1   col-xs-4 ">
             <select id="first_minute" class="selectpicker" data-hide-disabled="true" data-live-search="false">
               <option>00</option>
               <option>30</option>
             </select>
           </div> 
-          <div class="col-sm-1 to  col-xs-4">To</div>
-          <div class="col-sm-1  col-xs-3">
+          <div class="col-sm-1 to  col-xs-4 timepick" >To</div>
+          <div class="col-sm-1  col-xs-4 timepick" >
             <select id="second_hour" class="selectpicker" data-hide-disabled="true" data-live-search="false">
                 <option>09</option>
                 <option>10</option>
                 <option>11</option>
             </select>
           </div> 
-          <div class="col-sm-1  col-xs-3 ">
+          <div class="col-sm-1  col-xs-4 timepick" >
             <select id="second_minute" class="selectpicker" data-hide-disabled="true" data-live-search="false">
               <option>00</option>
               <option>30</option>
@@ -226,18 +241,18 @@
         </div>
         
         <div class="form-group">
-          <div class="col-sm-offset-3 col-sm-10">
+          <div class="col-sm-offset-3 col-sm-10 col-xs-4">
             <button type="button" class="btn btn-success" id="now-submit">提交</button>
           </div>
         </div>
       </form>
 
       <div class="row">
-        <div class="col-sm-7 col-sm-offset-1"><hr></div>
+        <div class="col-sm-7 col-sm-offset-1 col-xs-12"><hr></div>
       </div>
 
       <div class="row">
-        <div class="col-md-5 col-md-offset-2">
+        <div class="col-md-5 col-md-offset-2 col-xs-12">
           <address><p class="pull-right">©深圳大学 计算机与软件学院</p><p>©2017 </p></address>
         </div>
       </div>
@@ -246,6 +261,7 @@
         
     <script type="text/javascript" src='/javascripts/jquery-1.10.2.min.js'></script>
     <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> -->
+    <script type="text/javascript" src='/javascripts/tipso.js' ></script>
     <script type="text/javascript" src='/javascripts/bootstrap.min.js' ></script>
     <script type="text/javascript" src='/javascripts/jquery-ui-datepicker.js' ></script>
     <script type="text/javascript" src='/javascripts/moment.js' ></script>
@@ -253,6 +269,24 @@
     <script type="text/javascript">
       jQuery.browser={};(function(){jQuery.browser.msie=false; 
       jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)./)){ jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
+      jQuery.fn.extend({
+          // showMessage:function(html){
+          //     if($.trim(html)!=""){
+          //       console.log('top-->',$(this).offset().top)
+          //       console.log('top-->',$(this).outerHeight().context.clientHeight)
+          //         //wbx是弹出层的Css样式名，用于自定义Div层的外观，弹出位置为Dom元素的下方，透明度0.8，尺寸自适应html内容的尺寸
+          //         var warndiv=$("<div></div>").addClass("wbx").html(html).css({
+          //           position:"absolute",
+          //           left:$(this).offset().left,
+          //           top:$(this).offset().top + $(this).outerHeight().context.clientHeight,
+          //           zIndex:100
+          //         }).hide().fadeTo(0,0.8);
+          //         $("body").prepend(warndiv);
+          //         //下面这段的作用是使信息弹出并停留3秒后淡出，如不需要请移除
+          //         //warndiv.show("fast").animate({opacity:0.8}, 3000).fadeOut('slow',function(){$(this).remove();});
+          //     }
+          // }
+      });
     </script>
 
     <script type="text/javascript">
@@ -598,8 +632,45 @@
             //$(".modal-body").remove()
             //console.log('----- clear again -----')
         });
+
       });
-    
+      // $(document).ready(function(){
+      //   console.log('excute when page finished load')
+      //   $("#apply_email").on('click',function(){
+      //     console.log('here ')
+      //     $(this).showMessage("邮箱用于接收审批结果通知");
+      //   });
+      // })
+      $(function() {
+        //$("#apply_email").focus(function(){$(this).showMessage("请输入内容");});
+          // $('#apply_email').on('click',function(){
+          //   console.log('dddd')
+          //     $('#apply_email').tipso({
+          //       useTitle: false,
+          //       content : 'email',
+          //       position : 'bottom'
+          //   });
+          // })
+          $('#apply_email').focus(function(){
+             let v = $('#apply_email').val()
+             console.log('check v -->',v)
+             if(!v){
+              $('.note_email').show() 
+             }else{
+              $('.note_email').hide() 
+             }          
+          })
+          $("#apply_email").blur(function(){
+            let v = $('#apply_email').val()
+            console.log('check v -->',v)
+            if(!v){
+              $('.note_email').show()
+            }
+            else{
+              $('.note_email').hide() 
+            }
+          })
+      });
   </script>
   <!-- 模态框 -->
     <!-- Button trigger modal -->
