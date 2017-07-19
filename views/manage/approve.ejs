@@ -775,6 +775,20 @@
           }
         }); 
       },800)
+      setInterval(function(){
+          console.log('定时检查')
+        let table_ = $("#tb_departments tbody tr")
+        console.log(table_)
+        $(table_).find('td').each(function (i,n) { 
+          console.log('n-->',n)
+          if($(n).text() == '未审批'){
+            console.log('找到了')
+            $(n).parent().css({
+              background:'#E2EAFE',
+            })
+          }
+        });
+      },2000)
     })
     
     </script>
