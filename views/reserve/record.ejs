@@ -227,7 +227,52 @@
       jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)./)){ jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
     </script>
     <script type="text/javascript">
-
+    $(function(){
+      // var optino = $("#tb_departments").bootstrapTable('getVisibleColumns');
+      // console.log(optino)
+      setTimeout(function(){
+        console.log('what happen')
+        let table_ = $("#tb_departments tbody tr")
+        console.log(table_)
+        $(table_).find('td').each(function (i,n) { 
+          console.log('n-->',n)
+          if($(n).text() == '未审批'){
+            console.log('找到了')
+            $(n).parent().css({
+              background:'#E2EAFE',
+            })
+          }//#FF6A6A
+          if($(n).text() == '未批准'){
+            console.log('找到了')
+            $(n).parent().css({
+              background:'#FF6A6A',
+            })
+          }
+        }); 
+      },800)
+      //check
+      var innnnt=self.setInterval("checkColor()",1000)
+    })
+    function checkColor(){
+        console.log('dinshi')
+        let table_ = $("#tb_departments tbody tr")
+        console.log(table_)
+        $(table_).find('td').each(function (i,n) { 
+          console.log('n-->',n)
+          if($(n).text() == '未审批'){
+            console.log('找到了')
+            $(n).parent().css({
+              background:'#E2EAFE',
+            })
+          }//#FF6A6A
+          if($(n).text() == '未批准'){
+            console.log('找到了')
+            $(n).parent().css({
+              background:'#FF6A6A',
+            })
+          }
+        }); 
+    }
 
 
     $(function () {
@@ -283,7 +328,7 @@
                 }
                 $('#tb_departments').bootstrapTable('refresh');
                 console.log('----- click btn -----')
-                  setTimeout(function(){
+                  /*setTimeout(function(){
                             let table_ = $("#tb_departments tbody tr")
                             console.log(table_)
                             $(table_).find('td').each(function (i,n) { 
@@ -295,7 +340,7 @@
                                 })
                               }
                             }); 
-                          },300)
+                          },300)*/
             }
         })
          //弹出模态框
