@@ -2,12 +2,12 @@
 <html>
   <head>
     <title>会议室申请</title>
-    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
-    <link rel='stylesheet' href='/stylesheets/bootstrapValidator.min.css' />
-    <script type="text/javascript" src='/javascripts/jquery-1.10.2.min.js'></script>
-    <script type="text/javascript" src='/javascripts/bootstrap.min.js' ></script>
-    <script type="text/javascript" src='/javascripts/bootstrapValidator.min.js' ></script>
-    <script type="text/javascript" src='/javascripts/moment.js' ></script>
+    <link rel='stylesheet' href='/reserve/stylesheets/bootstrap.min.css' />
+    <link rel='stylesheet' href='/reserve/stylesheets/bootstrapValidator.min.css' />
+    <script type="text/javascript" src='/reserve/javascripts/jquery-1.10.2.min.js'></script>
+    <script type="text/javascript" src='/reserve/javascripts/bootstrap.min.js' ></script>
+    <script type="text/javascript" src='/reserve/javascripts/bootstrapValidator.min.js' ></script>
+    <script type="text/javascript" src='/reserve/javascripts/moment.js' ></script>
     <style type="text/css">
 
 		td{
@@ -107,7 +107,7 @@
 	        <div class="col-md-5"><h3>会议室申请</h3></div>
 	      </div>
 	      <div class="row">
-	      	<div class="col-md-4 pull-right" ><a href="/manage/approve">管理申请</a> | <a href="/reserve/reserve">申请会议室</a> | <a href="/manage/record">查看申请记录</a></div>
+	      	<div class="col-md-4 pull-right" ><a href="/reserve/manage/approve">管理申请</a> | <a href="/reserve/reserve/reserve">申请会议室</a> | <a href="/reserve/manage/record">查看申请记录</a></div>
 <!-- 	        <div class="col-md-2 pull-right" style="text-align: right;"><a href="/manage/approve">管理申请</a></div>
 <div class="col-md-2 pull-right" style="text-align: right;"><a href="/reserve/reserve">申请会议室</a></div>
 <div class="col-md-2 pull-right" style="text-align: right;"><a href="/reserve/record">查看申请记录</a></div> -->
@@ -179,9 +179,9 @@
 		  
 		  <div class="row bottom_bg">
 			<div class="col-md-12 note">
-				<span class="bottom_span">注：1.<img src="/images/red.png" class="bottom_img"   /> 红色代表该时间段已被占用;</span>
-				<span class="bottom_span">2.<img src="/images/orange.png"  class="bottom_img"  /> 橙色代表该时间段有人申请;</span>
-				<span class="bottom_span">3.<img src="/images/white.png"   class="bottom_img"  /> 白色代表该时间段空闲</span>
+				<span class="bottom_span">注：1.<img src="/reserve/images/red.png" class="bottom_img"   /> 红色代表该时间段已被占用;</span>
+				<span class="bottom_span">2.<img src="/reserve/images/orange.png"  class="bottom_img"  /> 橙色代表该时间段有人申请;</span>
+				<span class="bottom_span">3.<img src="/reserve/images/white.png"   class="bottom_img"  /> 白色代表该时间段空闲</span>
 			</div>
 		  </div>
 
@@ -320,7 +320,7 @@
 
       	//ajax请求数据
       	$.ajax({
-            url: '/reserve/get_meeting_detail', 
+            url: '/reserve/reserve/get_meeting_detail', 
             async: true,
             dataType: 'json',
             type: 'POST',

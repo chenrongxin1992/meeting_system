@@ -4,7 +4,7 @@ var logger = require('../log/logConfig').logger
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	logger.debug('here')
-	res.redirect('/reserve/meeting')
+	res.redirect('/reserve/reserve/meeting')
   	//res.render('index', { title: 'Express' });
 });
 

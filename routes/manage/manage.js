@@ -107,7 +107,7 @@ router.get('/approve',function(req,res){
 	console.log('check session ',req.session.user)
 	if(!req.session.user){
 		console.log('----- user not login -----')
-		return res.redirect('/manage/login')
+		return res.redirect('/reserve/manage/login')
 	}
 	return res.render('manage/approve',{username:req.session.user.username})
 })
@@ -126,7 +126,7 @@ router.get('/logout',function(req,res){
 	console.log('----- in router logout -----')
 	req.session.user = null;
     req.session.error = null;
-    res.redirect("/manage/login");
+    res.redirect("/reserve/manage/login");
 })
 //post method : ajax for add admin user 
 //get method : render a page to add admin user 

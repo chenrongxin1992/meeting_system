@@ -8,11 +8,11 @@
     <title>会议室申请</title>
 
     <!-- Bootstrap -->
-    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link href="/reserve/stylesheets/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"> -->
-    <link rel='stylesheet' href='/stylesheets/bootstrapValidator.min.css' />
-    <link rel='stylesheet' href='/stylesheets/jquery-ui.css' />
-    <link rel='stylesheet' href='/stylesheets/bootstrap-select.css' />
+    <link rel='stylesheet' href='/reserve/stylesheets/bootstrapValidator.min.css' />
+    <link rel='stylesheet' href='/reserve/stylesheets/jquery-ui.css' />
+    <link rel='stylesheet' href='/reserve/stylesheets/bootstrap-select.css' />
     <style type="text/css">
       h3{
         padding-top: 10px;
@@ -88,7 +88,7 @@
       </div>
       <div class="row apply_form">
         <div class="col-md-3 col-md-offset-3 col-xs-6"><h4><strong>会议室申请表</strong></h4></div>
-        <div class="col-md-6 pull-left col-xs-6"><span style="line-height: 39px"><a href="/reserve/meeting">返回</a> | <a href="/manage/record">查询申请记录</a></span></div>
+        <div class="col-md-6 pull-left col-xs-6"><span style="line-height: 39px"><a href="/reserve/reserve/meeting">返回</a> | <a href="/reserve/manage/record">查询申请记录</a></span></div>
         
       </div>
 
@@ -258,12 +258,12 @@
 </div>
     
         
-    <script type="text/javascript" src='/javascripts/jquery-1.10.2.min.js'></script>
+    <script type="text/javascript" src='/reserve/javascripts/jquery-1.10.2.min.js'></script>
     <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> -->
-    <script type="text/javascript" src='/javascripts/bootstrap.min.js' ></script>
-    <script type="text/javascript" src='/javascripts/jquery-ui-datepicker.js' ></script>
-    <script type="text/javascript" src='/javascripts/moment.js' ></script>
-    <script type="text/javascript" src='/javascripts/bootstrap-select.js' ></script>
+    <script type="text/javascript" src='/reserve/javascripts/bootstrap.min.js' ></script>
+    <script type="text/javascript" src='/reserve/javascripts/jquery-ui-datepicker.js' ></script>
+    <script type="text/javascript" src='/reserve/javascripts/moment.js' ></script>
+    <script type="text/javascript" src='/reserve/javascripts/bootstrap-select.js' ></script>
     <script type="text/javascript">
       jQuery.browser={};(function(){jQuery.browser.msie=false; 
       jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)./)){ jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
@@ -527,7 +527,7 @@
           console.log('exact_meeting_time-->',exact_meeting_time)
 
           $.ajax({
-            url: '/manage/applyTwo', 
+            url: '/reserve/manage/applyTwo', 
             async: true,
             dataType: 'json',
             type: 'POST',
@@ -620,7 +620,7 @@
         $('#check_record').on("click",function(){
           let apply_name = $('.modal-msg').attr('apply_name');
           console.log('apply_name-->',apply_name)
-          window.location.href = '/manage/recordByName' + '?apply_name=' + apply_name
+          window.location.href = '/reserve/manage/recordByName' + '?apply_name=' + apply_name
         })
         $(".modal-msg").on("hidden.bs.modal", function() {
               console.log('---- here ----')
