@@ -186,7 +186,33 @@ exports.apply_record = function(week,callback){
 				//console.log('resultList: ',resultList)
 				cb(null,resultList)
 			})
-		}
+		}/*,
+		function(resultList,cb){
+			for(let i=0;i<resultList.length;i++){
+				if(resultList[i][0] == '938会议室--有电脑(48-60人)'){
+					resultList[i][0] = '938会议室--有电脑(48-60人)李:13760277012'
+				}
+				else if(resultList[i][0] == '623会议室--无电脑(16-24人)'){
+					resultList[i][0] = '623会议室--无电脑(16-24人)曾:15220159520'
+				}
+				else if(resultList[i][0] == '624小教室--有电脑(68人)'){
+					resultList[i][0] = '624小教室--有电脑(68人)曾:15220159520'
+				}
+				else if(resultList[i][0] == '412会议室--无电脑(11人)'){
+					resultList[i][0] == '412会议室--无电脑(11人)梁:13530039843'
+				}
+				else if(resultList[i][0] == '414小教室--有电脑(32人)'){
+					resultList[i][0] == '414小教室--有电脑(32人)梁:13530039843'
+				}
+				else if(resultList[i][0] == '1楼报告厅--无电脑(452人)'){
+					resultList[i][0] == '1楼报告厅--无电脑(452人)冯:86934730'
+				}
+				else{
+					resultList[i][0] == '1019会议室--无电脑(20人)李:13760277012'
+				}
+			}
+			cb(null,resultList)
+		}*/
 	],function(err,result){
 		if(err && err == 1){
 			console.log('----- async err and result is null -----')
@@ -659,16 +685,16 @@ exports.applyRecord = function(limit,offset,applier,callback){
 exports.applyApprove = function(limit,offset,username,applier,callback){
 	console.log('session username is -->',username)
 	if(username == 'admin1'){
-		var room_name_arr = ['624小教室--有电脑(68人)','623会议室--无电脑(16-24人)']
+		var room_name_arr = ['624小教室--有电脑(68人)曾:15220159520','623会议室--无电脑(16-24人)曾:15220159520']
 	}
 	else if(username == 'admin2'){
-		var room_name_arr = ['1楼报告厅--无电脑(452人)']
+		var room_name_arr = ['1楼报告厅--无电脑(452人)冯:86934730']
 	}
 	else if(username == 'admin3'){
-		var room_name_arr = ['412会议室--无电脑(11人)','414小教室--有电脑(32人)']
+		var room_name_arr = ['412会议室--无电脑(11人)梁:13530039843','414小教室--有电脑(32人)梁:13530039843']
 	}
 	else{
-		var room_name_arr = ['414小教室--有电脑(32人)','624小教室--有电脑(68人)','623会议室--无电脑(16-24人)','1楼报告厅--无电脑(452人)','412会议室--无电脑(11人)','1019会议室--无电脑(20人)','407小教室--无电脑(42人)','938会议室--有电脑(48-60人)']
+		var room_name_arr = ['414小教室--有电脑(32人)梁:13530039843','624小教室--有电脑(68人)曾:15220159520','623会议室--无电脑(16-24人)曾:15220159520','1楼报告厅--无电脑(452人)冯:86934730','412会议室--无电脑(11人)梁:13530039843','1019会议室--无电脑(20人)李:13760277012','407小教室--无电脑(42人)梁:13530039843','938会议室--有电脑(48-60人)李:13760277012']
 	}
 	console.log('check room_name_arr -->',room_name_arr)
 

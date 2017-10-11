@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=4, minimum-scale=1, user-scalable=yes" />
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>会议室申请</title>
@@ -289,9 +291,11 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
+        'use strict'
         //动态改变时间段
         //$("#select_id").change(function(){//code...});
         $('#shijianduan').change(function(){
+          'use strict'
           var temp_shijianduan = $('#shijianduan option:selected').val()
           console.log('temp_shijianduan-->',temp_shijianduan)
           if(temp_shijianduan == '上午'){
@@ -485,6 +489,8 @@
           meeting_date = temp_meeting_date[0] + '月' + temp_meeting_date[1] + '日'
           console.log('meeting_date-->',meeting_date)
 
+          let exact_meeting_time = ''
+
           /*let temp_meeting_time = meeting_time.substring(0,2),
               exact_meeting_time = ''
           console.log('临时截取时间：',temp_meeting_time)
@@ -640,6 +646,7 @@
       //   });
       // })
       $(function() {
+        'use strict'
         //$("#apply_email").focus(function(){$(this).showMessage("请输入内容");});
           // $('#apply_email').on('click',function(){
           //   console.log('dddd')
