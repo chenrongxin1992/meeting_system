@@ -368,13 +368,15 @@ exports.applyTwo = function(attribute,callback){
 	async.waterfall([
 		function(cb){//检查申请时间段会议室是否已被批准使用
 			//情况1：审批结果的结束时间(second_minute)为00的时候
+			console.log('-------------- dddddddddddd ----------------')
 			let search = apply.find({})
 				search.where('room_name').equals(room_name)
 				search.where('meeting_date').equals(meeting_date)
 				search.where('is_approved').equals('1')
-				search.where('second_minute').equals('00')
+				//search.where('second_minute').equals('00')
+				search.where('first_minute').equals('00')
 				search.where('meeting_time').equals(meeting_time)
-				search.where('second_hour').gt(first_hour)
+				search.where('first_hour').lt(second_hour)
 				search.exec(function(err,docs){
 					if(err){
 						console.log('----- search err -----')
@@ -392,14 +394,15 @@ exports.applyTwo = function(attribute,callback){
 				})
 		},
 		function(cb){
+			console.log('-------------- aaaaaaaaaaaaaaa ----------------')
 			//情况2，审批结果的结束时间(second_minute)为30并且新申请first_hour小于second_hour的时候
 			let search = apply.find({})
 				search.where('room_name').equals(room_name)
 				search.where('meeting_date').equals(meeting_date)
 				search.where('is_approved').equals('1')
-				search.where('second_minute').equals('30')
+				search.where('first_minute').equals('30')
 				search.where('meeting_time').equals(meeting_time)
-				search.where('second_hour').gt(first_hour)
+				search.where('first_hour').lt(second_hour)
 				search.exec(function(err,docs){
 					if(err){
 						console.log('----- search err -----')
@@ -418,12 +421,13 @@ exports.applyTwo = function(attribute,callback){
 				})
 		},
 		function(cb){
+			console.log('-------------- bbbbbbbbbbbbbbb ----------------')
 			let search = apply.find({})
 				search.where('room_name').equals(room_name)
 				search.where('meeting_date').equals(meeting_date)
 				search.where('is_approved').equals('1')
-				search.where('second_minute').equals('30')
-				search.where('second_hour').equals(first_hour)
+				search.where('fitst_minute').equals('30')
+				search.where('first_hour').equals(first_hour)
 				search.exec(function(err,docs){
 					if(err){
 						console.log('----- search err -----')
@@ -445,6 +449,7 @@ exports.applyTwo = function(attribute,callback){
 				})
 		},
 		function(cb){
+			console.log('-------------- ccccccccccccccccccccc ----------------')
 			apply.find({'room_name':room_name,'meeting_date':meeting_date,'exact_meeting_time':exact_meeting_time,'apply_name':apply_name},function(err,doc){
 				if(err){
 					console.log('----- search err -----')
@@ -463,6 +468,7 @@ exports.applyTwo = function(attribute,callback){
 			})
 		},
 		function(cb){
+			console.log('-------------- fffffffffffff ----------------')
 			let for_week_use_1 = meeting_date.substring(0,2),
 				for_week_use_2 = meeting_date.substring(3,5),
 				week_day_use = '2017-' + for_week_use_1 + '-' + for_week_use_2

@@ -61,7 +61,7 @@ router.post('/applyTwo',function(req,res){
 			return res.json({'errCode':-1,'errMsg':err.message})
 		}
 		if(result == 1){
-			return res.json({'errCode':-1,'errMsg':'会议开始时间已被占用，请检查!'})
+			return res.json({'errCode':-1,'errMsg':'会议时间被占用，请检查!'})
 		}
 		if(result == 2){
 			return res.json({'errCode':-1,'errMsg':'抱歉，同一申请人同一时间段不能提交相同申请!'})

@@ -50,6 +50,11 @@
         padding-left: 0px;
       }
       @media screen and (max-width: 769px) {
+        #qrcode{
+          height: 237px;
+          width: 200px;
+          text-align: center;
+        }
         .apply_form{
           text-align: center;
         }
@@ -70,6 +75,13 @@
          }
       }
       @media screen and (min-width: 769px) {
+      #qrcode{
+        height: 296px;
+        width: 250px;
+        position: fixed;
+        right: 1%;
+        top: 20%
+      }
         .apply_form{
           text-align: right;
         }
@@ -84,6 +96,7 @@
         line-height: 32px;
         color:red;
       }
+
       
      
    
@@ -233,8 +246,20 @@
         </div>
       </form>
 
+      <!-- <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <strong style="color: red;">备注：</strong>学生申请时请写上老师的名字;相关会议室审批请扫码入群查询；
+        </div>
+      </div> -->
+
       <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><hr></div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <img src="/reserve/images/qrcode.png" class="img-responsive center-block" alt="" title="会议室管理群" id="qrcode"/>
+        </div>
       </div>
 
       <div class="row">
@@ -260,8 +285,42 @@
     </script>
 
     <script type="text/javascript">
+      function setCookie (name, value)
+      { 
+          //设置名称为name,值为value的Cookie
+          var expdate = new Date();   //初始化时间
+          expdate.setTime(expdate.getTime() + 24 * 7 * 60 * 60 * 1000);   //时间 one week
+          document.cookie = name+"="+value+";expires="+expdate.toGMTString()+";path=http://qiandao.szu.edu.cn:81/reserve";
+         //即document.cookie= name+"="+value+";path=/";   时间可以不要，但路径(path)必须要填写，因为JS的默认路径是当前页，如果不填，此cookie只在当前页面生效！~
+      }
+      function getCookie(c_name)
+      {
+        if (document.cookie.length>0)
+        {
+          c_start=document.cookie.indexOf(c_name + "=")
+          console.log('check c_start-->',c_start)
+          if (c_start!=-1)
+          { 
+            c_start=c_start + c_name.length+1 
+            c_end=document.cookie.indexOf(";",c_start)
+            if (c_end==-1) c_end=document.cookie.length
+              console.log('check arg-->',unescape(document.cookie.substring(c_start,c_end)))
+              return unescape(document.cookie.substring(c_start,c_end))
+          } 
+        }
+        return ""
+      }
+
       $(document).ready(function(){
         'use strict'
+        console.log(document)
+        let temp_apply_name = getCookie('apply_name'),
+            temp_apply_phone = getCookie('apply_phone'),
+            temp_apply_email = getCookie('apply_email')
+
+        $('#apply_name').val(temp_apply_name)
+        $('#apply_phone').val(temp_apply_phone)
+        $('#apply_email').val(temp_apply_email)
         //动态改变时间段
         //$("#select_id").change(function(){//code...});
         $('#shijianduan').change(function(){
@@ -339,7 +398,7 @@
           if(parseInt(temp_time,10) == 21){
             $("#second_hour").append("<option>"+21+"</option>");  
           }else{
-            for(let i=parseInt(temp_time,10)+1;i<21;i++){
+            for(let i=parseInt(temp_time,10)+1;i<=22;i++){
               let k = String(i)
               if(k.length < 2)
                 k = '0' + k
@@ -448,6 +507,10 @@
                   first_minute = $('#first_minute option:selected').val(),
                   second_hour = $('#second_hour option:selected').val(),
                   second_minute = $('#second_minute option:selected').val()
+
+              setCookie('apply_name',apply_name,7)
+              setCookie('apply_phone',apply_phone,7)
+              setCookie('apply_email',apply_email,7)
 
               console.log('check args',room_name,meeting_name,meeting_num,meeting_content,apply_name,apply_phone,meeting_date,meeting_time)
 
