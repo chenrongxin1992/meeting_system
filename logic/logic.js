@@ -471,7 +471,7 @@ exports.applyTwo = function(attribute,callback){
 			console.log('-------------- fffffffffffff ----------------')
 			let for_week_use_1 = meeting_date.substring(0,2),
 				for_week_use_2 = meeting_date.substring(3,5),
-				week_day_use = '2017-' + for_week_use_1 + '-' + for_week_use_2
+				week_day_use = '2018-' + for_week_use_1 + '-' + for_week_use_2//一年改一次
 
 			var new_apply_Two = new apply({
 				room_name : room_name,

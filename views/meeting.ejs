@@ -352,10 +352,10 @@
 	          var first_row = $('<div></div>')
 	          	  first_row.addClass('row')
 	          var first_col = $('<div></div>')
-	          	  first_col.addClass('col-md-3')
+	          	  first_col.addClass('col-md-3 col-xs-4')
 	          	  first_col.text('申请状态')
 	          var second_col = $('<div></div>')
-	          	  second_col.addClass('col-md-8 col-md-offset-1')
+	          	  second_col.addClass('col-md-9 col-xs-8')
 	          	  second_col.text('申请信息')
 
 	          	  first_col.appendTo(first_row)
@@ -373,46 +373,46 @@
 				    	parentdiv.addClass('row');    			
 
 				    var childdiv_left_parent=$('<div></div>');         //左边列
-					    childdiv_left_parent.addClass('col-md-3 cl');   
+					    childdiv_left_parent.addClass('col-md-3 col-xs-4 cl');   
 					    childdiv_left_parent.text(sta)
 
 				    var childdiv_right_parent = $('<div></div>');   	//右边列
-				    	childdiv_right_parent.addClass('col-md-9')
+				    	childdiv_right_parent.addClass('col-md-9 col-xs-8')
 
 				    var childdiv_right_child_row_1 = $('<div></div>');
 				    	childdiv_right_child_row_1.addClass('row')			//右边列 嵌套的第一行
 				    var childdiv_right_child_row_1_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
-				    	childdiv_right_child_row_1_col_1.addClass('col-md-3')
+				    	childdiv_right_child_row_1_col_1.addClass('col-md-3 col-xs-4')
 				    	childdiv_right_child_row_1_col_1.text('会议名称')
 				    var childdiv_right_child_row_1_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
-				    	childdiv_right_child_row_1_col_2.addClass('col-md-9')
+				    	childdiv_right_child_row_1_col_2.addClass('col-md-9 col-xs-8')
 				    	childdiv_right_child_row_1_col_2.text(result[i].meeting_name)
 
 				    var childdiv_right_child_row_2 = $('<div></div>');
 				    	childdiv_right_child_row_2.addClass('row')			//右边列 嵌套的第一行
 				    var childdiv_right_child_row_2_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
-				    	childdiv_right_child_row_2_col_1.addClass('col-md-3')
+				    	childdiv_right_child_row_2_col_1.addClass('col-md-3 col-xs-4')
 				    	childdiv_right_child_row_2_col_1.text('申请人')
 				    var childdiv_right_child_row_2_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
-				    	childdiv_right_child_row_2_col_2.addClass('col-md-9')
+				    	childdiv_right_child_row_2_col_2.addClass('col-md-9 col-xs-8')
 				    	childdiv_right_child_row_2_col_2.text(result[i].apply_name)
 				    
 				    var childdiv_right_child_row_3 = $('<div></div>');
 				    	childdiv_right_child_row_3.addClass('row')			//右边列 嵌套的第一行
 				    var childdiv_right_child_row_3_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
-				    	childdiv_right_child_row_3_col_1.addClass('col-md-3')
+				    	childdiv_right_child_row_3_col_1.addClass('col-md-3 col-xs-4')
 				    	childdiv_right_child_row_3_col_1.text('联系方式')
 				    var childdiv_right_child_row_3_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
-				    	childdiv_right_child_row_3_col_2.addClass('col-md-9')
+				    	childdiv_right_child_row_3_col_2.addClass('col-md-9 col-xs-8')
 				    	childdiv_right_child_row_3_col_2.text(result[i].apply_phone)
 
 				    var childdiv_right_child_row_4 = $('<div></div>');
 				    	childdiv_right_child_row_4.addClass('row')			//右边列 嵌套的第一行
 				    var childdiv_right_child_row_4_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
-				    	childdiv_right_child_row_4_col_1.addClass('col-md-3')
+				    	childdiv_right_child_row_4_col_1.addClass('col-md-3 col-xs-4')
 				    	childdiv_right_child_row_4_col_1.text('会议时间')
 				    var childdiv_right_child_row_4_col_2 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
-				    	childdiv_right_child_row_4_col_2.addClass('col-md-9')
+				    	childdiv_right_child_row_4_col_2.addClass('col-md-9 col-xs-8')
 				    	childdiv_right_child_row_4_col_2.text(result[i].meeting_date + ' ' + result[i].exact_meeting_time)
 
 				    childdiv_right_child_row_1_col_1.appendTo(childdiv_right_child_row_1)
