@@ -1258,7 +1258,7 @@ exports.deleteRecord = function(_id,check_delete,callback){
 exports.updateApprove = function(_id,is_approved,callback){
 	//{$set:{name:'MDragon'}}
 	if(is_approved == 1){
-		apply.update({'_id':_id},{$set:{'is_approved':is_approved}},function(err){
+		apply.update({'_id':_id},{$set:{'is_approved':is_approved,'is_allowed':0}},function(err){
 			if(err){
 				console.log('----- update err -----')
 				console.log(err.message)
@@ -1431,4 +1431,92 @@ exports.deleteApprove = function(ids,callback){
 			callback(null)
 		})
 	}
+}
+
+//临时定死
+	// "_id" : ObjectId("5aa8e6d21ec997037887246a"),
+ //    "room_name" : "624小教室--有电脑(68人)曾:15220159520",
+ //    "meeting_name" : "数媒班毕业论文开题",
+ //    "meeting_num" : "32人",
+ //    "meeting_content" : "数媒班毕业论文开题",
+ //    "meeting_date" : "03月25日",
+ //    "meeting_time" : "下午",
+ //    "apply_name" : "林芬",
+ //    "apply_phone" : "13652421280",
+ //    "exact_meeting_time" : "下午14:00-17:30",
+ //    "email" : "267495077@qq.com",
+ //    "first_hour" : "14",
+ //    "second_hour" : "17",
+ //    "first_minute" : "00",
+ //    "second_minute" : "30",
+ //    "week_day" : "星期日",
+ //    "is_allowed" : "0",
+ //    "apply_timeStamp" : "1520907941",
+ //    "is_approved" : "0",
+ //    "apply_time" : "2018-03-14 17:09:38",
+ //    "__v" : 0
+
+exports.tempadd = function(){
+	let enddate = 2018-07-01,
+		startdate = 2018-03-15
+	let tianshu = moment('2018-07-01').diff(moment('2018-03-15'), 'days')
+	console.log('check tianshu --->',tianshu)
+	let meeting_time = '下午',
+		arr = []
+	for(let i=0;i<tianshu;i++){
+		arr.push(i)
+	}
+	console.log('check arr.length-->',arr.length)
+	async.eachLimit(arr,1,function(item,callback){
+		let meeting_date = moment('2018-03-23').add(item,'day').format('YYYY-MM-DD'),
+			temp = meeting_date.split('-')
+		if(temp[1].length<2){
+			temp[1] = '0' + temp[1]
+		}
+		let resultdate = temp[1] + '月' + temp[2] + '日'
+		console.log(moment('2018-03-23').add(item,'day').format('dddd'))
+		if(moment('2018-03-23').add(item,'day').format('dddd') == '星期四' ){
+			console.log('周四')
+			let new_apply_Two = new apply({
+				room_name : '623会议室--无电脑(16-24人)曾:15220159520',
+				meeting_name : '项目讨论会',
+				meeting_num : '15',
+				meeting_content : '项目讨论会',
+				meeting_date : resultdate,
+				meeting_time : '下午',
+				apply_name : '曾小告',
+				apply_phone : '15220159520',
+				exact_meeting_time : meeting_time + '14:00-17:00',
+				apply_time : moment().format('YYYY-MM-DD HH:mm:ss'),
+				email :'848536190@qq.com',
+				first_hour : '14',
+				second_hour : '17',
+				first_minute : '00',
+				second_minute : '00',
+				week_day : '星期四',
+				is_approved : 1
+			})
+			new_apply_Two.save(function(err,doc){
+				console.log('check i------->',item)
+				if(err){
+					console.log('----- save err -----')
+					console.error(err)
+					callback(err)
+					//return cb(err)
+				}
+				console.log('---- save success -----')
+				console.log('new_apply_Two-->',doc)
+				callback()
+				//cb(null,doc)
+			})
+		}else{
+			callback()
+		}
+	},function(err){
+		if(err){
+			console.log(err)
+			return false
+		}
+		return true
+	})
 }

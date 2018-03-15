@@ -361,8 +361,134 @@
                         console.log('check _id: ',_id)
                         if(row.is_approved == '已批准')
                             return
-                        if(row.is_approved == '未批准')
+                        if(row.is_approved == '未批准'){
+                          $.ajax({ 
+                            url:'/reserve/manage/applyDetail',
+                            type:'post',
+                            data: {'_id':_id},
+                            success: function(result){ 
+                                console.log('result: ',result)
+                                console.log(result.result._id)
+                                if(result.errCode == -1){
+                                    console.log('err occurd!')
+                                    console.log(result.errMsg)
+                                    return 
+                                }
+                                if(result.errCode == 0){
+                                    //弹出模态框
+                                    $('.modal-msg').modal('show')
+                                    $('#gridSystemModalLabel').text(result.result.room_name + '预订信息')
+                                        
+                                    let second_row = $('<div></div>')
+                                        second_row.addClass('row')
+                                    let second_row_first_col = $('<div></div>')
+                                        second_row_first_col.addClass('col-md-3 col-xs-4')
+                                        second_row_first_col.text('会议名称')
+                                    let second_row_second_col = $('<div></div>')
+                                        second_row_second_col.addClass('col-md-6 col-xs-8')
+                                        second_row_second_col.text(result.result.meeting_name)
+                                    
+                                    //显示内容
+                                    let content_row = $('<div></div>')
+                                        content_row.addClass('row')
+                                    let content_row_first_col = $('<div></div>')
+                                        content_row_first_col.addClass('col-md-3 col-xs-4')
+                                        content_row_first_col.text('会议内容')
+                                    let content_row_second_col = $('<div></div>')
+                                        content_row_second_col.addClass('col-md-6 col-xs-8')
+                                        content_row_second_col.text(result.result.meeting_content)
+                                        
+                                    //增加一行显示预订时间
+                                    let insert_apply_time_row = $('<div></div>')
+                                        insert_apply_time_row.addClass('row')
+                                    let insert_apply_time_row_first_col = $('<div></div>')
+                                        insert_apply_time_row_first_col.addClass('col-md-3 col-xs-4')
+                                        insert_apply_time_row_first_col.text('申请时间')
+                                    let insert_apply_time_row_second_col = $('<div></div>')
+                                        insert_apply_time_row_second_col.addClass('col-md-6 col-xs-8')
+                                        insert_apply_time_row_second_col.text(result.result.apply_time)
+                                    
+
+                                    let four_row = $('<div></div>')
+                                        four_row.addClass('row')
+                                    let four_row_first_col = $('<div></div>')
+                                        four_row_first_col.addClass('col-md-3 col-xs-4')
+                                        four_row_first_col.text('会议人数')
+                                    let four_row_second_col = $('<div></div>')
+                                        four_row_second_col.addClass('col-md-6 col-xs-8')
+                                        four_row_second_col.text(result.result.meeting_num)
+                                        
+                                    let five_row = $('<div></div>')
+                                        five_row.addClass('row')
+                                    let five_row_first_col = $('<div></div>')
+                                        five_row_first_col.addClass('col-md-3 col-xs-4')
+                                        five_row_first_col.text('申请人')
+                                    let five_row_second_col = $('<div></div>')
+                                        five_row_second_col.addClass('col-md-6 col-xs-8')
+                                        five_row_second_col.text(result.result.apply_name)
+                                        
+                                    let six_row = $('<div></div>')
+                                        six_row.addClass('row')
+                                    let six_row_first_col = $('<div></div>')
+                                        six_row_first_col.addClass('col-md-3 col-xs-4')
+                                        six_row_first_col.text('联系方式')
+                                    let six_row_second_col = $('<div></div>')
+                                        six_row_second_col.addClass('col-md-6 col-xs-8')
+                                        six_row_second_col.text(result.result.apply_phone)
+                                        
+                                    let seven_row = $('<div></div>')
+                                        seven_row.addClass('row')
+                                    let seven_row_first_col = $('<div></div>')
+                                        seven_row_first_col.addClass('col-md-3 col-xs-4')
+                                        seven_row_first_col.text('是否批准')
+                                    let seven_row_second_col = $('<div></div>')
+                                        seven_row_second_col.addClass('col-md-6 col-xs-8')//form-control这个类是bootstrap自己写好的，你用惯了，知道他写的啥，就能用了？？
+                                        seven_row_second_col.html('<select id="approve" class="selectpicker form-control" data-hide-disabled="true" data-live-search="false"><option>批准</option><select>')
+
+
+                                         $('.modal-msg').attr('myid',result.result._id);
+                                    
+                                    
+
+                                    second_row_first_col.appendTo(second_row)
+                                    second_row_second_col.appendTo(second_row)
+                                    second_row.appendTo('.modal-body')
+                                        
+                                    
+                                    content_row_first_col.appendTo(content_row)
+                                    content_row_second_col.appendTo(content_row)
+                                    content_row.appendTo('.modal-body')
+
+                                    //insert
+                                    insert_apply_time_row_first_col.appendTo(insert_apply_time_row)
+                                    insert_apply_time_row_second_col.appendTo(insert_apply_time_row)
+                                    insert_apply_time_row.appendTo('.modal-body')
+
+                                    four_row_first_col.appendTo(four_row)
+                                    four_row_second_col.appendTo(four_row)
+                                    four_row.appendTo('.modal-body')
+
+                                    five_row_first_col.appendTo(five_row)
+                                    five_row_second_col.appendTo(five_row)
+                                    five_row.appendTo('.modal-body')
+
+                                    six_row_first_col.appendTo(six_row)
+                                    six_row_second_col.appendTo(six_row)
+                                    six_row.appendTo('.modal-body')
+
+                                    seven_row_first_col.appendTo(seven_row)
+                                    seven_row_second_col.appendTo(seven_row)
+                                    seven_row.appendTo('.modal-body')
+
+                                }
+                            },
+                            error: function(e){ 
+                                console.log('error')
+                                console.log(e.message)
+                            }
+                        });
                           return 
+                        }
                         $.ajax({ 
                             url:'/reserve/manage/applyDetail',
                             type:'post',
@@ -379,14 +505,6 @@
                                     //弹出模态框
                                     $('.modal-msg').modal('show')
                                     $('#gridSystemModalLabel').text(result.result.room_name + '预订信息')
-                                    /*let first_row = $('<div></div>')
-                                        first_row.addClass('row')
-                                    let first_col = $('<div></div>')
-                                        first_col.addClass('col-md-12 apply_info')
-                                        first_col.text('申请信息')
-                                        
-                                        first_col.appendTo(first_row)
-                                        first_row.appendTo('.modal-body')*/
                                         
                                     let second_row = $('<div></div>')
                                         second_row.addClass('row')
@@ -396,15 +514,6 @@
                                     let second_row_second_col = $('<div></div>')
                                         second_row_second_col.addClass('col-md-6 col-xs-8')
                                         second_row_second_col.text(result.result.meeting_name)
-                                        
-                                    // let three_row = $('<div></div>')
-                                    //     three_row.addClass('row')
-                                    // let three_row_first_col = $('<div></div>')
-                                    //     three_row_first_col.addClass('col-md-3')
-                                    //     three_row_first_col.text('会议内容')
-                                    // let three_row_second_col = $('<div></div>')
-                                    //     three_row_second_col.addClass('col-md-6')
-                                    //     three_row_second_col.text(result.result.meeting_content)
                                     
                                     //显示内容
                                     let content_row = $('<div></div>')
@@ -463,15 +572,7 @@
                                         seven_row_second_col.addClass('col-md-6 col-xs-8')//form-control这个类是bootstrap自己写好的，你用惯了，知道他写的啥，就能用了？？
                                         seven_row_second_col.html('<select id="approve" class="selectpicker form-control" data-hide-disabled="true" data-live-search="false"><option>批准</option><option>不批准</option><select>')
 
-                                 /*   let eight_row = $('<div></div>')
-                                        eight_row.addClass('row')
-                                        //eight_row.addClass('hide_id')
-                                        eight_row.attr('id', 'myid');//zheli
-                                    let eight_row_first_col = $('<div></div>')
-                                        eight_row_first_col.addClass('col-md-12')
-                                        //eight_row_first_col.addClass('hide_id')
-                                        //eight_row_first_col.attr('id', 'myid')
-                                        eight_row_first_col.text(result.result._id)//你这里都是text*/
+
                                          $('.modal-msg').attr('myid',result.result._id);
                                     
                                     
@@ -480,9 +581,6 @@
                                     second_row_second_col.appendTo(second_row)
                                     second_row.appendTo('.modal-body')
                                         
-                                    // three_row_first_col.appendTo(three_row)
-                                    // three_row_second_col.appendTo(three_row)
-                                    // three_row.appendTo('modal-body')
                                     
                                     content_row_first_col.appendTo(content_row)
                                     content_row_second_col.appendTo(content_row)
@@ -509,8 +607,6 @@
                                     seven_row_second_col.appendTo(seven_row)
                                     seven_row.appendTo('.modal-body')
 
-                                   /* eight_row_first_col.appendTo(eight_row)
-                                    eight_row.appendTo('.modal-body')*/
                                 }
                             },
                             error: function(e){ 

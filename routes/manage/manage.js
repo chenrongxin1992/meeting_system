@@ -8,6 +8,9 @@ var router = express.Router()
 var logger = require('../../log/logConfig').logger
 var logic = require('../../logic/logic')
 
+router.get('/tempadd',function(req,res){
+	logic.tempadd()
+})
 //get method : for render a page 
 //post method : for ajax add meeting room 
 router.get('/add_meeting_room',function(req,res){
