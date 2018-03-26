@@ -363,7 +363,8 @@ exports.applyTwo = function(attribute,callback){
 		first_hour = attribute.first_hour,
 		first_minute = attribute.first_minute,
 		second_hour = attribute.second_hour,
-		second_minute = attribute.second_minute
+		second_minute = attribute.second_minute,
+		fuzhilaoshi = attribute.fuzhilaoshi
 	console.log('first_hour-->',first_hour,'second_hour-->',second_hour,'first_minute-->',first_minute,'second_minute-->',second_minute)
 	async.waterfall([
 		function(cb){//检查申请时间段会议室是否已被批准使用
@@ -489,7 +490,8 @@ exports.applyTwo = function(attribute,callback){
 				second_hour : second_hour,
 				first_minute : first_minute,
 				second_minute : second_minute,
-				week_day : moment(week_day_use).format('dddd')
+				week_day : moment(week_day_use).format('dddd'),
+				fuzhilaoshi:fuzhilaoshi
 			})
 			console.log(new_apply_Two)
 
@@ -619,7 +621,7 @@ exports.applyRecord = function(limit,offset,applier,callback){
 			offset = parseInt(offset)
 			let numSkip = (offset) * limit
 			console.log('skip num is -->',numSkip)
-			let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
+			let search = apply.find({},{'fuzhilaoshi':1,'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 				search.where('apply_name').equals(applier)
 				search.sort({'apply_time':-1})
 				search.limit(limit)
@@ -730,7 +732,7 @@ exports.applyApprove = function(limit,offset,username,applier,callback){
 				offset = parseInt(offset)
 				let numSkip = (offset)*limit
 				console.log('skip num is: ',numSkip)
-				let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
+				let search = apply.find({},{'fuzhilaoshi':1,'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 					search.where('room_name').in(room_name_arr)
 					search.sort({'apply_time':-1})
 					search.limit(limit)
@@ -822,7 +824,7 @@ exports.applyApprove = function(limit,offset,username,applier,callback){
 				offset = parseInt(offset)
 				let numSkip = (offset)*limit
 				console.log('skip num is: ',numSkip)
-				let search = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
+				let search = apply.find({},{'fuzhilaoshi':1,'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 					search.where('room_name').in(room_name_arr)
 					search.where('apply_name').equals(applier)
 					search.sort({'apply_time':-1})
@@ -940,7 +942,7 @@ exports.applyRecordQuery = function(limit,offset,begin_date,end_date,applier,cal
 			offset = parseInt(offset)
 			let numSkip = (offset)*limit
 			console.log('skip num is: ',numSkip)
-			let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
+			let secondSearch = apply.find({},{'fuzhilaoshi':1,'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 				secondSearch.where('apply_name').equals(applier)
 				secondSearch.where('apply_timeStamp').gte(begin_date)
 				secondSearch.where('apply_timeStamp').lte(end_date)

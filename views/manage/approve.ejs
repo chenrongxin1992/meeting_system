@@ -426,7 +426,16 @@
                                     let five_row_second_col = $('<div></div>')
                                         five_row_second_col.addClass('col-md-6 col-xs-8')
                                         five_row_second_col.text(result.result.apply_name)
-                                        
+                                      
+                                    let five_row_1 = $('<div></div>')
+                                        five_row_1.addClass('row')
+                                    let five_row_first_col_1 = $('<div></div>')
+                                        five_row_first_col_1.addClass('col-md-3 col-xs-4')
+                                        five_row_first_col_1.text('申请人')
+                                    let five_row_second_col_1 = $('<div></div>')
+                                        five_row_second_col_1.addClass('col-md-6 col-xs-8')
+                                        five_row_second_col_1.text(result.result.apply_name)
+
                                     let six_row = $('<div></div>')
                                         six_row.addClass('row')
                                     let six_row_first_col = $('<div></div>')
@@ -554,6 +563,15 @@
                                         five_row_second_col.addClass('col-md-6 col-xs-8')
                                         five_row_second_col.text(result.result.apply_name)
                                         
+                                    let five_row_1 = $('<div></div>')
+                                        five_row_1.addClass('row')
+                                    let five_row_first_col_1 = $('<div></div>')
+                                        five_row_first_col_1.addClass('col-md-3 col-xs-4')
+                                        five_row_first_col_1.text('负责老师')
+                                    let five_row_second_col_1 = $('<div></div>')
+                                        five_row_second_col_1.addClass('col-md-6 col-xs-8')
+                                        five_row_second_col_1.text(result.result.fuzhilaoshi)
+
                                     let six_row = $('<div></div>')
                                         six_row.addClass('row')
                                     let six_row_first_col = $('<div></div>')
@@ -598,6 +616,10 @@
                                     five_row_first_col.appendTo(five_row)
                                     five_row_second_col.appendTo(five_row)
                                     five_row.appendTo('.modal-body')
+
+                                    five_row_first_col_1.appendTo(five_row_1)
+                                    five_row_second_col_1.appendTo(five_row_1)
+                                    five_row_1.appendTo('.modal-body')
 
                                     six_row_first_col.appendTo(six_row)
                                     six_row_second_col.appendTo(six_row)
@@ -662,6 +684,9 @@
                     }, {
                         field: 'apply_name',
                         title: '申请人'
+                    }, {
+                        field: 'fuzhilaoshi',
+                        title: '负责老师'
                     },{
                         field: 'apply_phone',
                         title: '联系电话'

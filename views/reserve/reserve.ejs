@@ -170,6 +170,14 @@
                  placeholder="请输入申请人" name="apply_name">
           </div>
         </div>
+
+        <div class="form-group">
+          <label for="fuzhilaoshi" class="col-lg-5 col-md-5 col-sm-5 col-xs-12 control-label">负责老师</label>
+          <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+            <input type="text" class="form-control" id="fuzhilaoshi" 
+                 placeholder="请输入负责老师(校外人员或者学生申请时请填写)" name="fuzhilaoshi">
+          </div>
+        </div>
         
         <div class="form-group">
           <label for="phone" class="col-lg-5 col-md-5 col-sm-5 col-xs-12 control-label">联系电话</label>
@@ -316,11 +324,13 @@
         console.log(document)
         let temp_apply_name = getCookie('apply_name'),
             temp_apply_phone = getCookie('apply_phone'),
-            temp_apply_email = getCookie('apply_email')
+            temp_apply_email = getCookie('apply_email'),
+            temp_fuzhilaoshi = getCookie('fuzhilaoshi')
 
         $('#apply_name').val(temp_apply_name)
         $('#apply_phone').val(temp_apply_phone)
         $('#apply_email').val(temp_apply_email)
+        $('#fuzhilaoshi').val(temp_apply_email)
         //动态改变时间段
         //$("#select_id").change(function(){//code...});
         $('#shijianduan').change(function(){
@@ -464,6 +474,14 @@
                         }
                       }
                     },
+                    fuzhilaoshi:{
+                      message: '请输入对应负责老师姓名',
+                      validators:{
+                        notEmpty: {
+                            message: '对应负责老师姓名不能为空!'
+                        }
+                      }
+                    },
                     phone:{
                       message: '请输入手机号码',
                       validators:{
@@ -499,6 +517,7 @@
                   meeting_num = $('#meeting_num').val(),
                   meeting_content = $('#meeting_content').val(),
                   apply_name = $('#apply_name').val(),
+                  fuzhilaoshi = $('#fuzhilaoshi').val(),
                   apply_phone = $('#apply_phone').val(),
                   meeting_date = $('#meeting_date').val(),
                   meeting_time = $('#meeting_time option:selected').val(),
@@ -511,6 +530,7 @@
               setCookie('apply_name',apply_name,7)
               setCookie('apply_phone',apply_phone,7)
               setCookie('apply_email',apply_email,7)
+              setCookie('fuzhilaoshi',fuzhilaoshi,7)
 
               console.log('check args',room_name,meeting_name,meeting_num,meeting_content,apply_name,apply_phone,meeting_date,meeting_time)
 
@@ -562,7 +582,8 @@
                   first_hour:first_hour,
                   first_minute:first_minute,
                   second_hour:second_hour,
-                  second_minute:second_minute
+                  second_minute:second_minute,
+                  fuzhilaoshi:fuzhilaoshi
                 },
 
                 success: function(result){

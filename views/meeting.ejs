@@ -397,6 +397,16 @@
 				    	childdiv_right_child_row_2_col_2.addClass('col-md-9 col-xs-8')
 				    	childdiv_right_child_row_2_col_2.text(result[i].apply_name)
 				    
+				    var childdiv_right_child_row_2_1_1 = $('<div></div>');
+				    	childdiv_right_child_row_2_1_1.addClass('row')			//右边列 嵌套的第一行
+				    var childdiv_right_child_row_2_col_1_1_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
+				    	childdiv_right_child_row_2_col_1_1_1.addClass('col-md-3 col-xs-4')
+				    	childdiv_right_child_row_2_col_1_1_1.text('负责老师')
+				    var childdiv_right_child_row_2_col_2_1_1 = $('<div></div>')//右边列 嵌套的第1行 第2列(会议名称)
+				    	childdiv_right_child_row_2_col_2_1_1.addClass('col-md-9 col-xs-8')
+				    	childdiv_right_child_row_2_col_2_1_1.text(result[i].fuzhilaoshi)
+				    	
+				    console.log('ddddddddd->',result[i].fuzhilaoshi)
 				    var childdiv_right_child_row_3 = $('<div></div>');
 				    	childdiv_right_child_row_3.addClass('row')			//右边列 嵌套的第一行
 				    var childdiv_right_child_row_3_col_1 = $('<div></div>')//右边列 嵌套的第1行 第1列(会议名称)
@@ -421,6 +431,9 @@
 				    childdiv_right_child_row_2_col_1.appendTo(childdiv_right_child_row_2)
 				    childdiv_right_child_row_2_col_2.appendTo(childdiv_right_child_row_2)
 
+				    childdiv_right_child_row_2_col_1_1_1.appendTo(childdiv_right_child_row_2_1_1)
+				    childdiv_right_child_row_2_col_2_1_1.appendTo(childdiv_right_child_row_2_1_1)
+
 				    childdiv_right_child_row_3_col_1.appendTo(childdiv_right_child_row_3)
 				    childdiv_right_child_row_3_col_2.appendTo(childdiv_right_child_row_3)
 
@@ -429,6 +442,7 @@
 
 				    childdiv_right_child_row_1.appendTo(childdiv_right_parent)
 				    childdiv_right_child_row_2.appendTo(childdiv_right_parent)
+				    childdiv_right_child_row_2_1_1.appendTo(childdiv_right_parent)
 				    childdiv_right_child_row_3.appendTo(childdiv_right_parent)
 				    childdiv_right_child_row_4.appendTo(childdiv_right_parent)
 
