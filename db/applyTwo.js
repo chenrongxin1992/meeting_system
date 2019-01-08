@@ -25,7 +25,10 @@ var applyTwoSchema = new Schema({
     first_hour : {type : String},
     second_hour : {type : String},
     first_minute : {type : String},
-    second_minute : {type :String}
+    second_minute : {type :String},
+    week_day : {type :String},
+    fuzhilaoshi:{type:String},
+    meeting_date_timestamp:{type : String,default:moment().format('X')}
 })
 
 module.exports = mongoose.model('applyTwo',applyTwoSchema);

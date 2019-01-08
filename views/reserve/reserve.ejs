@@ -533,7 +533,7 @@
               setCookie('fuzhilaoshi',fuzhilaoshi,7)
 
               console.log('check args',room_name,meeting_name,meeting_num,meeting_content,apply_name,apply_phone,meeting_date,meeting_time)
-
+              let meeting_date1 = meeting_date
               meeting_date = meeting_date.substring(5)
               console.log('meeting_date-->',meeting_date)
               let temp_meeting_date = meeting_date.split('-')
@@ -583,7 +583,8 @@
                   first_minute:first_minute,
                   second_hour:second_hour,
                   second_minute:second_minute,
-                  fuzhilaoshi:fuzhilaoshi
+                  fuzhilaoshi:fuzhilaoshi,
+                  meeting_date1:meeting_date1
                 },
 
                 success: function(result){

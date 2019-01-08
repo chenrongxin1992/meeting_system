@@ -27,7 +27,8 @@ var applySchema = new Schema({
     first_minute : {type : String},
     second_minute : {type :String},
     week_day : {type :String},
-    fuzhilaoshi:{type:String}
+    fuzhilaoshi:{type:String},
+     meeting_date_timestamp:{type : String,default:moment().format('X')}
 })
 
 module.exports = mongoose.model('apply',applySchema);

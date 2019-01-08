@@ -89,7 +89,7 @@ exports.add_meeting_room = function(room_name,callback){
 exports.apply_record = function(week,callback){
 	async.waterfall([
 		function(cb){//获取所有会议室记录
-			meeting_room.find({},'room_name',function(err,docs){
+			meeting_room.find({'in_used':1},'room_name',function(err,docs){
 				if(err){
 					console.log('----- search err -----')
 					cb(err)
@@ -135,7 +135,7 @@ exports.apply_record = function(week,callback){
 						console.log('----- check timeArr val -----')
 						//console.log(v)
 						console.log('meeting_date && meeting_time && room_name',val,v,item.room_name)
-						apply.find({'meeting_date':val,'meeting_time':v,'room_name':item.room_name},function(err,doc){
+						apply.find({'meeting_date':val,'meeting_time':v,'room_name':item.room_name,'apply_timeStamp':{$gt:moment('2018-06-06').unix()}},function(err,doc){
 							if(err){
 								console.log('----- search err -----')
 							}
@@ -248,7 +248,7 @@ exports.get_meeting_detail = function(week,room_name,meeting_date,meeting_time,c
 }
 //获取会议室，返回前端select
 exports.select_room = function(callback){
-	meeting_room.find({},function(err,docs){
+	meeting_room.find({'in_used':1},function(err,docs){
 		if(err){
 			console.log('----- search err -----')
 			callback(err)
@@ -271,7 +271,8 @@ exports.select_room = function(callback){
 exports.apply = function(room_name,meeting_name,meeting_num,meeting_content,meeting_date,meeting_time,apply_name,apply_phone,exact_meeting_time,apply_email,callback){
 	async.waterfall([
 		function(cb){//检查该时间段会议室是否已被批准使用
-			apply.find({'room_name':room_name,'meeting_date':meeting_date,'exact_meeting_time':exact_meeting_time,'is_approved':1},function(err,doc){
+			apply.find({'room_name':room_name,'meeting_date':meeting_date,'exact_meeting_time':exact_meeting_time},function(err,doc){
+			//apply.find({'room_name':room_name,'meeting_date':meeting_date,'exact_meeting_time':exact_meeting_time,'is_approved':1},function(err,doc){
 				if(err){
 					console.log('----- search err -----')
 					console.error(err)
@@ -364,7 +365,8 @@ exports.applyTwo = function(attribute,callback){
 		first_minute = attribute.first_minute,
 		second_hour = attribute.second_hour,
 		second_minute = attribute.second_minute,
-		fuzhilaoshi = attribute.fuzhilaoshi
+		fuzhilaoshi = attribute.fuzhilaoshi,
+		meeting_date1 = attribute.meeting_date1
 	console.log('first_hour-->',first_hour,'second_hour-->',second_hour,'first_minute-->',first_minute,'second_minute-->',second_minute)
 	async.waterfall([
 		function(cb){//检查申请时间段会议室是否已被批准使用
@@ -373,7 +375,7 @@ exports.applyTwo = function(attribute,callback){
 			let search = apply.find({})
 				search.where('room_name').equals(room_name)
 				search.where('meeting_date').equals(meeting_date)
-				search.where('is_approved').equals('1')
+				//search.where('is_approved').equals('1')
 				//search.where('second_minute').equals('00')
 				search.where('first_minute').equals('00')
 				search.where('meeting_time').equals(meeting_time)
@@ -400,7 +402,7 @@ exports.applyTwo = function(attribute,callback){
 			let search = apply.find({})
 				search.where('room_name').equals(room_name)
 				search.where('meeting_date').equals(meeting_date)
-				search.where('is_approved').equals('1')
+				//search.where('is_approved').equals('1')
 				search.where('first_minute').equals('30')
 				search.where('meeting_time').equals(meeting_time)
 				search.where('first_hour').lt(second_hour)
@@ -426,7 +428,7 @@ exports.applyTwo = function(attribute,callback){
 			let search = apply.find({})
 				search.where('room_name').equals(room_name)
 				search.where('meeting_date').equals(meeting_date)
-				search.where('is_approved').equals('1')
+				//search.where('is_approved').equals('1')
 				search.where('fitst_minute').equals('30')
 				search.where('first_hour').equals(first_hour)
 				search.exec(function(err,docs){
@@ -473,13 +475,16 @@ exports.applyTwo = function(attribute,callback){
 			let for_week_use_1 = meeting_date.substring(0,2),
 				for_week_use_2 = meeting_date.substring(3,5),
 				week_day_use = '2018-' + for_week_use_1 + '-' + for_week_use_2//一年改一次
-
+			console.log('meeting_date1',meeting_date1)
+			console.log('meeting_date1_timestamp',moment(meeting_date1,'YYYY-MM-DD').format('X'))
+			//return false
 			var new_apply_Two = new apply({
 				room_name : room_name,
 				meeting_name : meeting_name,
 				meeting_num : meeting_num,
 				meeting_content : meeting_content,
 				meeting_date : meeting_date,
+				meeting_date_timestamp : moment(meeting_date1,'YYYY-MM-DD').format('X'),
 				meeting_time : meeting_time,
 				apply_name : apply_name,
 				apply_phone : apply_phone,
@@ -910,7 +915,7 @@ exports.applyRecordQuery = function(limit,offset,begin_date,end_date,applier,cal
 		console.log('end_date is null ')
 		console.log('check end_date timeStamp',end_date)
 	}else{
-		end_date = moment(end_date,'YYYY-MM-DD').add(1,'days').format('X')
+		end_date = moment(end_date,'YYYY-MM-DD').add(2,'days').format('X')
 		console.log('end_date is not null')
 		console.log('check end_date timeStamp',begin_date)
 	}
@@ -918,8 +923,8 @@ exports.applyRecordQuery = function(limit,offset,begin_date,end_date,applier,cal
 		function(cb){
 			let search = apply.find({})
 				search.where('apply_name').equals(applier)
-				search.where('apply_timeStamp').gte(begin_date)
-				search.where('apply_timeStamp').lte(end_date)
+				search.where('meeting_date_timestamp').gte(begin_date)
+				search.where('meeting_date_timestamp').lte(end_date)
 				search.exec(function(err,docs){
 					if(err){
 						console.log('----- search err -----')
@@ -944,8 +949,8 @@ exports.applyRecordQuery = function(limit,offset,begin_date,end_date,applier,cal
 			console.log('skip num is: ',numSkip)
 			let secondSearch = apply.find({},{'fuzhilaoshi':1,'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 				secondSearch.where('apply_name').equals(applier)
-				secondSearch.where('apply_timeStamp').gte(begin_date)
-				secondSearch.where('apply_timeStamp').lte(end_date)
+				secondSearch.where('meeting_date_timestamp').gte(begin_date)
+				secondSearch.where('meeting_date_timestamp').lte(end_date)
 				secondSearch.sort({'apply_time':-1})
 				secondSearch.limit(limit)
 				secondSearch.skip(numSkip)
@@ -1014,10 +1019,10 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 		var room_name_arr = ['412会议室--无电脑(11人)','407小教室--有电脑(42人)']
 	}
 	else{
-		var room_name_arr = ['407小教室--有电脑(42人)','624小教室--有电脑(68人)','623会议室--无电脑(16-24人)','1楼报告厅--无电脑(452人)','412会议室--无电脑(11人)','1019会议室--无电脑(20人)','407小教室--无电脑(42人)','938会议室--有电脑(48-60人)']
+		var room_name_arr = ['教职工之家--无电脑（20人）李:15818677129','624小教室--有电脑(68人)曾:15220159520','623会议室--无电脑(16-24人)曾:15220159520','1楼报告厅--无电脑(452人)冯:86934730','412会议室--无电脑(11人)刘:13544002290','1019会议室--无电脑(20人)李:15818677129','407小教室--无电脑(42人)','938会议室--有电脑(48-60人)李:15818677129']
 	}
 	console.log('check room_name_arr -->',room_name_arr)
-
+	//return false
 	//如果begin_date为空，取默认值2017-01-01,end_time为空，取当前时间戳
 	if(!begin_date || typeof begin_date == 'undefined'){
 		begin_date = moment('2017-01-01','YYYY-MM-DD').format('X')
@@ -1033,19 +1038,20 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 		console.log('end_date is null ')
 		console.log('check end_date timeStamp',end_date)
 	}else{
-		end_date = moment(end_date,'YYYY-MM-DD').add(1,'days').format('X')
+		end_date = moment(end_date,'YYYY-MM-DD').add(2,'days').format('X')
 		console.log('end_date is not null')
-		console.log('check end_date timeStamp',begin_date)
+		console.log('check end_date timeStamp',end_date)
 	}
 	if(!applier){
 		console.log('----- 没有输入申请人 -----')
+		//return false
 		async.waterfall([
 			function(cb){
 				let search = apply.find({})
 					search.where('room_name').in(room_name_arr)
-					search.where('apply_timeStamp').gte(begin_date)
-					search.where('apply_timeStamp').lte(end_date)
-					search.where('is_approved').equals('1')
+					search.where('meeting_date_timestamp').gte(begin_date)
+					search.where('meeting_date_timestamp').lte(end_date)
+					//search.where('is_approved').equals('1')
 					search.exec(function(err,docs){
 						if(err){
 							console.log('----- search err -----')
@@ -1056,7 +1062,7 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 							console.log('----- no result now -----')
 							cb(1,1)
 						}
-						if(docs && docs.length !=0){
+						if(docs){
 							console.log('check apply records that fetch condition: ',docs)
 							cb(null,docs.length)
 						}
@@ -1064,16 +1070,17 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 			},
 			function(length,cb){
 				console.log('check records length: ',length)
+				//return false
 				limit = parseInt(limit)
 				offset = parseInt(offset)
 				let numSkip = (offset)*limit
 				console.log('skip num is: ',numSkip)
 				let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 					secondSearch.where('room_name').in(room_name_arr)
-					secondSearch.where('apply_timeStamp').gte(begin_date)
-					secondSearch.where('apply_timeStamp').lte(end_date)
+					secondSearch.where('meeting_date_timestamp').gte(begin_date)
+					secondSearch.where('meeting_date_timestamp').lte(end_date)
 					//secondSearch.select()
-					secondSearch.where('is_approved').equals('1')
+					//secondSearch.where('is_approved').equals('1')
 					secondSearch.sort({'apply_time':-1})
 					secondSearch.limit(limit)
 					secondSearch.skip(numSkip)
@@ -1087,8 +1094,8 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 							console.log('----- no result now -----')
 							cb(1,1)
 						}
-						if(docs && docs.length != 0){
-							
+						if(docs){
+							console.log('ddddddddd')
 							for(let i=0;i<docs.length;i++){
 								if(typeof(docs[i].week_day) == 'undefined'){
 									docs[i].week_day = ''
@@ -1110,6 +1117,8 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 								 	docs : docs,
 								 	offset : offset
 								 }
+							// console.log('dcos.total',docs.total)
+							// return false
 							cb(null,docs)
 						}
 					})
@@ -1134,9 +1143,9 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 			function(cb){
 				let search = apply.find({})
 					search.where('room_name').in(room_name_arr)
-					search.where('apply_name').equals(applier)
-					search.where('apply_timeStamp').gte(begin_date)
-					search.where('apply_timeStamp').lte(end_date)
+					//search.where('apply_name').equals(applier)
+					search.where('meeting_date_timestamp').gte(begin_date)
+					search.where('meeting_date_timestamp').lte(end_date)
 					//search.where('is_approved').equals('1')
 					search.exec(function(err,docs){
 						if(err){
@@ -1162,9 +1171,9 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 				console.log('skip num is: ',numSkip)
 				let secondSearch = apply.find({},{'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 					secondSearch.where('room_name').in(room_name_arr)
-					secondSearch.where('apply_name').equals(applier)
-					secondSearch.where('apply_timeStamp').gte(begin_date)
-					secondSearch.where('apply_timeStamp').lte(end_date)
+					//secondSearch.where('apply_name').equals(applier)
+					secondSearch.where('meeting_date_timestamp').gte(begin_date)
+					secondSearch.where('meeting_date_timestamp').lte(end_date)
 					//secondSearch.select()
 					//secondSearch.where('is_approved').equals('1')
 					secondSearch.sort({'apply_time':-1})
@@ -1458,10 +1467,11 @@ exports.deleteApprove = function(ids,callback){
  //    "apply_time" : "2018-03-14 17:09:38",
  //    "__v" : 0
 
+//定死记录
 exports.tempadd = function(){
-	let enddate = 2018-07-01,
-		startdate = 2018-03-15
-	let tianshu = moment('2018-07-01').diff(moment('2018-03-15'), 'days')
+	let enddate = 2019-01-25,
+		startdate = 2018-10-23
+	let tianshu = moment('2019-01-25').diff(moment('2018-10-23'), 'days')
 	console.log('check tianshu --->',tianshu)
 	let meeting_time = '下午',
 		arr = []
@@ -1470,20 +1480,20 @@ exports.tempadd = function(){
 	}
 	console.log('check arr.length-->',arr.length)
 	async.eachLimit(arr,1,function(item,callback){
-		let meeting_date = moment('2018-03-23').add(item,'day').format('YYYY-MM-DD'),
+		let meeting_date = moment('2018-10-23').add(item,'day').format('YYYY-MM-DD'),
 			temp = meeting_date.split('-')
 		if(temp[1].length<2){
 			temp[1] = '0' + temp[1]
 		}
 		let resultdate = temp[1] + '月' + temp[2] + '日'
-		console.log(moment('2018-03-23').add(item,'day').format('dddd'))
-		if(moment('2018-03-23').add(item,'day').format('dddd') == '星期四' ){
-			console.log('周四')
+		console.log(moment('2018-10-23').add(item,'day').format('dddd'))
+		if(moment('2018-10-23').add(item,'day').format('dddd') == '星期一' ){
+			console.log('周三')
 			let new_apply_Two = new apply({
 				room_name : '623会议室--无电脑(16-24人)曾:15220159520',
-				meeting_name : '项目讨论会',
+				meeting_name : '王熙照老师小组例会',
 				meeting_num : '15',
-				meeting_content : '项目讨论会',
+				meeting_content : '王熙照老师小组例会',
 				meeting_date : resultdate,
 				meeting_time : '下午',
 				apply_name : '曾小告',
@@ -1495,8 +1505,9 @@ exports.tempadd = function(){
 				second_hour : '17',
 				first_minute : '00',
 				second_minute : '00',
-				week_day : '星期四',
-				is_approved : 1
+				week_day : '星期一',
+				is_approved : 1,
+				fuzhilaoshi : '曾小告'
 			})
 			new_apply_Two.save(function(err,doc){
 				console.log('check i------->',item)
