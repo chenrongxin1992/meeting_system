@@ -11,6 +11,10 @@ var logic = require('../../logic/logic')
 router.get('/tempadd',function(req,res){
 	logic.tempadd()
 })
+//往年重复内容修改状态
+router.get('/modify_status',function(req,res){
+	logic.modify_status()
+})
 //get method : for render a page 
 //post method : for ajax add meeting room 
 router.get('/add_meeting_room',function(req,res){
@@ -154,8 +158,8 @@ router.post('/addAdminUser',function(req,res){
 }).get('/addAdminUser',function(req,res){
 	let username = req.body.username,
 		password = req.body.password
-		username = 'liyali'
-		password = 'liyali'
+		username = 'heliang'
+		password = '18529409985'
 	if(!username || typeof username == 'undefined'){
 		return res.json({'errCode':-1,'errMsg':'username can not be null'})
 	}

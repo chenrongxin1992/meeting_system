@@ -158,16 +158,16 @@
 						<tr>
 							<% for(var c=0;c<result[b].length;c++) { %>
 									<% if(result[b][c] == 2) { %>
-										<td class="red" title= '<%=result[b][0]%>,<%=b%>,<%=c%>' style= "cursor:pointer; "></td>
+										<td class="red" title= '<%=result[b][0]%>,<%=b%>,<%=c%>,<%=result[b][c]%>' style= "cursor:pointer; "></td>
 									<% } %>
 									<% if(result[b][c] == 0) { %>
-										<td class="white" title= '<%=result[b][0]%>,<%=b%>,<%=c%>' style= "cursor:pointer;"></td>
+										<td class="white" title= '<%=result[b][0]%>,<%=b%>,<%=c%>,<%=result[b][c]%>' style= "cursor:pointer;"></td>
 									<% } %>
 									<% if(result[b][c] == 1) { %>
-										<td class="blue" title= '<%=result[b][0]%>,<%=b%>,<%=c%>' style= "cursor:pointer; "></td>
+										<td class="blue" title= '<%=result[b][0]%>,<%=b%>,<%=c%>,<%=result[b][c]%>' style= "cursor:pointer; "></td>
 									<% } %>
 									<% if(result[b][c] != 0 && result[b][c] != 1 && result[b][c] != 2) { %>
-										<td class="none" title= '<%=result[b][0]%>,<%=b%>,<%=c%>'><%= result[b][c] %></td>
+										<td class="none" title= '<%=result[b][0]%>,<%=b%>,<%=c%>,<%=result[b][c]%>'><%= result[b][c] %></td>
 									<% } %>
 							<% } %>
 						</tr>

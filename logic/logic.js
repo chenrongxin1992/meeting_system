@@ -134,8 +134,8 @@ exports.apply_record = function(week,callback){
 					async.eachLimit(timeArr,1,function(v,cbbbb){
 						console.log('----- check timeArr val -----')
 						//console.log(v)
-						console.log('meeting_date && meeting_time && room_name',val,v,item.room_name)
-						apply.find({'meeting_date':val,'meeting_time':v,'room_name':item.room_name,'apply_timeStamp':{$gt:moment('2018-06-06').unix()}},function(err,doc){
+						console.log('meeting_date && meeting_time && room_name',val,v,item.room_name,moment('2019-02-28').unix(),moment().subtract(60,'d').unix())
+						apply.find({'meeting_date':val,'meeting_time':v,'room_name':item.room_name,'apply_timeStamp':{$gt:moment().subtract(150,'d').unix()}},function(err,doc){//重复记录排除，每次修改申请的时间戳大于某个值
 							if(err){
 								console.log('----- search err -----')
 							}
@@ -229,10 +229,18 @@ exports.apply_record = function(week,callback){
 		}
 	})
 }
-//获取点击查看申请详情
+//获取点击查看申请详情,加一个条件限制，每年改一次，申请时间戳要大于每年一个时间
 exports.get_meeting_detail = function(week,room_name,meeting_date,meeting_time,callback){
+	let year = moment().format('YYYY')
+	console.log('year',year)
+	let lastyear = year - 1
+	console.log('lastyear',lastyear)
+	let temp = '2018-03-27 22:56:50'
+	if(temp.indexOf(lastyear) != -1){
+		console.log('包含')
+	}
 	console.log('check args: ',room_name,meeting_date,meeting_time)
-	apply.find({'room_name':room_name,'meeting_date':meeting_date,'meeting_time':meeting_time},function(err,docs){
+	apply.find({'room_name':room_name,'meeting_date':meeting_date,'meeting_time':meeting_time,'apply_timeStamp':{$gt:moment('2019-02-28').unix()}},function(err,docs){
 		if(err){
 			console.log('----- find err -----')
 			callback(err)
@@ -380,6 +388,10 @@ exports.applyTwo = function(attribute,callback){
 				search.where('first_minute').equals('00')
 				search.where('meeting_time').equals(meeting_time)
 				search.where('first_hour').lt(second_hour)
+				search.where('is_allowed').equals(1)
+				search.where('is_approved').equals(1)
+				//加一个时间戳，过滤去年存在的数据
+				search.where('apply_timeStamp').gt(moment('2019-02-28').unix())
 				search.exec(function(err,docs){
 					if(err){
 						console.log('----- search err -----')
@@ -406,6 +418,8 @@ exports.applyTwo = function(attribute,callback){
 				search.where('first_minute').equals('30')
 				search.where('meeting_time').equals(meeting_time)
 				search.where('first_hour').lt(second_hour)
+				search.where('is_allowed').equals(1)
+				search.where('is_approved').equals(1)
 				search.exec(function(err,docs){
 					if(err){
 						console.log('----- search err -----')
@@ -431,6 +445,8 @@ exports.applyTwo = function(attribute,callback){
 				//search.where('is_approved').equals('1')
 				search.where('fitst_minute').equals('30')
 				search.where('first_hour').equals(first_hour)
+				search.where('is_allowed').equals(1)
+				search.where('is_approved').equals(1)
 				search.exec(function(err,docs){
 					if(err){
 						console.log('----- search err -----')
@@ -474,7 +490,7 @@ exports.applyTwo = function(attribute,callback){
 			console.log('-------------- fffffffffffff ----------------')
 			let for_week_use_1 = meeting_date.substring(0,2),
 				for_week_use_2 = meeting_date.substring(3,5),
-				week_day_use = '2018-' + for_week_use_1 + '-' + for_week_use_2//一年改一次
+				week_day_use = '2019-' + for_week_use_1 + '-' + for_week_use_2//一年改一次
 			console.log('meeting_date1',meeting_date1)
 			console.log('meeting_date1_timestamp',moment(meeting_date1,'YYYY-MM-DD').format('X'))
 			//return false
@@ -704,10 +720,13 @@ exports.applyApprove = function(limit,offset,username,applier,callback){
 		var room_name_arr = ['1楼报告厅--无电脑(452人)冯:86934730']
 	}
 	else if(username == 'admin3'){
-		var room_name_arr = ['412会议室--无电脑(11人)刘:13544002290','414小教室--有电脑(32人)刘:13544002290']
+		var room_name_arr = ['413会议室--无电脑(11人)刘:13544002290','414小教室--有电脑(32人)刘:13544002290']
+	}
+	else if(username == 'heliang'){
+		var room_name_arr = ['1019党员活动室-贺-18529409985']
 	}
 	else{
-		var room_name_arr = ['414小教室--有电脑(32人)刘:13544002290','624小教室--有电脑(68人)曾:15220159520','623会议室--无电脑(16-24人)曾:15220159520','1楼报告厅--无电脑(452人)冯:86934730','412会议室--无电脑(11人)刘:13544002290','1019会议室--无电脑(20人)李:15818677129','407小教室--无电脑(42人)刘:13544002290','938会议室--有电脑(48-60人)李:15818677129','教职工之家--无电脑（20人）李:15818677129']
+		var room_name_arr = ['1019党员活动室-贺-18529409985','414小教室--有电脑(32人)刘:13544002290','624小教室--有电脑(68人)曾:15220159520','623会议室--无电脑(16-24人)曾:15220159520','1楼报告厅--无电脑(452人)冯:86934730','413会议室--无电脑(11人)刘:13544002290','1019会议室--无电脑(20人)李:15818677129','407小教室--无电脑(42人)刘:13544002290','938会议室--有电脑(48-60人)李:15818677129','教职工之家--无电脑（20人）李:15818677129']
 	}
 	console.log('check room_name_arr -->',room_name_arr)
 
@@ -739,7 +758,10 @@ exports.applyApprove = function(limit,offset,username,applier,callback){
 				console.log('skip num is: ',numSkip)
 				let search = apply.find({},{'fuzhilaoshi':1,'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 					search.where('room_name').in(room_name_arr)
-					search.sort({'apply_time':-1})
+					//加入时间戳，过滤去年数据
+					search.where('apply_timeStamp').gt(moment('2019-01-01').unix())
+					search.sort({'apply_timeStamp':-1})
+					search.sort({'meeting_date_timestamp':-1})
 					search.limit(limit)
 					search.skip(numSkip)
 					search.exec(function(err,docs){
@@ -831,8 +853,10 @@ exports.applyApprove = function(limit,offset,username,applier,callback){
 				console.log('skip num is: ',numSkip)
 				let search = apply.find({},{'fuzhilaoshi':1,'room_name':1,'meeting_name':1,'meeting_date':1,'exact_meeting_time':1,'meeting_content':1,'apply_time':1,'meeting_num':1,'apply_name':1,'apply_phone':1,'is_approved':1,'_id':1,'is_allowed':1,'week_day':1})
 					search.where('room_name').in(room_name_arr)
+					search.where('apply_timeStamp').gt(moment('2019-01-01').unix())
 					search.where('apply_name').equals(applier)
-					search.sort({'apply_time':-1})
+					search.sort({'apply_timeStamp':-1})
+					search.sort({'meeting_date_timestamp':-1})
 					search.limit(limit)
 					search.skip(numSkip)
 					search.exec(function(err,docs){
@@ -951,7 +975,7 @@ exports.applyRecordQuery = function(limit,offset,begin_date,end_date,applier,cal
 				secondSearch.where('apply_name').equals(applier)
 				secondSearch.where('meeting_date_timestamp').gte(begin_date)
 				secondSearch.where('meeting_date_timestamp').lte(end_date)
-				secondSearch.sort({'apply_time':-1})
+				secondSearch.sort({'meeting_date_timestamp':-1})
 				secondSearch.limit(limit)
 				secondSearch.skip(numSkip)
 				secondSearch.exec(function(err,docs){
@@ -1016,10 +1040,10 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 		var room_name_arr = ['1楼报告厅--无电脑(452人)']
 	}
 	else if(username == 'admin3'){
-		var room_name_arr = ['412会议室--无电脑(11人)','407小教室--有电脑(42人)']
+		var room_name_arr = ['413会议室--无电脑(11人)','407小教室--有电脑(42人)']
 	}
 	else{
-		var room_name_arr = ['教职工之家--无电脑（20人）李:15818677129','624小教室--有电脑(68人)曾:15220159520','623会议室--无电脑(16-24人)曾:15220159520','1楼报告厅--无电脑(452人)冯:86934730','412会议室--无电脑(11人)刘:13544002290','1019会议室--无电脑(20人)李:15818677129','407小教室--无电脑(42人)','938会议室--有电脑(48-60人)李:15818677129']
+		var room_name_arr = ['教职工之家--无电脑（20人）李:15818677129','624小教室--有电脑(68人)曾:15220159520','623会议室--无电脑(16-24人)曾:15220159520','1楼报告厅--无电脑(452人)冯:86934730','413会议室--无电脑(11人)刘:13544002290','1019会议室--无电脑(20人)李:15818677129','407小教室--无电脑(42人)','938会议室--有电脑(48-60人)李:15818677129']
 	}
 	console.log('check room_name_arr -->',room_name_arr)
 	//return false
@@ -1081,7 +1105,7 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 					secondSearch.where('meeting_date_timestamp').lte(end_date)
 					//secondSearch.select()
 					//secondSearch.where('is_approved').equals('1')
-					secondSearch.sort({'apply_time':-1})
+					secondSearch.sort({'meeting_date_timestamp':-1})
 					secondSearch.limit(limit)
 					secondSearch.skip(numSkip)
 					secondSearch.exec(function(err,docs){
@@ -1176,7 +1200,7 @@ exports.applyApproveQuery = function(limit,offset,begin_date,end_date,username,a
 					secondSearch.where('meeting_date_timestamp').lte(end_date)
 					//secondSearch.select()
 					//secondSearch.where('is_approved').equals('1')
-					secondSearch.sort({'apply_time':-1})
+					secondSearch.sort({'meeting_date_timestamp':-1})
 					secondSearch.limit(limit)
 					secondSearch.skip(numSkip)
 					secondSearch.exec(function(err,docs){
@@ -1323,7 +1347,7 @@ exports.updateApprove = function(_id,is_approved,callback){
 					else if(doc.room_name == '1楼报告厅--无电脑(452人)'){
 						data.html = '您好，你申请的 <strong>'+doc.room_name+' </strong>已被占用,会议时间: <strong style="color:red">' + doc.meeting_date + ' ' + doc.exact_meeting_time + '</strong>，特殊情况请联系管理员 冯春(13603010438)。'
 					}
-					else if(doc.room_name == '412会议室--无电脑(11人)'){
+					else if(doc.room_name == '413会议室--无电脑(11人)'){
 						data.html = '您好，你申请的 <strong>'+doc.room_name+' </strong>已被占用,会议时间: <strong style="color:red">' + doc.meeting_date + ' ' + doc.exact_meeting_time + '</strong>，特殊情况请联系管理员 余芳(13760178106)。'
 					}
 					else{
@@ -1466,12 +1490,53 @@ exports.deleteApprove = function(ids,callback){
  //    "is_approved" : "0",
  //    "apply_time" : "2018-03-14 17:09:38",
  //    "__v" : 0
-
+exports.modify_status = function(){
+	let count = 0
+	async.waterfall([
+			function(cb){
+				apply.find({'apply_timeStamp':{$lt:moment('2019-02-28').unix()},'is_allowed':'1'},function(error,docs){
+					if (error) {
+						console.log('find error ',error)
+						cb(error)
+					}
+					console.log('find result ',docs.length)
+					cb(null,docs)
+				})
+			},
+			function(docs,cb){
+				async.eachLimit(docs,1,function(item,callback){
+					apply.update({'_id':item._id},{$set:{'is_approved':'5','is_allowed':'5'}},function(err){
+						if(err){
+							console.log('eachLimit err ',err)
+							callback(err)
+						}
+						count ++ 
+						console.log('eachLimit success')
+						callback()
+					})
+				},function(eachLimiterr){
+					if(eachLimiterr){
+						console.log('eachLimiterr ',eachLimiterr)
+						cb(eachLimiterr)
+					}
+					console.log('count ',count)
+					cb()
+				})
+			}
+		],function(err,result){
+		if(err){
+			console.log('async waterfall err',err)
+			return false
+		}
+		console.log('async waterfall success')
+		return true
+	})
+}
 //定死记录
 exports.tempadd = function(){
-	let enddate = 2019-01-25,
-		startdate = 2018-10-23
-	let tianshu = moment('2019-01-25').diff(moment('2018-10-23'), 'days')
+	let enddate = 2019-02-27,
+		startdate = 2019-08-27
+	let tianshu = moment('2019-08-27').diff(moment('2019-02-27'), 'days')
 	console.log('check tianshu --->',tianshu)
 	let meeting_time = '下午',
 		arr = []
@@ -1480,34 +1545,35 @@ exports.tempadd = function(){
 	}
 	console.log('check arr.length-->',arr.length)
 	async.eachLimit(arr,1,function(item,callback){
-		let meeting_date = moment('2018-10-23').add(item,'day').format('YYYY-MM-DD'),
+		let meeting_date = moment('2019-02-27').add(item,'day').format('YYYY-MM-DD'),
 			temp = meeting_date.split('-')
 		if(temp[1].length<2){
 			temp[1] = '0' + temp[1]
 		}
 		let resultdate = temp[1] + '月' + temp[2] + '日'
-		console.log(moment('2018-10-23').add(item,'day').format('dddd'))
-		if(moment('2018-10-23').add(item,'day').format('dddd') == '星期一' ){
+		console.log(moment('2019-02-27').add(item,'day').format('dddd'))
+		if(moment('2019-02-27').add(item,'day').format('dddd') == '星期三' ){
 			console.log('周三')
 			let new_apply_Two = new apply({
-				room_name : '623会议室--无电脑(16-24人)曾:15220159520',
-				meeting_name : '王熙照老师小组例会',
+				room_name : '1楼报告厅--无电脑(452人)冯:86934730',
+				meeting_name : '周三下午不外借',
 				meeting_num : '15',
-				meeting_content : '王熙照老师小组例会',
+				meeting_content : '周三下午不外借',
 				meeting_date : resultdate,
 				meeting_time : '下午',
-				apply_name : '曾小告',
-				apply_phone : '15220159520',
-				exact_meeting_time : meeting_time + '14:00-17:00',
+				apply_name : '黄晓聪',
+				apply_phone : '15212159520',
+				exact_meeting_time : meeting_time + '14:00-17:30',
 				apply_time : moment().format('YYYY-MM-DD HH:mm:ss'),
 				email :'848536190@qq.com',
 				first_hour : '14',
 				second_hour : '17',
 				first_minute : '00',
-				second_minute : '00',
-				week_day : '星期一',
+				second_minute : '30',
+				week_day : '星期三',
 				is_approved : 1,
-				fuzhilaoshi : '曾小告'
+				is_allowed :1 ,
+				fuzhilaoshi : '黄晓聪'
 			})
 			new_apply_Two.save(function(err,doc){
 				console.log('check i------->',item)
